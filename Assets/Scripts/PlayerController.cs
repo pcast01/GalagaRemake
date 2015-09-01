@@ -22,7 +22,7 @@ public class PlayerController : MonoBehaviour {
 	
     void Fire()
     {
-        Vector3 offset = new Vector3(0, 0, 2);
+        Vector3 offset = new Vector3(0, 0, 4);
         GameObject laserBeam = Instantiate(bullet, transform.position + offset, Quaternion.identity) as GameObject;
         laserBeam.GetComponent<Rigidbody>().velocity = new Vector3(0, 0, projectileSpeed);
         //Debug.Log("Fire at speed: " + projectileSpeed);
