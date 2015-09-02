@@ -26,10 +26,14 @@ RenderSettings:
   m_AmbientIntensity: 1
   m_AmbientMode: 0
 <<<<<<< HEAD
+<<<<<<< HEAD
   m_SkyboxMaterial: {fileID: 2100000, guid: dd1c3d629e5049543943beee2bdd65bf, type: 2}
 =======
   m_SkyboxMaterial: {fileID: 2100000, guid: 529b246c57304084692c2db0c3c3a15f, type: 2}
 >>>>>>> Art-John
+=======
+  m_SkyboxMaterial: {fileID: 2100000, guid: d71f1b9940cf546479e46f8b320b8948, type: 2}
+>>>>>>> parent of a5e742b... 1
   m_HaloStrength: .5
   m_FlareStrength: 1
   m_FlareFadeSpeed: 3
