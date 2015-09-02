@@ -63,7 +63,7 @@ public class EnemyController : MonoBehaviour {
 	
 	void Fire()
 	{
-		Vector3 startPos = transform.position + new Vector3(0, 0, -4);
+		Vector3 startPos = transform.position + new Vector3(0, 0, -1);
 		//GameObject enemyBullet = Instantiate(enemyLaser, startPos, Quaternion.identity) as GameObject;
 		GameObject enemyBullet = (GameObject)SimplePool.Spawn(enemyLaser, startPos, Quaternion.identity, true);
 		enemyBullet.GetComponent<Rigidbody>().velocity = new Vector3(0, 0, -projectileSpeed);
@@ -82,7 +82,7 @@ public class EnemyController : MonoBehaviour {
 			//scoreKeeper.Score(scoreValue);
 			if (health <= 0)
 			{
-				//Destroy(gameObject);
+				Destroy(gameObject);
 				//end of game
 				//scoreKeeper.Score(200);
 				//Die();

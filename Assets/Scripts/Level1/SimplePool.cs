@@ -178,7 +178,7 @@ public static class SimplePool
 	/// after spawning -- but remember that toggling IsActive will also
 	/// call that function.
 	/// </summary>
-	static public GameObject Spawn(GameObject prefab, Vector2 pos, Quaternion rot, bool spawnEnabled) 
+	static public GameObject Spawn(GameObject prefab, Vector3 pos, Quaternion rot, bool spawnEnabled) 
 	{
 		if(prefab==null) 
 		{

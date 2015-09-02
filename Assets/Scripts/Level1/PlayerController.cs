@@ -11,8 +11,6 @@ public class PlayerController : MonoBehaviour {
 	private float xMin;
 	private float xMax;
 
-	//private GameObject bulletPrefab;
-
 	// Use this for initialization
 	void Start () {
 		float distance = transform.position.z - Camera.main.transform.position.z;
@@ -24,7 +22,7 @@ public class PlayerController : MonoBehaviour {
 	
 	void Fire()
 	{
-		Vector3 offset = transform.position + new Vector3(0, 0, -4);
+		Vector3 offset = this.transform.position + new Vector3(0, 0, 1);
 		GameObject laserBeam = (GameObject)SimplePool.Spawn(bullet, offset, Quaternion.identity, true);
 		laserBeam.GetComponent<Rigidbody>().velocity = new Vector3(0, 0, projectileSpeed);
 		//Debug.Log("Fire at speed: " + projectileSpeed);

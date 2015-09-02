@@ -31,6 +31,7 @@ public class ShipBuilder : MonoBehaviour {
 		{
 			Debug.Log("spot3");
 			//change to spawn ship model instead of cube
+			//GameObject playerShip = (GameObject)SimplePool.Spawn(Resources.Load("PlayerShip"), startPos, Quaternion.identity, true);
 			GameObject playerShip = GameObject.CreatePrimitive(PrimitiveType.Cube);
 			playerShip.name = "PlayerShip";
 			playerShip.tag = "pShip";
@@ -38,7 +39,7 @@ public class ShipBuilder : MonoBehaviour {
 			playerShip.GetComponent<Renderer>().material = playerShipMat;
 			playerShip.AddComponent(System.Type.GetType("PlayerController"));
 			
-			//playerShips[curNumPlayerShips] = playerShip;
+			playerShips[curNumPlayerShips] = playerShip;
 			curNumPlayerShips++;
 		}
 	}
