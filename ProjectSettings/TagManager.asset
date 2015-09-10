@@ -3,7 +3,13 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - Point2
+  - Point3
+  - begin_Left
+  - begin_Right
+  - Spawn_BottomLeft
+  - circle
   layers:
   - Default
   - TransparentFX
@@ -13,10 +19,10 @@ TagManager:
   - UI
   - 
   - 
-  - 
-  - 
-  - 
-  - 
+  - EnermyProjectiles
+  - PlayerProjectiles
+  - Enemy
+  - Player
   - 
   - 
   - 
