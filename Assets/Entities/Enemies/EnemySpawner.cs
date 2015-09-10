@@ -118,7 +118,7 @@ public class EnemySpawner : MonoBehaviour {
             // Top Spawn Point
             GameObject spawnPt = GameObject.FindGameObjectWithTag("Respawn");
             //GameObject bottomLeftPt = GameObject.FindGameObjectWithTag("Spawn_BottomLeft");
-            GameObject enemy = Instantiate(enemyPrefab, spawnPt.transform.position, Quaternion.identity) as GameObject;
+            GameObject enemy = Instantiate(enemyPrefab, spawnPt.transform.position, enemyPrefab.transform.rotation  ) as GameObject;
             currentSpawnPos = freePosition;
             if (spawnEntranceRight)
             {
