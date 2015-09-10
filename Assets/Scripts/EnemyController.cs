@@ -17,7 +17,7 @@ public class EnemyController : MonoBehaviour {
     private ScoreKeeper scoreKeeper;
 
 	// Use this for initialization
-	void Start () {
+	protected void Start () {
         float distance = transform.position.z - Camera.main.transform.position.z;
         Vector3 leftMost = Camera.main.ViewportToWorldPoint(new Vector3(0, 0, distance));
         Vector3 rightMost = Camera.main.ViewportToWorldPoint(new Vector3(1, 0, distance));
@@ -28,7 +28,7 @@ public class EnemyController : MonoBehaviour {
 	}
 	
 	// Update is called once per frame
-	void Update () {
+	protected void Update () {
 
         if (isMovingRight)
         {
@@ -63,6 +63,7 @@ public class EnemyController : MonoBehaviour {
     {
         Vector3 startPos = transform.position + new Vector3(0, 0, -4);
         GameObject enemyBullet = Instantiate(enemyLaser, startPos, Quaternion.identity) as GameObject;
+        Physics.IgnoreCollision(gameObject.GetComponent<Collider>(), enemyBullet.GetComponent<Collider>());
         enemyBullet.GetComponent<Rigidbody>().velocity = new Vector3(0, 0, -projectileSpeed);
     }
 

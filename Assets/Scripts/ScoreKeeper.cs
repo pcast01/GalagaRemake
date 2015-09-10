@@ -14,6 +14,7 @@ public class ScoreKeeper : MonoBehaviour {
 
     public void Score(int points)
     {
+        
         score += points;
         scoreText.text = "Score: " + score.ToString();
     }
