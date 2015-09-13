@@ -9,7 +9,11 @@ TagManager:
   - begin_Left
   - begin_Right
   - Spawn_BottomLeft
-  - circle
+  - phase2
+  - phase31
+  - Spawn_BottomRight
+  - phase41
+  - phase51
   layers:
   - Default
   - TransparentFX

@@ -7,8 +7,6 @@ public class EnemySpawner : MonoBehaviour {
     // 8x8 size of one enemy
     [Header("Enemy Movement")]
     public GameObject enemyPrefab;
-    public float speed = 5.0f;
-    public bool isMovingRight;
     [Header("Gizmo Settings")]
     public float width = 10f;
     public float height = 5f;
@@ -19,59 +17,57 @@ public class EnemySpawner : MonoBehaviour {
     public bool moveFormation = false;
     public bool isStartFormation = false;
     public bool spawnEntranceRight = false;
-    private float xMin;
-    private float xMax;
+    [Header("Formation")]
+    public EnemySpawner round1Phase2spawner;
+    public bool isFormationUp = false;
+    public int enemiesInPlace = 0;
 
 	void Start () {
-        float distance = transform.position.z - Camera.main.transform.position.z;
-        Vector3 leftMost = Camera.main.ViewportToWorldPoint(new Vector3(0, 0, distance));
-        Vector3 rightMost = Camera.main.ViewportToWorldPoint(new Vector3(1, 0, distance));
-        xMin = leftMost.x + padding;
-        xMax = rightMost.x - padding;
-        SpawnUntilFull();
+        if (GalagaHelper.CurrentRoundPhase == GalagaHelper.Formations.Round1Phase1 && gameObject.name == "Round1Phase1EnemyFormation")
+        {
+            SpawnUntilFull();
+        }
+        else if (GalagaHelper.CurrentRoundPhase == GalagaHelper.Formations.Round1Phase2 && gameObject.name == "Round1Phase2EnemyFormation")
+        {
+            SpawnUntilFull();
+        }
+        else if (GalagaHelper.CurrentRoundPhase == GalagaHelper.Formations.Round1Phase3_1 && gameObject.name == "Round1Phase3_1EnemyFormation")
+        {
+            SpawnUntilFull();
+        }
+        else if (GalagaHelper.CurrentRoundPhase == GalagaHelper.Formations.Round1Phase4_1 && gameObject.name == "Round1Phase4_1EnemyFormation")
+        {
+            SpawnUntilFull();
+        }
+        else if (GalagaHelper.CurrentRoundPhase == GalagaHelper.Formations.Round1Phase5_1 && gameObject.name == "Round1Phase5_1EnemyFormation")
+        {
+            SpawnUntilFull();
+        }
 	}
-	
-    public void StartMovement()
-    {
-        transform.position += new Vector3(speed * Time.deltaTime, 0, 0);
-        moveFormation = true;
-    }
 
 	void Update () {
-        int x = isEnemyInPlace();
-        Debug.Log("enemies in place: " + x);
-        if (x == 6 && moveFormation == false)
+        enemiesInPlace = isEnemyInPlace();
+        Debug.Log(gameObject.name + " - enemies in place: " + enemiesInPlace + " Enemies Spawned: " + GalagaHelper.EnemiesSpawned);
+        if (enemiesInPlace == 8 && gameObject.name == "Round1Phase1EnemyFormation")
         {
-            if (!isStartFormation)
-            {
-                Invoke("StartMovement", 4f);
-                isStartFormation = true;
-            }
-            //StartMovement();
-            Debug.Log("*** ALL Enemies in place. ***");
+            GameObject pt2 = GameObject.FindGameObjectWithTag("phase2").gameObject;
+            pt2.GetComponent<EnemySpawner>().enabled = true;
+            //Debug.Log("*** ALL Enemies in place. ***");
         }
-
-        if (moveFormation && isStartFormation)
+        else if (enemiesInPlace == 8 && gameObject.name == "Round1Phase2EnemyFormation")
         {
-            if (isMovingRight)
-            {
-                transform.position += Vector3.right * speed * Time.deltaTime;
-            }
-            else
-            {
-                transform.position += Vector3.left * speed * Time.deltaTime;
-            }
-
-            float rightEdgeOfFormation = transform.position.x + (0.5f * width);
-            float leftEdgeOfFormation = transform.position.x - (0.5f * width);
-            if (leftEdgeOfFormation < xMin)
-            {
-                isMovingRight = true;
-            }
-            else if (rightEdgeOfFormation > xMax)
-            {
-                isMovingRight = false;
-            }
+            GameObject pt3 = GameObject.FindGameObjectWithTag("phase31").gameObject;
+            pt3.GetComponent<EnemySpawner>().enabled = true;
+        }
+        else if (enemiesInPlace == 8 && gameObject.name == "Round1Phase3_1EnemyFormation")
+        {
+            GameObject pt4 = GameObject.FindGameObjectWithTag("phase41").gameObject;
+            pt4.GetComponent<EnemySpawner>().enabled = true;
+        }
+        else if (enemiesInPlace == 8 && gameObject.name == "Round1Phase4_1EnemyFormation")
+        {
+            GameObject pt5 = GameObject.FindGameObjectWithTag("phase51").gameObject;
+            pt5.GetComponent<EnemySpawner>().enabled = true;
         }
 	}
 
@@ -98,7 +94,10 @@ public class EnemySpawner : MonoBehaviour {
                 //Debug.Log("Parent pos: " + transform.GetChild(i).position + " Child pos: " + transform.GetChild(i).GetChild(0).position);
                 int childZ = (int)Math.Round(transform.GetChild(i).GetChild(0).position.z, 0);
                 int parentZ = (int)Math.Round(transform.GetChild(i).position.z, 0);
-                //Debug.Log("Parent: " + parentZ + " Child: " + childZ);
+                //if (gameObject.name == "Round1Phase4_1EnemyFormation")
+                //{
+                //    Debug.Log("Enemies spawned: " + GalagaHelper.EnemiesSpawned + " Parent Pos: " + parentZ + " Child Pos: " + childZ);
+                //}
                 if (childZ == parentZ)
                 {
                     //Debug.Log("Child in place.");
@@ -106,19 +105,16 @@ public class EnemySpawner : MonoBehaviour {
                 }
             }
         }
-
         return x;
     }
 
     void SpawnUntilFull()
     {
         Transform freePosition = NextFreePosition();
+        Transform spawnPoint = GalagaHelper.RespawnPoint(gameObject.name);
         if (freePosition)
         {
-            // Top Spawn Point
-            GameObject spawnPt = GameObject.FindGameObjectWithTag("Respawn");
-            //GameObject bottomLeftPt = GameObject.FindGameObjectWithTag("Spawn_BottomLeft");
-            GameObject enemy = Instantiate(enemyPrefab, spawnPt.transform.position, enemyPrefab.transform.rotation  ) as GameObject;
+            GameObject enemy = Instantiate(enemyPrefab, spawnPoint.position, enemyPrefab.transform.rotation) as GameObject;
             currentSpawnPos = freePosition;
             if (spawnEntranceRight)
             {
@@ -140,8 +136,8 @@ public class EnemySpawner : MonoBehaviour {
         }
         else
         {
-            //StartMovement();
-            //Debug.Log("Start Movement started...");
+            isFormationUp = false;
+            GalagaHelper.CurrentRoundPhase += 1;
         }
     }
 

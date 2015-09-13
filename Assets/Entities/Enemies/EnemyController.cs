@@ -13,80 +13,48 @@ public class EnemyController : MonoBehaviour {
     public float projectileSpeed = 16f;
     [Header("Flight Pattern Settings")]
     public float pathSpeed = 50.0F;
-    public Transform[] stage1_PathOneRight = new Transform[5];
-    public Transform[] stage1_PathOneLeft = new Transform[5];
-    public Transform[] entrance_BeginPathBottomLeft = new Transform[2];
     public Hashtable myTween = new Hashtable();
-    public GameObject bottomLeftPt;
     private ScoreKeeper scoreKeeper;
-    private EnemySpawner spawner;
+    private EnemySpawner round1Phase1spawner;
 
 	void Start () {
-        spawner = GameObject.Find("EnemyFormation1").GetComponent<EnemySpawner>();
-
-        if (spawner.spawnEntranceRight)
+        GalagaHelper.EnemiesSpawned += 1;
+        round1Phase1spawner = GameObject.Find("Round1Phase1EnemyFormation").GetComponent<EnemySpawner>();
+        //Debug.Log("enemies spawned: " + GalagaHelper.EnemiesSpawned);
+        if (GalagaHelper.EnemiesSpawned <= 8)
         {
-            myTween.Add("path", GalagaHelper.EntrancePatterns(GalagaHelper.EntranceFlightPatterns.round1_DownRight));
+            // Spawn 1 of 5 phases
+            if (round1Phase1spawner.spawnEntranceRight)
+            {
+                myTween.Add("path", GalagaHelper.EntrancePatterns(GalagaHelper.EntranceFlightPatterns.round1_DownRight));
+            }
+            else
+            {
+                myTween.Add("path", GalagaHelper.EntrancePatterns(GalagaHelper.EntranceFlightPatterns.round1_DownLeft));
+            }
         }
-        else
+        else if (GalagaHelper.EnemiesSpawned>8 && GalagaHelper.EnemiesSpawned<17)  // If Round1 Phase2 is not full then set path
         {
-            myTween.Add("path", GalagaHelper.EntrancePatterns(GalagaHelper.EntranceFlightPatterns.round1_DownLeft));
+            myTween.Add("path", GalagaHelper.EntrancePatterns(GalagaHelper.EntranceFlightPatterns.rd1_Left));
+        }
+        else if (GalagaHelper.EnemiesSpawned>16 && GalagaHelper.EnemiesSpawned<25) // 4 only
+        {
+            myTween.Add("path", GalagaHelper.EntrancePatterns(GalagaHelper.EntranceFlightPatterns.rd1_Right)); 
+        }
+        else if (GalagaHelper.EnemiesSpawned > 24 && GalagaHelper.EnemiesSpawned < 33)
+        {
+            myTween.Add("path", GalagaHelper.EntrancePatterns(GalagaHelper.EntranceFlightPatterns.rd1_TopLeft));
+        }
+        else if (GalagaHelper.EnemiesSpawned > 32 && GalagaHelper.EnemiesSpawned < 41)
+        {
+            myTween.Add("path", GalagaHelper.EntrancePatterns(GalagaHelper.EntranceFlightPatterns.rd1_TopRight));
         }
 
         myTween.Add("speed", pathSpeed);
         scoreKeeper = GameObject.Find("Score").GetComponent<ScoreKeeper>();
         iTween.MoveTo(gameObject, myTween);
-        
-        //GameObject spawnPt = GameObject.FindGameObjectWithTag("Respawn");
-        //GameObject middlePt = GameObject.FindGameObjectWithTag("Point2");
-        //GameObject rightEntrancePt = GameObject.FindGameObjectWithTag("begin_Right");
-        //bottomLeftPt = GameObject.FindGameObjectWithTag("Spawn_BottomLeft");
-
-        //Left Entrance
-        //GameObject leftEntrancePt = GameObject.FindGameObjectWithTag("begin_Left");
-        //Transform nextSpawnPos = spawner.currentSpawnPos;
-
-        // Test Bottom Left path
-        //entrance_BeginPathBottomLeft[0] = bottomLeftPt.transform;
-        //entrance_BeginPathBottomLeft[1] = leftEntrancePt.transform;
-
-        //Testing itween
-        //if (nextSpawnPos)
-        //{
-        //    // Entrance Left
-        //    stage1_PathOneLeft[0] = spawnPt.transform;
-        //    stage1_PathOneLeft[1] = middlePt.transform;
-        //    stage1_PathOneLeft[2] = leftEntrancePt.transform;
-        //    stage1_PathOneLeft[3] = spawner.gameObject.transform;
-        //    stage1_PathOneLeft[4] = nextSpawnPos;
-        //    // Entrance Right
-        //    stage1_PathOneRight[0] = spawnPt.transform;
-        //    stage1_PathOneRight[1] = middlePt.transform;
-        //    stage1_PathOneRight[2] = rightEntrancePt.transform;
-        //    stage1_PathOneRight[3] = spawner.gameObject.transform;
-        //    stage1_PathOneRight[4] = nextSpawnPos;
-        //}
-
-        //Alternate left to right entrance
-        //Debug.Log("path goes:" + spawner.spawnEntranceRight);
-        //if (spawner.spawnEntranceRight == true)
-        //{
-        //    myTween.Add("path", stage1_PathOneRight);
-        //}
-        //else
-        //{
-        //    myTween.Add("path", stage1_PathOneLeft);
-        //}
-
-	}
-	
-    public void OnDrawGizmos()
-    {
-        //iTween.DrawLine(stage1_PathOneRight);
-        //iTween.DrawLine(stage1_PathOneLeft, Color.blue);
     }
 
-	// Update is called once per frame
 	void Update () {
         // Fire random
         float probability = Time.deltaTime * shotsPerSecond;
@@ -95,9 +63,6 @@ public class EnemyController : MonoBehaviour {
             //Debug.Log("Enemy firing.");
             //Fire();
         }
-        //transform.Rotate(bottomLeftPt.transform.position, 90.0f);
-        
-        //transform.rotation = Quaternion.AngleAxis(30, bottomLeftPt.transform.position);
 	}
 
     void Fire()
