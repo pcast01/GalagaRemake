@@ -6,7 +6,8 @@ public class EnemySpawner : MonoBehaviour {
 
     // 8x8 size of one enemy
     [Header("Enemy Movement")]
-    public GameObject enemyPrefab;
+    public GameObject enemy1Prefab;
+    //public GameObject enemy2Prefab;
     [Header("Gizmo Settings")]
     public float width = 10f;
     public float height = 5f;
@@ -31,15 +32,15 @@ public class EnemySpawner : MonoBehaviour {
         {
             SpawnUntilFull();
         }
-        else if (GalagaHelper.CurrentRoundPhase == GalagaHelper.Formations.Round1Phase3_1 && gameObject.name == "Round1Phase3_1EnemyFormation")
+        else if (GalagaHelper.CurrentRoundPhase == GalagaHelper.Formations.Round1Phase3 && gameObject.name == "Round1Phase3_1EnemyFormation")
         {
             SpawnUntilFull();
         }
-        else if (GalagaHelper.CurrentRoundPhase == GalagaHelper.Formations.Round1Phase4_1 && gameObject.name == "Round1Phase4_1EnemyFormation")
+        else if (GalagaHelper.CurrentRoundPhase == GalagaHelper.Formations.Round1Phase4 && gameObject.name == "Round1Phase4_1EnemyFormation")
         {
             SpawnUntilFull();
         }
-        else if (GalagaHelper.CurrentRoundPhase == GalagaHelper.Formations.Round1Phase5_1 && gameObject.name == "Round1Phase5_1EnemyFormation")
+        else if (GalagaHelper.CurrentRoundPhase == GalagaHelper.Formations.Round1Phase5 && gameObject.name == "Round1Phase5_1EnemyFormation")
         {
             SpawnUntilFull();
         }
@@ -48,8 +49,14 @@ public class EnemySpawner : MonoBehaviour {
 	void Update () {
         enemiesInPlace = isEnemyInPlace();
         Debug.Log(gameObject.name + " - enemies in place: " + enemiesInPlace + " Enemies Spawned: " + GalagaHelper.EnemiesSpawned);
+
+        // Check if 8 enemies have spawned then run them
+        GalagaHelper.StartRound1();
+
+        // Enable the next script to be able to run
         if (enemiesInPlace == 8 && gameObject.name == "Round1Phase1EnemyFormation")
         {
+            //GalagaHelper.StartPaths();
             GameObject pt2 = GameObject.FindGameObjectWithTag("phase2").gameObject;
             pt2.GetComponent<EnemySpawner>().enabled = true;
             //Debug.Log("*** ALL Enemies in place. ***");
@@ -71,6 +78,10 @@ public class EnemySpawner : MonoBehaviour {
         }
 	}
 
+    /// <summary>
+    /// Gets the next Free position in the formation for the enemy to fly to.
+    /// </summary>
+    /// <returns></returns>
     public Transform NextFreePosition()
     {
         for (int i = 0; i < transform.childCount; i++)
@@ -83,6 +94,10 @@ public class EnemySpawner : MonoBehaviour {
         return null;
     }
 
+    /// <summary>
+    /// Gets the number of Enemies that are setup in the current formation.
+    /// </summary>
+    /// <returns></returns>
     public int isEnemyInPlace()
     {
         int x = 0;
@@ -108,22 +123,27 @@ public class EnemySpawner : MonoBehaviour {
         return x;
     }
 
+    /// <summary>
+    /// Spawn every enemy in the formation that you are in and then switch to the next wave. Uses Invoke
+    /// Command to call it self and when full then it sets the currentroundphase to the next wave.
+    /// </summary>
     void SpawnUntilFull()
     {
         Transform freePosition = NextFreePosition();
-        Transform spawnPoint = GalagaHelper.RespawnPoint(gameObject.name);
+        Transform spawnPoint = GalagaHelper.RespawnPoint(gameObject.name, spawnEntranceRight);
         if (freePosition)
         {
-            GameObject enemy = Instantiate(enemyPrefab, spawnPoint.position, enemyPrefab.transform.rotation) as GameObject;
             currentSpawnPos = freePosition;
             if (spawnEntranceRight)
             {
                 spawnEntranceRight = false;
+                //enemy1Prefab = enemy2Prefab;
             }
             else
             {
                 spawnEntranceRight = true;
             }
+            GameObject enemy = Instantiate(enemy1Prefab, spawnPoint.position, enemy1Prefab.transform.rotation) as GameObject;
             //Debug.Log("Enemy spawned." + "free pos=" + freePosition.position.z);
             enemy.transform.parent = freePosition;
             Debug.Log("Enemy parent name: " + enemy.transform.parent.name + " FreePos: " + freePosition.name);

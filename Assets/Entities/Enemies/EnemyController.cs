@@ -12,10 +12,11 @@ public class EnemyController : MonoBehaviour {
     public float shotsPerSecond = 0.5f;
     public float projectileSpeed = 16f;
     [Header("Flight Pattern Settings")]
-    public float pathSpeed = 50.0F;
+    public float pathSpeed;
     public Hashtable myTween = new Hashtable();
     private ScoreKeeper scoreKeeper;
     private EnemySpawner round1Phase1spawner;
+    private const float fDelay = 0.06f;
 
 	void Start () {
         GalagaHelper.EnemiesSpawned += 1;
@@ -27,32 +28,43 @@ public class EnemyController : MonoBehaviour {
             if (round1Phase1spawner.spawnEntranceRight)
             {
                 myTween.Add("path", GalagaHelper.EntrancePatterns(GalagaHelper.EntranceFlightPatterns.round1_DownRight));
+                myTween.Add("delay", GalagaHelper.Wave1Delay);
+                GalagaHelper.Wave1Delay += fDelay;
             }
             else
             {
                 myTween.Add("path", GalagaHelper.EntrancePatterns(GalagaHelper.EntranceFlightPatterns.round1_DownLeft));
+                myTween.Add("delay", GalagaHelper.Wave1Delay);
+                GalagaHelper.Wave1Delay += fDelay;
             }
         }
-        else if (GalagaHelper.EnemiesSpawned>8 && GalagaHelper.EnemiesSpawned<17)  // If Round1 Phase2 is not full then set path
+        else if (GalagaHelper.EnemiesSpawned > 8 && GalagaHelper.EnemiesSpawned < 17)  // If Round1 Phase2 is not full then set path
         {
-            myTween.Add("path", GalagaHelper.EntrancePatterns(GalagaHelper.EntranceFlightPatterns.rd1_Left));
+            myTween.Add("path", GalagaHelper.EntrancePatterns(GalagaHelper.EntranceFlightPatterns.round1_Left));
         }
-        else if (GalagaHelper.EnemiesSpawned>16 && GalagaHelper.EnemiesSpawned<25) // 4 only
+        else if (GalagaHelper.EnemiesSpawned > 16 && GalagaHelper.EnemiesSpawned < 25) // 4 only
         {
-            myTween.Add("path", GalagaHelper.EntrancePatterns(GalagaHelper.EntranceFlightPatterns.rd1_Right)); 
+            myTween.Add("path", GalagaHelper.EntrancePatterns(GalagaHelper.EntranceFlightPatterns.round1_Right)); 
         }
         else if (GalagaHelper.EnemiesSpawned > 24 && GalagaHelper.EnemiesSpawned < 33)
         {
-            myTween.Add("path", GalagaHelper.EntrancePatterns(GalagaHelper.EntranceFlightPatterns.rd1_TopLeft));
+            myTween.Add("path", GalagaHelper.EntrancePatterns(GalagaHelper.EntranceFlightPatterns.round1_TopLeft));
         }
         else if (GalagaHelper.EnemiesSpawned > 32 && GalagaHelper.EnemiesSpawned < 41)
         {
-            myTween.Add("path", GalagaHelper.EntrancePatterns(GalagaHelper.EntranceFlightPatterns.rd1_TopRight));
+            myTween.Add("path", GalagaHelper.EntrancePatterns(GalagaHelper.EntranceFlightPatterns.round1_TopRight));
         }
 
         myTween.Add("speed", pathSpeed);
         scoreKeeper = GameObject.Find("Score").GetComponent<ScoreKeeper>();
-        iTween.MoveTo(gameObject, myTween);
+        if (GalagaHelper.EnemiesSpawned < 9)
+        {
+            GalagaHelper.CollectEnemyPaths(gameObject, myTween);
+        }
+        else
+        {
+            iTween.MoveTo(gameObject, myTween);
+        }
     }
 
 	void Update () {
