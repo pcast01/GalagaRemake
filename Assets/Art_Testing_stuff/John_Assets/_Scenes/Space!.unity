@@ -25,7 +25,7 @@ RenderSettings:
   m_AmbientGroundColor: {r: .0469999984, g: .0430000015, b: .0350000001, a: 1}
   m_AmbientIntensity: 1
   m_AmbientMode: 0
-  m_SkyboxMaterial: {fileID: 2100000, guid: e44a9f225bf46654a86a1d39b6dd6f42, type: 2}
+  m_SkyboxMaterial: {fileID: 2100000, guid: 24acfde078af6d64c851ed89b98a0643, type: 2}
   m_HaloStrength: .5
   m_FlareStrength: 1
   m_FlareFadeSpeed: 3
@@ -94,35 +94,35 @@ Prefab:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 452650, guid: 893458e4f75f68144beb3696d4ec6c4c, type: 2}
+    - target: {fileID: 415992, guid: 893458e4f75f68144beb3696d4ec6c4c, type: 2}
       propertyPath: m_LocalPosition.x
-      value: -5.82000017
+      value: -15
       objectReference: {fileID: 0}
-    - target: {fileID: 452650, guid: 893458e4f75f68144beb3696d4ec6c4c, type: 2}
+    - target: {fileID: 415992, guid: 893458e4f75f68144beb3696d4ec6c4c, type: 2}
       propertyPath: m_LocalPosition.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 452650, guid: 893458e4f75f68144beb3696d4ec6c4c, type: 2}
+    - target: {fileID: 415992, guid: 893458e4f75f68144beb3696d4ec6c4c, type: 2}
       propertyPath: m_LocalPosition.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 452650, guid: 893458e4f75f68144beb3696d4ec6c4c, type: 2}
+    - target: {fileID: 415992, guid: 893458e4f75f68144beb3696d4ec6c4c, type: 2}
       propertyPath: m_LocalRotation.x
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 452650, guid: 893458e4f75f68144beb3696d4ec6c4c, type: 2}
+    - target: {fileID: 415992, guid: 893458e4f75f68144beb3696d4ec6c4c, type: 2}
       propertyPath: m_LocalRotation.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 452650, guid: 893458e4f75f68144beb3696d4ec6c4c, type: 2}
+    - target: {fileID: 415992, guid: 893458e4f75f68144beb3696d4ec6c4c, type: 2}
       propertyPath: m_LocalRotation.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 452650, guid: 893458e4f75f68144beb3696d4ec6c4c, type: 2}
+    - target: {fileID: 415992, guid: 893458e4f75f68144beb3696d4ec6c4c, type: 2}
       propertyPath: m_LocalRotation.w
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 452650, guid: 893458e4f75f68144beb3696d4ec6c4c, type: 2}
+    - target: {fileID: 415992, guid: 893458e4f75f68144beb3696d4ec6c4c, type: 2}
       propertyPath: m_RootOrder
       value: 0
       objectReference: {fileID: 0}
