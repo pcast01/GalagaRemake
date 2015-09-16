@@ -15,12 +15,12 @@ public class ScoreKeeper : MonoBehaviour {
     public void Score(int points)
     {
         score += points;
-        scoreText.text = "Score: " + score.ToString();
+        scoreText.text = score.ToString();
     }
 
     public void Reset()
     {
         score = 0;
-        scoreText.text = "Score: " + score.ToString();
+        scoreText.text = score.ToString();
     }
 }
