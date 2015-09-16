@@ -18,14 +18,13 @@ public class Enemy3Controller : EnemyController {
     public float pathSpeed = 10f;
     public float heightOffset = 25f;
 
-    private Transform _endPoint;
-
     private List<Vector3> _wayPoints = new List<Vector3>();
 
     private float _pathPercentage = 0f;
     private Vector3 _originalPosition;
+    private Vector3 _endPoint;
     private State _state = State.Idle;
-
+    private Hashtable myTween = new Hashtable();
     private float xMin;
     private float xMax;
     void Awake() 
@@ -38,7 +37,7 @@ public class Enemy3Controller : EnemyController {
     {
         base.Start();
         _originalPosition = transform.position;
-        
+       
 	}
 	
 	
@@ -52,41 +51,14 @@ public class Enemy3Controller : EnemyController {
             if (Input.GetKeyDown(KeyCode.K))
             {
                 _state = State.NormalFlying;
-                CreateNormalFlyingPath();
+                CreatePath(_state);
+                iTween.MoveTo(gameObject, myTween);
             }
             if (Input.GetKeyDown(KeyCode.L))
             {
                 _state = State.StealFlying;
-                CreateStealFlyingPath();
-            }
-        }
-        else
-        {
-            if (_pathPercentage > 1)
-            {
-                if (_state != State.StealFlying && _state != State.Stealing)
-                {
-                    _state = State.Idle;
-                    transform.position = _originalPosition;
-                }
-                else
-                {
-                    _state = State.Stealing;
-                }
-
-                _wayPoints.Clear();
-                _pathPercentage = 0;
-
-            }
-
-            if (_state != State.Idle)
-            {
-                _pathPercentage += Time.deltaTime;
-                if (_wayPoints.Count > 1)
-                {
-                    iTween.PutOnPath(gameObject, _wayPoints.ToArray(), _pathPercentage);
-                }
-
+                CreatePath(_state);
+                iTween.MoveTo(gameObject, myTween);
             }
         }
         
@@ -114,6 +86,57 @@ public class Enemy3Controller : EnemyController {
         point = new Vector3(xMin + Random.Range(10, 60), transform.position.y, -35);
         _wayPoints.Add(point);
 
+    }
+
+    private void CreatePath(State state)
+    {
+        myTween.Clear();
+        _originalPosition = transform.position;
+        switch (state)
+        {
+            case State.Idle:
+                break;
+            case State.NormalFlying:
+                CreateNormalFlyingPath();
+                myTween.Add("path", _wayPoints.ToArray());
+                break;
+            case State.StealFlying:
+                CreateStealFlyingPath();
+                myTween.Add("path",_wayPoints.ToArray());
+                break;
+            case State.Returning:
+                break;
+            case State.Stealing:
+                break;
+            default:
+                break;
+        }
+        myTween.Add("speed", pathSpeed);
+        myTween.Add("oncomplete", "onCompleteTween");
+        myTween.Add("easetype", "linear");
+    }
+    private void onCompleteTween()
+    {
+        _wayPoints.Clear();
+        switch (_state)
+        {
+            case State.Idle:
+                break;
+            case State.NormalFlying:
+                _state = State.Idle;
+                transform.position = _originalPosition;
+                break;
+            case State.StealFlying:
+                _state = State.Stealing;
+                break;
+            case State.Returning:
+                break;
+            case State.Stealing:
+                break;
+            default:
+                break;
+        }
+       
     }
     
 
