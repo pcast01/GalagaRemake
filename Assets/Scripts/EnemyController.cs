@@ -14,7 +14,7 @@ public class EnemyController : MonoBehaviour {
     private float padding = 2f;
     private float xMin;
     private float xMax;
-    private ScoreKeeper scoreKeeper;
+    protected ScoreKeeper scoreKeeper;
 
 	// Use this for initialization
 	protected void Start () {
@@ -50,6 +50,10 @@ public class EnemyController : MonoBehaviour {
             isMovingRight = false;
         }
 
+        FireRandom();
+	}
+    protected void FireRandom()
+    {
         // Fire random
         float probability = Time.deltaTime * shotsPerSecond;
         if (Random.value < probability)
@@ -57,8 +61,7 @@ public class EnemyController : MonoBehaviour {
             Debug.Log("Enemy firing.");
             Fire();
         }
-	}
-
+    }
     void Fire()
     {
         Vector3 startPos = transform.position + new Vector3(0, 0, -4);
@@ -67,7 +70,7 @@ public class EnemyController : MonoBehaviour {
         enemyBullet.GetComponent<Rigidbody>().velocity = new Vector3(0, 0, -projectileSpeed);
     }
 
-    void OnTriggerEnter(Collider other)
+    protected void OnTriggerEnter(Collider other)
     {
         Projectile playerBullet = other.gameObject.GetComponent<Projectile>();
         if (playerBullet)
@@ -81,9 +84,21 @@ public class EnemyController : MonoBehaviour {
                 Destroy(gameObject);
                 //end of game
                 scoreKeeper.Score(200);
-                Application.LoadLevel("Win Screen");
+                
                 //Die();
             }
         }
+        
     }
+
+    public void OnCollisionEnter(Collision collision)
+    {
+        if (collision.collider.CompareTag("Player"))
+        {
+            Destroy(gameObject);
+            Destroy(collision.collider.gameObject);
+            scoreKeeper.Score(200);
+        }
+    }
+    
 }
