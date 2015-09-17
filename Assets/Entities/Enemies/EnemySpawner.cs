@@ -48,7 +48,7 @@ public class EnemySpawner : MonoBehaviour {
 
 	void Update () {
         enemiesInPlace = isEnemyInPlace();
-        Debug.Log(gameObject.name + " - enemies in place: " + enemiesInPlace + " Enemies Spawned: " + GalagaHelper.EnemiesSpawned);
+        //Debug.Log(gameObject.name + " - enemies in place: " + enemiesInPlace + " Enemies Spawned: " + GalagaHelper.EnemiesSpawned);
 
         // Check if 8 enemies have spawned then run them
         GalagaHelper.StartRound1();
@@ -65,6 +65,8 @@ public class EnemySpawner : MonoBehaviour {
         {
             GameObject pt3 = GameObject.FindGameObjectWithTag("phase31").gameObject;
             pt3.GetComponent<EnemySpawner>().enabled = true;
+            //var message = "Enemy formation 3 on";
+            //Debug.Log(message.Bold().Sized(8));
         }
         else if (enemiesInPlace == 8 && gameObject.name == "Round1Phase3_1EnemyFormation")
         {
