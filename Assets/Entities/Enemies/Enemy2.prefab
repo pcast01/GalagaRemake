@@ -79,7 +79,7 @@ MonoBehaviour:
   enemyLaser: {fileID: 103356, guid: c59875210abc21544b4ee5e6df08bfeb, type: 2}
   shotsPerSecond: .5
   projectileSpeed: 16
-  pathSpeed: 30
+  pathSpeed: 40
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1
@@ -89,7 +89,7 @@ Prefab:
     m_Modifications:
     - target: {fileID: 0}
       propertyPath: pathSpeed
-      value: 30
+      value: 40
       objectReference: {fileID: 0}
     - target: {fileID: 0}
       propertyPath: enemyLaser
