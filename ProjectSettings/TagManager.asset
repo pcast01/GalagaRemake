@@ -14,6 +14,7 @@ TagManager:
   - Spawn_BottomRight
   - phase41
   - phase51
+  - MainFormation
   layers:
   - Default
   - TransparentFX

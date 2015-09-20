@@ -12,47 +12,108 @@ public class EnemyController : MonoBehaviour {
     public float shotsPerSecond = 0.5f;
     public float projectileSpeed = 16f;
     [Header("Flight Pattern Settings")]
-    public float pathSpeed = 50.0F;
+    public float pathSpeed;
     public Hashtable myTween = new Hashtable();
     private ScoreKeeper scoreKeeper;
     private EnemySpawner round1Phase1spawner;
+    private const float fDelay = 0.06f;
+    [SerializeField]
+    private float movePathTime;
 
-	void Start () {
+    void Start () {
         GalagaHelper.EnemiesSpawned += 1;
         round1Phase1spawner = GameObject.Find("Round1Phase1EnemyFormation").GetComponent<EnemySpawner>();
+        scoreKeeper = GameObject.Find("Score").GetComponent<ScoreKeeper>();
         //Debug.Log("enemies spawned: " + GalagaHelper.EnemiesSpawned);
+
+        // Wave 1 path creation.
         if (GalagaHelper.EnemiesSpawned <= 8)
         {
             // Spawn 1 of 5 phases
             if (round1Phase1spawner.spawnEntranceRight)
             {
                 myTween.Add("path", GalagaHelper.EntrancePatterns(GalagaHelper.EntranceFlightPatterns.round1_DownRight));
+                myTween.Add("delay", GalagaHelper.Wave1Delay);
+                GalagaHelper.Wave1Delay += fDelay;
+                //Debug.Log("1 WAVE DELAY; " + GalagaHelper.Wave1Delay);
             }
             else
             {
                 myTween.Add("path", GalagaHelper.EntrancePatterns(GalagaHelper.EntranceFlightPatterns.round1_DownLeft));
+                myTween.Add("delay", GalagaHelper.Wave1Delay);
+                GalagaHelper.Wave1Delay += fDelay;
+                //Debug.Log("1 WAVE DELAY; " + GalagaHelper.Wave1Delay);
             }
         }
-        else if (GalagaHelper.EnemiesSpawned>8 && GalagaHelper.EnemiesSpawned<17)  // If Round1 Phase2 is not full then set path
+
+        // Collect all 1st wave enemies and move them all at once with a delay
+        if (GalagaHelper.EnemiesSpawned < 9)
         {
-            myTween.Add("path", GalagaHelper.EntrancePatterns(GalagaHelper.EntranceFlightPatterns.rd1_Left));
+            myTween.Add("time", movePathTime);
+            myTween.Add("easetype", "linear");
+            GalagaHelper.CollectEnemyPaths(gameObject, myTween);
         }
-        else if (GalagaHelper.EnemiesSpawned>16 && GalagaHelper.EnemiesSpawned<25) // 4 only
+        else if (GalagaHelper.EnemiesSpawned > 8 && GalagaHelper.EnemiesSpawned < 17)
         {
-            myTween.Add("path", GalagaHelper.EntrancePatterns(GalagaHelper.EntranceFlightPatterns.rd1_Right)); 
+            CreatePathAndMove(2);
+        }
+        else if (GalagaHelper.EnemiesSpawned > 16 && GalagaHelper.EnemiesSpawned < 25)
+        {
+            CreatePathAndMove(3);
         }
         else if (GalagaHelper.EnemiesSpawned > 24 && GalagaHelper.EnemiesSpawned < 33)
         {
-            myTween.Add("path", GalagaHelper.EntrancePatterns(GalagaHelper.EntranceFlightPatterns.rd1_TopLeft));
+            CreatePathAndMove(4);
         }
         else if (GalagaHelper.EnemiesSpawned > 32 && GalagaHelper.EnemiesSpawned < 41)
         {
-            myTween.Add("path", GalagaHelper.EntrancePatterns(GalagaHelper.EntranceFlightPatterns.rd1_TopRight));
+            CreatePathAndMove(5);
         }
+        else
+        {
+            myTween.Add("time", movePathTime);
+            myTween.Add("easetype", "linear");
+            iTween.MoveTo(gameObject, myTween);
+        }
+    }
 
-        myTween.Add("speed", pathSpeed);
-        scoreKeeper = GameObject.Find("Score").GetComponent<ScoreKeeper>();
+    /// <summary>
+    /// Create path based on wave number.
+    /// </summary>
+    /// <param name="wave"></param>
+    public void CreatePathAndMove(int wave)
+    {
+        GalagaHelper.ClearWavePath();
+        GalagaHelper.GetWavePaths(wave);
+        GalagaHelper.Wave1Delay += 0.06f;
+        if (wave == 2 || wave == 3)
+        {
+            myTween.Add("path", GalagaHelper.SecondWavePath);
+        }
+        else
+        {
+            myTween.Add("path", GalagaHelper.FourthWavePath);
+        }
+        myTween.Add("time", movePathTime);
+        myTween.Add("delay", GalagaHelper.Wave1Delay);
+        myTween.Add("easetype", "linear");
         iTween.MoveTo(gameObject, myTween);
+        if (wave % 2 != 0)
+        {
+            GalagaHelper.PrintAllGhostObjects();
+        }
+    }
+
+    public void OnDrawGizmos()
+    {
+        if (GalagaHelper.SecondWavePath.Length != 0)
+        {
+            iTween.DrawPath(GalagaHelper.SecondWavePath);
+        }
+        if (GalagaHelper.FourthWavePath.Length != 0)
+        {
+            iTween.DrawPath(GalagaHelper.FourthWavePath);
+        }
     }
 
 	void Update () {
