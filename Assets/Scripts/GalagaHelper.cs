@@ -3,9 +3,9 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
-public static class GalagaHelper {
-
-
+public static class GalagaHelper
+{
+    #region Enum variables
     /// <summary>
     /// Wave Patterns for Round1.
     /// </summary>
@@ -32,7 +32,9 @@ public static class GalagaHelper {
         Round1Phase4,
         Round1Phase5
     }
+    #endregion
 
+    #region Variables
     // Second wave path
     public static Vector3[] SecondWavePath = new Vector3[11];
     public static Vector3[] FourthWavePath = new Vector3[8];
@@ -59,8 +61,9 @@ public static class GalagaHelper {
     /// Gets the current wave of enemy.
     /// </summary>
     public static Formations CurrentRoundPhase = Formations.Round1Phase1;
-#region formation
+    #endregion
 
+    #region Waves 3 thru Waves 5 Functions
     /// <summary>
     /// Gets the Beginning Spawn point of entry for enemy entrance flight.
     /// </summary>
@@ -72,14 +75,6 @@ public static class GalagaHelper {
         if (formationName == "Round1Phase1EnemyFormation")
         {
             spawnPoint = GameObject.FindGameObjectWithTag("Respawn");
-            //if (spawnEntranceRight)
-            //{
-            //    spawnPoint.transform.position = new Vector3(spawnPoint.transform.position.x - 10, spawnPoint.transform.position.y, spawnPoint.transform.position.z);
-            //}
-            //else
-            //{
-            //    spawnPoint.transform.position = new Vector3(spawnPoint.transform.position.x + 10, spawnPoint.transform.position.y, spawnPoint.transform.position.z);
-            //}
         }
         else if (formationName == "Round1Phase2EnemyFormation")
         {
@@ -114,31 +109,9 @@ public static class GalagaHelper {
         GameObject middlePt = GameObject.FindGameObjectWithTag("Point2");
         GameObject rightEntrancePt = GameObject.FindGameObjectWithTag("begin_Right");
         GameObject leftEntrancePt = GameObject.FindGameObjectWithTag("begin_Left");
-        GameObject bottomLeftPt = GameObject.FindGameObjectWithTag("Spawn_BottomLeft");
-        GameObject bottomRightPt = GameObject.FindGameObjectWithTag("Spawn_BottomRight");
 
         // Get next spawn position from spawner script on current formation.
         Transform nextSpawnPos = spawner.currentSpawnPos;
-        if (EnemiesSpawned > 8 && EnemiesSpawned < 17) // Round 2
-        {
-            EnemySpawner form2Spawn = GameObject.FindGameObjectWithTag("phase2").GetComponent<EnemySpawner>();
-            nextSpawnPos = form2Spawn.currentSpawnPos;
-        }
-        else if(EnemiesSpawned > 16 && EnemiesSpawned < 25) // Round 3_1
-        {
-            EnemySpawner form31Spawn = GameObject.FindGameObjectWithTag("phase31").GetComponent<EnemySpawner>();
-            nextSpawnPos = form31Spawn.currentSpawnPos;
-        }
-        else if (EnemiesSpawned > 24 && EnemiesSpawned < 33) // Round 4_1
-        {
-            EnemySpawner form41Spawn = GameObject.FindGameObjectWithTag("phase41").GetComponent<EnemySpawner>();
-            nextSpawnPos = form41Spawn.currentSpawnPos;
-        }
-        else if (EnemiesSpawned > 32 && EnemiesSpawned < 41) // Round 5_1
-        {
-            EnemySpawner form51Spawn = GameObject.FindGameObjectWithTag("phase51").GetComponent<EnemySpawner>();
-            nextSpawnPos = form51Spawn.currentSpawnPos;
-        }
 
         switch (pattern)
         {
@@ -161,42 +134,6 @@ public static class GalagaHelper {
                 rd1_Flight2[4] = nextSpawnPos;
                 return rd1_Flight2;
                 break;
-            case EntranceFlightPatterns.round1_Left:
-                Transform[] rd1_Flight3 = new Transform[5];
-                rd1_Flight3[0] = bottomLeftPt.transform;
-                rd1_Flight3[1] = leftEntrancePt.transform;
-                rd1_Flight3[2] = middlePt.transform;
-                rd1_Flight3[3] = form2.transform;
-                rd1_Flight3[4] = nextSpawnPos;
-                return rd1_Flight3;
-                break;
-            case EntranceFlightPatterns.round1_Right:
-                Transform[] rd_Flight4 = new Transform[5];
-                rd_Flight4[0] = bottomRightPt.transform;
-                rd_Flight4[1] = rightEntrancePt.transform;
-                rd_Flight4[2] = middlePt.transform;
-                rd_Flight4[3] = form31.transform;
-                rd_Flight4[4] = nextSpawnPos;
-                return rd_Flight4;
-                break;
-            case EntranceFlightPatterns.round1_TopLeft:
-                Transform[] rd1_Flight5 = new Transform[5];
-                rd1_Flight5[0] = spawnPt.transform;
-                rd1_Flight5[1] = middlePt.transform;
-                rd1_Flight5[2] = bottomLeftPt.transform;
-                rd1_Flight5[3] = leftEntrancePt.transform;
-                rd1_Flight5[4] = nextSpawnPos;
-                return rd1_Flight5;
-                break;
-            case EntranceFlightPatterns.round1_TopRight:
-                Transform[] rd1_Flight6 = new Transform[5];
-                rd1_Flight6[0] = spawnPt.transform;
-                rd1_Flight6[1] = middlePt.transform;
-                rd1_Flight6[2] = bottomRightPt.transform;
-                rd1_Flight6[3] = rightEntrancePt.transform;
-                rd1_Flight6[4] = nextSpawnPos;
-                return rd1_Flight6;
-                break;
             default:
                 Transform[] test = new Transform[2];
                 test[0] = spawnPt.transform;
@@ -205,149 +142,163 @@ public static class GalagaHelper {
                 break;
         }
     }
-#endregion
-    public static void Get2ndwave() 
+
+    /// <summary>
+    /// Gets EnemySpawner Formation Script object for positioning each enemy.
+    /// </summary>
+    /// <param name="waveNumber"></param>
+    /// <returns></returns>
+    public static EnemySpawner GetFormationScript(int waveNumber)
     {
-        // Get formation2 script
-        EnemySpawner form2Spawn = GameObject.FindGameObjectWithTag("phase2").GetComponent<EnemySpawner>();
-        if (SecondWavePath[0].x == 0f)
+        EnemySpawner formSpawn = new EnemySpawner();
+        switch (waveNumber)
         {
-            // Reset WaveDelay to zero
-            Wave1Delay = 0.0f;
-            Vector3[] circleNodes = new Vector3[7];
-            circleNodes = iTweenPath.GetPath("LeftCircle");
-            Debug.Log("<color=red> path nodes:</color> " + iTweenPath.GetPath("LeftCircle").GetUpperBound(0));
-            GameObject spawnPoint = new GameObject();
-            spawnPoint = GameObject.FindGameObjectWithTag("Spawn_BottomLeft");
-
-            GameObject middlePt = GameObject.FindGameObjectWithTag("Point2");
-            //EnemySpawner form2Spawn = GameObject.FindGameObjectWithTag("phase2").GetComponent<EnemySpawner>();
-            Vector3[] LeftPath = new Vector3[11];
-            LeftPath[0] = spawnPoint.transform.position;
-            LeftPath[1] = circleNodes[0];
-            LeftPath[2] = circleNodes[1];
-            LeftPath[3] = circleNodes[2];
-            LeftPath[4] = circleNodes[3];
-            LeftPath[5] = circleNodes[4];
-            LeftPath[6] = circleNodes[5];
-            LeftPath[7] = circleNodes[6];
-            LeftPath[8] = middlePt.transform.position;
-            LeftPath[9] = form2Spawn.transform.position;
-            LeftPath[10] = form2Spawn.currentSpawnPos.position;
-            SecondWavePath = LeftPath;
+            case 2:
+                formSpawn = GameObject.FindGameObjectWithTag("phase2").GetComponent<EnemySpawner>();
+                break;
+            case 3:
+                formSpawn = GameObject.FindGameObjectWithTag("phase31").GetComponent<EnemySpawner>();
+                break;
+            case 4:
+                formSpawn = GameObject.FindGameObjectWithTag("phase41").GetComponent<EnemySpawner>();
+                break;
+            case 5:
+                formSpawn = GameObject.FindGameObjectWithTag("phase51").GetComponent<EnemySpawner>();
+                break;
         }
-        // Change last position to the formation's last position.
-        SecondWavePath[10] = form2Spawn.currentSpawnPos.position;
-        Debug.Log("<color=green>Current spawn pos: </color>" + form2Spawn.currentSpawnPos);
+        return formSpawn;
     }
+    #endregion
 
-    public static void Get3rdwave()
+    #region FirstAndSecondWaves
+    /// <summary>
+    /// Creates the paths for waves 2 - 5.
+    /// </summary>
+    /// <param name="waveNumber"></param>
+    public static void GetWavePaths(int waveNumber)
     {
-        // Get formation3 script
-        EnemySpawner form3Spawn = GameObject.FindGameObjectWithTag("phase31").GetComponent<EnemySpawner>();
-        if (SecondWavePath[0].x == 0f)
-        {
-            // Reset WaveDelay to zero
-            Wave1Delay = 0.0f;
-            Vector3[] circleNodes = new Vector3[7];
-            circleNodes = iTweenPath.GetPath("RightCircle");
-            Debug.Log("<color=red> path nodes:</color> " + iTweenPath.GetPath("RightCircle").GetUpperBound(0));
-            GameObject spawnPoint = new GameObject();
-            spawnPoint = GameObject.FindGameObjectWithTag("Spawn_BottomRight");
-
-            GameObject middlePt = GameObject.FindGameObjectWithTag("Point2");
-            //EnemySpawner form2Spawn = GameObject.FindGameObjectWithTag("phase2").GetComponent<EnemySpawner>();
-            Vector3[] LeftPath = new Vector3[11];
-            LeftPath[0] = spawnPoint.transform.position;
-            LeftPath[1] = circleNodes[0];
-            LeftPath[2] = circleNodes[1];
-            LeftPath[3] = circleNodes[2];
-            LeftPath[4] = circleNodes[3];
-            LeftPath[5] = circleNodes[4];
-            LeftPath[6] = circleNodes[5];
-            LeftPath[7] = circleNodes[6];
-            LeftPath[8] = middlePt.transform.position;
-            LeftPath[9] = form3Spawn.transform.position;
-            LeftPath[10] = form3Spawn.currentSpawnPos.position;
-            SecondWavePath = LeftPath;
-        }
-        // Change last position to the formation's last position.
-        SecondWavePath[10] = form3Spawn.currentSpawnPos.position;
-        Debug.Log("<color=green>Current spawn pos: </color>" + form3Spawn.currentSpawnPos);
-    }
-
-    public static void Get4thwave()
-    {
-        // Get formation3 script
-        EnemySpawner form4Spawn = GameObject.FindGameObjectWithTag("phase41").GetComponent<EnemySpawner>();
+        Vector3[] path = null;
+        // Get formation script
+        EnemySpawner formSpawn = GetFormationScript(waveNumber);
         if (FourthWavePath[0].x == 0f)
         {
             // Reset WaveDelay to zero
             Wave1Delay = 0.0f;
             Vector3[] circleNodes = new Vector3[7];
-            circleNodes = iTweenPath.GetPath("LeftCircle");
-            Debug.Log("<color=red> path nodes:</color> " + iTweenPath.GetPath("LeftCircle").GetUpperBound(0));
-            GameObject spawnPoint = new GameObject();
-            spawnPoint = GameObject.FindGameObjectWithTag("Respawn");
-
             GameObject middlePt = GameObject.FindGameObjectWithTag("Point2");
-            //EnemySpawner form2Spawn = GameObject.FindGameObjectWithTag("phase2").GetComponent<EnemySpawner>();
-            Vector3[] LeftPath = new Vector3[8];
-            LeftPath[0] = spawnPoint.transform.position;
-            LeftPath[1] = circleNodes[3];
-            LeftPath[2] = circleNodes[4];
-            LeftPath[3] = circleNodes[5];
-            LeftPath[4] = circleNodes[6];
-            LeftPath[5] = middlePt.transform.position;
-            LeftPath[6] = form4Spawn.transform.position;
-            LeftPath[7] = form4Spawn.currentSpawnPos.position;
-            FourthWavePath = LeftPath;
-        }
-        // Change last position to the formation's last position.
-        FourthWavePath[7] = form4Spawn.currentSpawnPos.position;
-        Debug.Log("<color=green>Current spawn pos: </color>" + form4Spawn.currentSpawnPos);
-    }
 
-    public static void Get5thwave()
-    {
-        // Get formation3 script
-        EnemySpawner form5Spawn = GameObject.FindGameObjectWithTag("phase51").GetComponent<EnemySpawner>();
-        if (FourthWavePath[0].x == 0f)
+            //Even number traits Left Circle, Odd number Right Circle
+            if (waveNumber % 2 == 0)
+            {
+                // Get Right circle
+                circleNodes = iTweenPath.GetPath("LeftCircle");
+                Debug.Log("<color=red> path nodes:</color> " + iTweenPath.GetPath("LeftCircle").GetUpperBound(0));
+            }
+            else
+            {
+                // Get Right circle
+                circleNodes = iTweenPath.GetPath("RightCircle");
+                Debug.Log("<color=red> path nodes:</color> " + iTweenPath.GetPath("RightCircle").GetUpperBound(0));
+            }
+
+            // Spawning and Positions
+            // Wave # > 3 == Respawn && 8 positions, Wave == 3 == spawn_bottomRight, Wave == 2 = spawn_bottomleft
+            if (waveNumber > 3)
+            {
+                // Spawn point
+                GameObject spawnPoint = new GameObject();
+                spawnPoint = GameObject.FindGameObjectWithTag("Respawn");
+
+                // Path Positions
+                path = new Vector3[8];
+                path[0] = spawnPoint.transform.position;
+                path[1] = circleNodes[3];
+                path[2] = circleNodes[4];
+                path[3] = circleNodes[5];
+                path[4] = circleNodes[6];
+                path[5] = middlePt.transform.position;
+                path[6] = formSpawn.transform.position;
+                path[7] = formSpawn.currentSpawnPos.position;
+            }
+            if (waveNumber == 3)
+            {
+                // Spawn point
+                GameObject spawnPoint = new GameObject();
+                spawnPoint = GameObject.FindGameObjectWithTag("Spawn_BottomRight");
+                // Path Positions
+                path = new Vector3[11];
+                path[1] = circleNodes[0];
+                path[2] = circleNodes[1];
+                path[0] = spawnPoint.transform.position;
+                path[3] = circleNodes[2];
+                path[4] = circleNodes[3];
+                path[5] = circleNodes[4];
+                path[6] = circleNodes[5];
+                path[7] = circleNodes[6];
+                path[8] = middlePt.transform.position;
+                path[9] = formSpawn.transform.position;
+                path[10] = formSpawn.currentSpawnPos.position;
+            }
+            else if (waveNumber == 2)
+	        {
+                // Spawn Point
+                GameObject spawnPoint = new GameObject();
+                spawnPoint = GameObject.FindGameObjectWithTag("Spawn_BottomLeft");
+
+                // Path positions
+                path = new Vector3[11];
+                path[0] = spawnPoint.transform.position;
+                path[1] = circleNodes[0];
+                path[2] = circleNodes[1];
+                path[3] = circleNodes[2];
+                path[4] = circleNodes[3];
+                path[5] = circleNodes[4];
+                path[6] = circleNodes[5];
+                path[7] = circleNodes[6];
+                path[8] = middlePt.transform.position;
+                path[9] = formSpawn.transform.position;
+                path[10] = formSpawn.currentSpawnPos.position;
+	        }
+
+            // SecondWavePath == 11
+            // FourthWavePath == 8
+            if (path.Length == 8)
+            {
+                FourthWavePath = path;
+            }
+            else
+	        {
+                SecondWavePath = path;
+	        }
+        }
+
+        // Change last position to the formation's last position.
+        if (path.Length == 8)
         {
-            // Reset WaveDelay to zero
-            Wave1Delay = 0.0f;
-            Vector3[] circleNodes = new Vector3[7];
-            circleNodes = iTweenPath.GetPath("RightCircle");
-            Debug.Log("<color=red> path nodes:</color> " + iTweenPath.GetPath("RightCircle").GetUpperBound(0));
-            GameObject spawnPoint = new GameObject();
-            spawnPoint = GameObject.FindGameObjectWithTag("Respawn");
-
-            GameObject middlePt = GameObject.FindGameObjectWithTag("Point2");
-            //EnemySpawner form2Spawn = GameObject.FindGameObjectWithTag("phase2").GetComponent<EnemySpawner>();
-            Vector3[] LeftPath = new Vector3[8];
-            LeftPath[0] = spawnPoint.transform.position;
-            LeftPath[1] = circleNodes[3];
-            LeftPath[2] = circleNodes[4];
-            LeftPath[3] = circleNodes[5];
-            LeftPath[4] = circleNodes[6];
-            LeftPath[5] = middlePt.transform.position;
-            LeftPath[6] = form5Spawn.transform.position;
-            LeftPath[7] = form5Spawn.currentSpawnPos.position;
-            FourthWavePath = LeftPath;
+            FourthWavePath[7] = formSpawn.currentSpawnPos.position;
         }
-        // Change last position to the formation's last position.
-        FourthWavePath[7] = form5Spawn.currentSpawnPos.position;
-        Debug.Log("<color=green>Current spawn pos: </color>" + form5Spawn.currentSpawnPos);
+        else
+	    {
+            SecondWavePath[10] = formSpawn.currentSpawnPos.position;
+	    }
     }
 
+    /// <summary>
+    /// Stores the game object and the Path Parameters for the iTween paths.
+    /// </summary>
+    /// <param name="gm"></param>
+    /// <param name="gmParams"></param>
     public static void CollectEnemyPaths(GameObject gm, Hashtable gmParams)
     {
         enemyObjects.Add(gm);
         //Debug.Log("Added Enemy object");
         EnemyPathParams.Add(gmParams);
-        Debug.Log("<color=green>Current Spawn POS - CollectEnemyPaths" + gmParams);
+        Debug.Log("<color=green>Current Spawn POS - CollectEnemyPaths</color>" + gmParams);
     }
 
+    /// <summary>
+    /// Sets the first 2 waves in motion to start the game.
+    /// </summary>
     public static void StartPaths()
     {
         if (NumEnemyObjects() == 8)
@@ -356,13 +307,15 @@ public static class GalagaHelper {
             {
                 Debug.Log("Last pos:" + GalagaHelper.SecondWavePath[10]);
                 iTween.MoveTo(enemyObjects[i], EnemyPathParams[i]);
-                //EnemyPathParams[i].Keys
                 //Debug.Log("enemy paths: " + EnemyPathParams[i].Values);
                 isWaveOneStarted = true;
             }
         }
     }
 
+    /// <summary>
+    /// Clears out both Enemy object list and Enemy Path Params list.
+    /// </summary>
     public static void RemovePaths()
     {
         isWaveOneStarted = false;
@@ -371,6 +324,9 @@ public static class GalagaHelper {
         Debug.Log("<color=red>ENEMY OBJECTS CLEARED</color>");
     }
 
+    /// <summary>
+    /// Starts Round 1 Wave 1
+    /// </summary>
     public static void StartRound1()
     {
         if (EnemiesSpawned > 7 && enemyObjects.Count == 8 && isWaveOneStarted == false)
@@ -389,6 +345,9 @@ public static class GalagaHelper {
         }
     }
 
+    /// <summary>
+    /// Clears the static wave paths.
+    /// </summary>
     public static void ClearWavePath()
     {
         for (int i = 0; i < 11; i++)
@@ -401,4 +360,25 @@ public static class GalagaHelper {
             FourthWavePath[i] = new Vector3(0, 0, 0);   
         }
     }
+    #endregion
+
+    #region Delete Emtpy GameObjects in Scene
+    /// <summary>
+    /// Finds and deletes all gameobjects named "New Game Object"
+    /// </summary>
+    public static void PrintAllGhostObjects()
+    {
+        int x = 0;
+        foreach (GameObject obj in Object.FindObjectsOfType(typeof(GameObject)))
+        {
+            if (obj.name == "New Game Object")
+            {
+                //Debug.Log(obj.name.Bold().Sized(10));
+                x += 1;
+                Object.Destroy(obj.gameObject);
+            }
+        }
+        Debug.Log("<bold>Count of objects:</bold> " + x);
+    }
+    #endregion
 }
