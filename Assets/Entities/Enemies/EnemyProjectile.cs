@@ -1,14 +1,9 @@
 using UnityEngine;
 using System.Collections;
 
-public class Projectile : MonoBehaviour {
+public class EnemyProjectile : MonoBehaviour {
 
-    public float damage = 200f;
-
-    void Awake()
-    {
-        //SimplePool.Preload(20);
-    }
+    public float damage = 100f;
 
     public float GetDamage()
     {
