@@ -11,6 +11,10 @@ public class PlayerController : MonoBehaviour {
     private float xMin;
     private float xMax;
 
+    void Awake()
+    {
+        SimplePool.Preload(bullet, 20);
+    }
 	// Use this for initialization
 	void Start () {
 	    float distance = transform.position.z - Camera.main.transform.position.z;
@@ -23,7 +27,9 @@ public class PlayerController : MonoBehaviour {
     void Fire()
     {
         Vector3 offset = new Vector3(0, 0, 4);
-        GameObject laserBeam = Instantiate(bullet, transform.position + offset, Quaternion.identity) as GameObject;
+        //GameObject laserBeam = Instantiate(bullet, transform.position + offset, Quaternion.identity) as GameObject
+        GameObject laserBeam = SimplePool.Spawn(bullet, transform.position + offset, Quaternion.identity, true) as GameObject;
+        laserBeam.transform.position = transform.position + offset;
         laserBeam.GetComponent<Rigidbody>().velocity = new Vector3(0, 0, projectileSpeed);
         //Debug.Log("Fire at speed: " + projectileSpeed);
     }

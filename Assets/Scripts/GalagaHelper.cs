@@ -196,7 +196,7 @@ public static class GalagaHelper
             {
                 // Get Right circle
                 circleNodes = iTweenPath.GetPath("LeftCircle");
-                Debug.Log("<color=red> path nodes:</color> " + iTweenPath.GetPath("LeftCircle").GetUpperBound(0));
+                //Debug.Log("<color=red> path nodes:</color> " + iTweenPath.GetPath("LeftCircle").GetUpperBound(0));
             }
             else
             {
@@ -309,7 +309,7 @@ public static class GalagaHelper
         {
             for (int i = 0; i < 8; i++)
             {
-                Debug.Log("Last pos:" + GalagaHelper.SecondWavePath[10]);
+                //Debug.Log("Last pos:" + GalagaHelper.SecondWavePath[10]);
                 iTween.MoveTo(enemyObjects[i], EnemyPathParams[i]);
                 //Debug.Log("enemy paths: " + EnemyPathParams[i].Values);
                 isWaveOneStarted = true;

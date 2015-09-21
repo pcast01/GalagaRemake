@@ -20,6 +20,11 @@ public class EnemyController : MonoBehaviour {
     [SerializeField]
     private float movePathTime;
 
+    void Awake()
+    {
+        SimplePool.Preload(enemyLaser, 25);
+    }
+
     void Start () {
         GalagaHelper.EnemiesSpawned += 1;
         round1Phase1spawner = GameObject.Find("Round1Phase1EnemyFormation").GetComponent<EnemySpawner>();
@@ -121,7 +126,7 @@ public class EnemyController : MonoBehaviour {
         float probability = Time.deltaTime * shotsPerSecond;
         if (Random.value < probability)
         {
-            Debug.Log("Enemy firing.");
+            //Debug.Log("Enemy firing.");
             Fire();
         }
         //EnemySpawner formSpawn = GalagaHelper.GetFormationScript(GalagaHelper.CurrentRoundPhase);
@@ -140,7 +145,9 @@ public class EnemyController : MonoBehaviour {
     void Fire()
     {
         Vector3 startPos = transform.position + new Vector3(0, 0, -4);
-        GameObject enemyBullet = Instantiate(enemyLaser, startPos, Quaternion.identity) as GameObject;
+        //GameObject enemyBullet = Instantiate(enemyLaser, startPos, Quaternion.identity) as GameObject;
+        GameObject enemyBullet = SimplePool.Spawn(enemyLaser, startPos, Quaternion.identity, true) as GameObject;
+        enemyBullet.transform.position = startPos;
         enemyBullet.GetComponent<Rigidbody>().velocity = new Vector3(0, 0, -projectileSpeed);
     }
 
@@ -151,11 +158,15 @@ public class EnemyController : MonoBehaviour {
         {
             health -= playerBullet.GetDamage();
             playerBullet.Hit();
-            Debug.Log("Enemy hit!");
+            Debug.Log("Enemy hit!".Bold().Colored(Colors.red));
             scoreKeeper.Score(scoreValue);
             if (health <= 0)
             {
-                Destroy(gameObject);
+                //gameObject.isDead = true;
+                SimplePool.Despawn(gameObject);
+                //gameObject.SetActive(false);
+                Debug.Log("Enemy is dead".Bold());
+                //Destroy(gameObject);
                 //end of game
                 scoreKeeper.Score(200);
                 //Application.LoadLevel("Win Screen");

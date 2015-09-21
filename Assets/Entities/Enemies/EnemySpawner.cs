@@ -22,6 +22,11 @@ public class EnemySpawner : MonoBehaviour {
     private bool isFormationUp = false;
     private int enemiesInPlace = 0;
 
+    void Awake()
+    {
+        SimplePool.Preload(enemy1Prefab, 8);
+    }
+
 	void Start () {
         // Execute Spawn function
         SpawnUntilFull();
@@ -98,10 +103,18 @@ public class EnemySpawner : MonoBehaviour {
                 //Debug.Log("child count = " + transform.GetChild(i).childCount);
                 //Debug.Log("Parent pos: " + transform.GetChild(i).position + " Child pos: " + transform.GetChild(i).GetChild(0).position);
                 int childZ = (int)Math.Round(transform.GetChild(i).GetChild(0).position.z, 0);
+
                 int parentZ = (int)Math.Round(transform.GetChild(i).position.z, 0);
-                if (childZ == parentZ)
+                Transform childEnemy = transform.GetChild(i).GetChild(0);
+                EnemyController childEnemyScript = childEnemy.GetComponent<EnemyController>();
+                
+                // if the child is in position or is dead from bullets
+                if (childZ == parentZ || childEnemyScript.isActiveAndEnabled == false)
                 {
-                    //Debug.Log("Child in place.");
+                    if (childEnemyScript.isActiveAndEnabled == false)
+                    {
+                        Debug.Log("Enemy obj disabled.".Italics().Colored(Colors.red));
+                    }
                     x += 1;
                 }
             }
@@ -131,7 +144,10 @@ public class EnemySpawner : MonoBehaviour {
                 spawnEntranceRight = true;
             }
             // Spawn enemy in enemy1Prefab.
-            GameObject enemy = Instantiate(enemy1Prefab, spawnPoint.position, enemy1Prefab.transform.rotation) as GameObject;
+            //SimplePool.Spawn()
+            //GameObject enemy = Instantiate(enemy1Prefab, spawnPoint.position, enemy1Prefab.transform.rotation) as GameObject;
+            GameObject enemy = SimplePool.Spawn(enemy1Prefab, spawnPoint.position, enemy1Prefab.transform.rotation, true) as GameObject;
+            enemy.transform.position = spawnPoint.position;
             //Debug.Log("Enemy spawned." + "free pos=" + freePosition.position.z);
             // Set free position's Parent
             enemy.transform.parent = freePosition;

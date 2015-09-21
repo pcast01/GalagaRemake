@@ -11,6 +11,7 @@ GameObject:
   - 33: {fileID: 3377794}
   - 23: {fileID: 2381064}
   - 114: {fileID: 11411886}
+  - 64: {fileID: 6403324}
   m_Layer: 10
   m_Name: Enemy2
   m_TagString: Untagged
@@ -61,6 +62,18 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 172892}
   m_Mesh: {fileID: 4300000, guid: a7deaa9e20233b74094038fb1c22572e, type: 3}
+--- !u!64 &6403324
+MeshCollider:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 172892}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Convex: 1
+  m_Mesh: {fileID: 4300000, guid: a7deaa9e20233b74094038fb1c22572e, type: 3}
 --- !u!114 &11411886
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -77,7 +90,7 @@ MonoBehaviour:
   scoreValue: 150
   isMovingRight: 0
   enemyLaser: {fileID: 103356, guid: c59875210abc21544b4ee5e6df08bfeb, type: 2}
-  shotsPerSecond: .5
+  shotsPerSecond: .00999999978
   projectileSpeed: 16
   pathSpeed: 40
   movePathTime: 1
@@ -103,6 +116,18 @@ Prefab:
     - target: {fileID: 0}
       propertyPath: m_Layer
       value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: m_Convex
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: m_IsTrigger
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: shotsPerSecond
+      value: .00999999978
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}

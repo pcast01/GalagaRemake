@@ -605,8 +605,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bullet: {fileID: 172490, guid: 4d0759e09ef9306419a04af7c36c5ee8, type: 2}
-  projectileSpeed: 18
-  speed: 34
+  projectileSpeed: 34
+  speed: 44
   firingRate: 1
 --- !u!1001 &216009917
 Prefab:
@@ -2918,6 +2918,14 @@ Prefab:
     - target: {fileID: 194518, guid: c667f4f3e75366b49a406cc54830fc5e, type: 2}
       propertyPath: m_TagString
       value: Player
+      objectReference: {fileID: 0}
+    - target: {fileID: 11462636, guid: c667f4f3e75366b49a406cc54830fc5e, type: 2}
+      propertyPath: speed
+      value: 44
+      objectReference: {fileID: 0}
+    - target: {fileID: 11462636, guid: c667f4f3e75366b49a406cc54830fc5e, type: 2}
+      propertyPath: projectileSpeed
+      value: 34
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: c667f4f3e75366b49a406cc54830fc5e, type: 2}

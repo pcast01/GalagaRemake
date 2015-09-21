@@ -3,7 +3,12 @@ using System.Collections;
 
 public class Projectile : MonoBehaviour {
 
-    public float damage = 100f;
+    public float damage = 200f;
+
+    void Awake()
+    {
+        //SimplePool.Preload(20);
+    }
 
     public float GetDamage()
     {
@@ -12,6 +17,7 @@ public class Projectile : MonoBehaviour {
 
     public void Hit()
     {
-        Destroy(gameObject);
+        SimplePool.Despawn(gameObject);
+        //Destroy(gameObject);
     }
 }
