@@ -20,6 +20,11 @@ public class EnemyController : MonoBehaviour {
     [SerializeField]
     private float movePathTime;
 
+    void Awake()
+    {
+        SimplePool.Preload(enemyLaser, 25);
+    }
+
     void Start () {
         GalagaHelper.EnemiesSpawned += 1;
         round1Phase1spawner = GameObject.Find("Round1Phase1EnemyFormation").GetComponent<EnemySpawner>();
@@ -55,19 +60,19 @@ public class EnemyController : MonoBehaviour {
         }
         else if (GalagaHelper.EnemiesSpawned > 8 && GalagaHelper.EnemiesSpawned < 17)
         {
-            CreatePathAndMove(2);
+            CreatePathAndMove(GalagaHelper.Formations.Round1Phase2);
         }
         else if (GalagaHelper.EnemiesSpawned > 16 && GalagaHelper.EnemiesSpawned < 25)
         {
-            CreatePathAndMove(3);
+            CreatePathAndMove(GalagaHelper.Formations.Round1Phase3);
         }
         else if (GalagaHelper.EnemiesSpawned > 24 && GalagaHelper.EnemiesSpawned < 33)
         {
-            CreatePathAndMove(4);
+            CreatePathAndMove(GalagaHelper.Formations.Round1Phase4);
         }
         else if (GalagaHelper.EnemiesSpawned > 32 && GalagaHelper.EnemiesSpawned < 41)
         {
-            CreatePathAndMove(5);
+            CreatePathAndMove(GalagaHelper.Formations.Round1Phase5);
         }
         else
         {
@@ -81,12 +86,12 @@ public class EnemyController : MonoBehaviour {
     /// Create path based on wave number.
     /// </summary>
     /// <param name="wave"></param>
-    public void CreatePathAndMove(int wave)
+    public void CreatePathAndMove(GalagaHelper.Formations form)
     {
         GalagaHelper.ClearWavePath();
-        GalagaHelper.GetWavePaths(wave);
+        GalagaHelper.GetWavePaths(form);
         GalagaHelper.Wave1Delay += 0.06f;
-        if (wave == 2 || wave == 3)
+        if ((int)form == 2 || (int)form == 3)
         {
             myTween.Add("path", GalagaHelper.SecondWavePath);
         }
@@ -98,7 +103,7 @@ public class EnemyController : MonoBehaviour {
         myTween.Add("delay", GalagaHelper.Wave1Delay);
         myTween.Add("easetype", "linear");
         iTween.MoveTo(gameObject, myTween);
-        if (wave % 2 != 0)
+        if ((int)form % 2 != 0)
         {
             GalagaHelper.PrintAllGhostObjects();
         }
@@ -122,14 +127,27 @@ public class EnemyController : MonoBehaviour {
         if (Random.value < probability)
         {
             //Debug.Log("Enemy firing.");
-            //Fire();
+            Fire();
         }
+        //EnemySpawner formSpawn = GalagaHelper.GetFormationScript(GalagaHelper.CurrentRoundPhase);
+
+        //if (GalagaHelper.CurrentRoundPhase == GalagaHelper.Formations.Round1Phase1 && GalagaHelper.EnemiesSpawned > 7)
+        //{
+        //    if (gameObject.transform.position == formSpawn.transform.position)
+        //    {
+        //        iTween.MoveUpdate(gameObject, formSpawn.currentSpawnPos.position, 0.5f);
+        //        Debug.Log("Move update called.".Bold());
+        //    }
+        //}
+        // Until the enemy is in the position keep updating moveTo
 	}
 
     void Fire()
     {
         Vector3 startPos = transform.position + new Vector3(0, 0, -4);
-        GameObject enemyBullet = Instantiate(enemyLaser, startPos, Quaternion.identity) as GameObject;
+        //GameObject enemyBullet = Instantiate(enemyLaser, startPos, Quaternion.identity) as GameObject;
+        GameObject enemyBullet = SimplePool.Spawn(enemyLaser, startPos, Quaternion.identity, true) as GameObject;
+        enemyBullet.transform.position = startPos;
         enemyBullet.GetComponent<Rigidbody>().velocity = new Vector3(0, 0, -projectileSpeed);
     }
 
@@ -140,14 +158,18 @@ public class EnemyController : MonoBehaviour {
         {
             health -= playerBullet.GetDamage();
             playerBullet.Hit();
-            //Debug.Log("Enemy hit!");
+            Debug.Log("Enemy hit!".Bold().Colored(Colors.red));
             scoreKeeper.Score(scoreValue);
             if (health <= 0)
             {
-                Destroy(gameObject);
+                //gameObject.isDead = true;
+                SimplePool.Despawn(gameObject);
+                //gameObject.SetActive(false);
+                Debug.Log("Enemy is dead".Bold());
+                //Destroy(gameObject);
                 //end of game
                 scoreKeeper.Score(200);
-                Application.LoadLevel("Win Screen");
+                //Application.LoadLevel("Win Screen");
                 //Die();
             }
         }

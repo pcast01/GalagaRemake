@@ -605,8 +605,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bullet: {fileID: 172490, guid: 4d0759e09ef9306419a04af7c36c5ee8, type: 2}
-  projectileSpeed: 18
-  speed: 34
+  projectileSpeed: 34
+  speed: 44
   firingRate: 1
 --- !u!1001 &216009917
 Prefab:
@@ -2919,6 +2919,14 @@ Prefab:
       propertyPath: m_TagString
       value: Player
       objectReference: {fileID: 0}
+    - target: {fileID: 11462636, guid: c667f4f3e75366b49a406cc54830fc5e, type: 2}
+      propertyPath: speed
+      value: 44
+      objectReference: {fileID: 0}
+    - target: {fileID: 11462636, guid: c667f4f3e75366b49a406cc54830fc5e, type: 2}
+      propertyPath: projectileSpeed
+      value: 34
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: c667f4f3e75366b49a406cc54830fc5e, type: 2}
   m_IsPrefabParent: 0
@@ -4241,7 +4249,7 @@ GameObject:
   - 114: {fileID: 1770887235}
   m_Layer: 0
   m_Name: Round1Phase1EnemyFormation
-  m_TagString: Untagged
+  m_TagString: phase1
   m_Icon: {fileID: 7250588514170254948, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -5772,7 +5780,7 @@ MonoBehaviour:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 2064273400}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: deb748c27acbc514e97c9126bed7c347, type: 3}
   m_Name: 
