@@ -44,7 +44,7 @@ public static class GalagaHelper
     public static List<Hashtable> EnemyPathParams = new List<Hashtable>();
 
     public static bool isWaveOneStarted;
-
+    public static int RoundNumber;
     public static int NumEnemyObjects()
     {
         return enemyObjects.Count;
@@ -62,6 +62,31 @@ public static class GalagaHelper
     /// </summary>
     public static Formations CurrentRoundPhase = Formations.Round1Phase1;
     #endregion
+
+    /// <summary>
+    /// Disable all formations except 1st formation.
+    /// </summary>
+    public static void ResetFormations()
+    {
+        EnemySpawner form = GetFormationScript(GalagaHelper.Formations.Round1Phase1);
+        form.DisownChildren();
+
+        form = GetFormationScript(GalagaHelper.Formations.Round1Phase2);
+        form.DisownChildren();
+        form.enabled = false;
+
+        form = GetFormationScript(GalagaHelper.Formations.Round1Phase3);
+        form.DisownChildren();
+        form.enabled = false;
+
+        form = GetFormationScript(GalagaHelper.Formations.Round1Phase4);
+        form.DisownChildren();
+        form.enabled = false;
+
+        form = GetFormationScript(GalagaHelper.Formations.Round1Phase5);
+        form.DisownChildren();
+        form.enabled = false;
+    }
 
     #region Waves 3 thru Waves 5 Functions
     /// <summary>
@@ -178,12 +203,16 @@ public static class GalagaHelper
     /// Creates the paths for waves 2 - 5.
     /// </summary>
     /// <param name="form"></param>
-    public static void GetWavePaths(Formations form)
+    public static void GetWavePaths(Formations form, int RoundNumber)
     {
         Vector3[] path = null;
         // Get formation script
         Debug.Log("Current Spawn: ".Bold().Colored(Colors.green) + CurrentRoundPhase + " Wave #:".Bold() + form);
+        Debug.Log("GetWavePaths Round#: ".Bold().Colored(Colors.green) + GalagaHelper.RoundNumber);
         EnemySpawner formSpawn = GetFormationScript(form);
+        // FourthWavePath=8 is used for waves 4 & 5.
+        // SecondWavePath=11 is used for waves 2 & 3.
+        // Check to see if paths are clear before putting path in.
         if (FourthWavePath[0].x == 0f)
         {
             // Reset WaveDelay to zero
@@ -202,7 +231,7 @@ public static class GalagaHelper
             {
                 // Get Right circle
                 circleNodes = iTweenPath.GetPath("RightCircle");
-                Debug.Log("<color=red> path nodes:</color> " + iTweenPath.GetPath("RightCircle").GetUpperBound(0));
+                //Debug.Log("<color=red> path nodes:</color> " + iTweenPath.GetPath("RightCircle").GetUpperBound(0));
             }
 
             // Spawning and Positions
@@ -212,36 +241,72 @@ public static class GalagaHelper
                 // Spawn point
                 GameObject spawnPoint = new GameObject();
                 spawnPoint = GameObject.FindGameObjectWithTag("Respawn");
-
-                // Path Positions
-                path = new Vector3[8];
-                path[0] = spawnPoint.transform.position;
-                path[1] = circleNodes[3];
-                path[2] = circleNodes[4];
-                path[3] = circleNodes[5];
-                path[4] = circleNodes[6];
-                path[5] = middlePt.transform.position;
-                path[6] = formSpawn.transform.position;
-                path[7] = formSpawn.currentSpawnPos.position;
+                if (RoundNumber == 2 && formSpawn.spawnEntranceRight)
+                {
+                    Vector3 offset = new Vector3(20, 0, 0);
+                    // Path Positions
+                    path = new Vector3[8];
+                    path[0] = spawnPoint.transform.position;
+                    path[1] = circleNodes[3] + offset;
+                    path[2] = circleNodes[4] + offset;
+                    path[3] = circleNodes[5] + offset;
+                    path[4] = circleNodes[6] + offset;
+                    path[5] = middlePt.transform.position + offset;
+                    path[6] = formSpawn.transform.position + offset;
+                    path[7] = formSpawn.currentSpawnPos.position;
+                }
+                else 
+                {
+                    // Path Positions
+                    path = new Vector3[8];
+                    path[0] = spawnPoint.transform.position;
+                    path[1] = circleNodes[3];
+                    path[2] = circleNodes[4];
+                    path[3] = circleNodes[5];
+                    path[4] = circleNodes[6];
+                    path[5] = middlePt.transform.position;
+                    path[6] = formSpawn.transform.position;
+                    path[7] = formSpawn.currentSpawnPos.position;
+                }
             }
             if ((int)form == 3)
             {
                 // Spawn point
                 GameObject spawnPoint = new GameObject();
                 spawnPoint = GameObject.FindGameObjectWithTag("Spawn_BottomRight");
-                // Path Positions
-                path = new Vector3[11];
-                path[1] = circleNodes[0];
-                path[2] = circleNodes[1];
-                path[0] = spawnPoint.transform.position;
-                path[3] = circleNodes[2];
-                path[4] = circleNodes[3];
-                path[5] = circleNodes[4];
-                path[6] = circleNodes[5];
-                path[7] = circleNodes[6];
-                path[8] = middlePt.transform.position;
-                path[9] = formSpawn.transform.position;
-                path[10] = formSpawn.currentSpawnPos.position;
+                if (RoundNumber == 2 && formSpawn.spawnEntranceRight)
+                {
+                    Vector3 offset = new Vector3(20, 0, 0);
+                    // Path Positions
+                    path = new Vector3[11];
+                    path[0] = spawnPoint.transform.position;
+                    path[1] = circleNodes[0] + offset;
+                    path[2] = circleNodes[1] + offset;
+                    path[3] = circleNodes[2] + offset;
+                    path[4] = circleNodes[3] + offset;
+                    path[5] = circleNodes[4] + offset;
+                    path[6] = circleNodes[5] + offset;
+                    path[7] = circleNodes[6] + offset;
+                    path[8] = middlePt.transform.position + offset;
+                    path[9] = formSpawn.transform.position + offset;
+                    path[10] = formSpawn.currentSpawnPos.position;
+                }
+                else
+                {
+                    // Path Positions
+                    path = new Vector3[11];
+                    path[0] = spawnPoint.transform.position;
+                    path[1] = circleNodes[0];
+                    path[2] = circleNodes[1];
+                    path[3] = circleNodes[2];
+                    path[4] = circleNodes[3];
+                    path[5] = circleNodes[4];
+                    path[6] = circleNodes[5];
+                    path[7] = circleNodes[6];
+                    path[8] = middlePt.transform.position;
+                    path[9] = formSpawn.transform.position;
+                    path[10] = formSpawn.currentSpawnPos.position;
+                }
             }
             else if ((int)form == 2)
 	        {
@@ -249,19 +314,39 @@ public static class GalagaHelper
                 GameObject spawnPoint = new GameObject();
                 spawnPoint = GameObject.FindGameObjectWithTag("Spawn_BottomLeft");
 
-                // Path positions
-                path = new Vector3[11];
-                path[0] = spawnPoint.transform.position;
-                path[1] = circleNodes[0];
-                path[2] = circleNodes[1];
-                path[3] = circleNodes[2];
-                path[4] = circleNodes[3];
-                path[5] = circleNodes[4];
-                path[6] = circleNodes[5];
-                path[7] = circleNodes[6];
-                path[8] = middlePt.transform.position;
-                path[9] = formSpawn.transform.position;
-                path[10] = formSpawn.currentSpawnPos.position;
+                if (RoundNumber == 2 && formSpawn.spawnEntranceRight)
+                {
+                    // Path positions slight right
+                    Vector3 offset = new Vector3(20, 0, 0);
+                    path = new Vector3[11];
+                    path[0] = spawnPoint.transform.position;
+                    path[1] = circleNodes[0] + offset;
+                    path[2] = circleNodes[1] + offset;
+                    path[3] = circleNodes[2] + offset;
+                    path[4] = circleNodes[3] + offset;
+                    path[5] = circleNodes[4] + offset;
+                    path[6] = circleNodes[5] + offset;
+                    path[7] = circleNodes[6] + offset;
+                    path[8] = middlePt.transform.position + offset;
+                    path[9] = formSpawn.transform.position + offset;
+                    path[10] = formSpawn.currentSpawnPos.position;
+                }
+                else
+                {
+                    // Path positions
+                    path = new Vector3[11];
+                    path[0] = spawnPoint.transform.position;
+                    path[1] = circleNodes[0];
+                    path[2] = circleNodes[1];
+                    path[3] = circleNodes[2];
+                    path[4] = circleNodes[3];
+                    path[5] = circleNodes[4];
+                    path[6] = circleNodes[5];
+                    path[7] = circleNodes[6];
+                    path[8] = middlePt.transform.position;
+                    path[9] = formSpawn.transform.position;
+                    path[10] = formSpawn.currentSpawnPos.position;
+                }
 	        }
 
             // SecondWavePath == 11
@@ -356,7 +441,7 @@ public static class GalagaHelper
     {
         for (int i = 0; i < 11; i++)
         {
-            SecondWavePath[i] = new Vector3(0, 0, 0);
+            SecondWavePath[i] = new Vector3(0, 0, 0); // might need 0f
         }
 
         for (int i = 0; i < 8; i++)
