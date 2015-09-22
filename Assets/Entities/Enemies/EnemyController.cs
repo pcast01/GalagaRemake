@@ -60,19 +60,19 @@ public class EnemyController : MonoBehaviour {
         }
         else if (GalagaHelper.EnemiesSpawned > 8 && GalagaHelper.EnemiesSpawned < 17)
         {
-            CreatePathAndMove(GalagaHelper.Formations.Round1Phase2);
+            CreatePathAndMove(GalagaHelper.Formations.Round1Phase2, GalagaHelper.RoundNumber);
         }
         else if (GalagaHelper.EnemiesSpawned > 16 && GalagaHelper.EnemiesSpawned < 25)
         {
-            CreatePathAndMove(GalagaHelper.Formations.Round1Phase3);
+            CreatePathAndMove(GalagaHelper.Formations.Round1Phase3, GalagaHelper.RoundNumber);
         }
         else if (GalagaHelper.EnemiesSpawned > 24 && GalagaHelper.EnemiesSpawned < 33)
         {
-            CreatePathAndMove(GalagaHelper.Formations.Round1Phase4);
+            CreatePathAndMove(GalagaHelper.Formations.Round1Phase4, GalagaHelper.RoundNumber);
         }
         else if (GalagaHelper.EnemiesSpawned > 32 && GalagaHelper.EnemiesSpawned < 41)
         {
-            CreatePathAndMove(GalagaHelper.Formations.Round1Phase5);
+            CreatePathAndMove(GalagaHelper.Formations.Round1Phase5, GalagaHelper.RoundNumber);
         }
         else
         {
@@ -86,10 +86,10 @@ public class EnemyController : MonoBehaviour {
     /// Create path based on wave number.
     /// </summary>
     /// <param name="wave"></param>
-    public void CreatePathAndMove(GalagaHelper.Formations form)
+    public void CreatePathAndMove(GalagaHelper.Formations form , int RoundNumber)
     {
         GalagaHelper.ClearWavePath();
-        GalagaHelper.GetWavePaths(form);
+        GalagaHelper.GetWavePaths(form, RoundNumber);
         GalagaHelper.Wave1Delay += 0.06f;
         if ((int)form == 2 || (int)form == 3)
         {
@@ -127,7 +127,7 @@ public class EnemyController : MonoBehaviour {
         if (Random.value < probability)
         {
             //Debug.Log("Enemy firing.");
-            Fire();
+            //Fire();
         }
         //EnemySpawner formSpawn = GalagaHelper.GetFormationScript(GalagaHelper.CurrentRoundPhase);
 
@@ -163,7 +163,12 @@ public class EnemyController : MonoBehaviour {
             if (health <= 0)
             {
                 //gameObject.isDead = true;
+                GameObject test = new GameObject("Test");
+                test.transform.parent = gameObject.transform.parent;
+                test.transform.position = test.transform.parent.position;
+                //Debug.Log("parent ".Bold()+ gameObject.transform.parent);
                 SimplePool.Despawn(gameObject);
+                GalagaHelper.EnemiesSpawned -= 1;
                 //gameObject.SetActive(false);
                 Debug.Log("Enemy is dead".Bold());
                 //Destroy(gameObject);

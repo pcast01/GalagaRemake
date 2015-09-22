@@ -21,6 +21,7 @@ public class MainEnemyFormation : MonoBehaviour {
         xMin = leftMost.x + padding;
         xMax = rightMost.x - padding;
         moveFormation = true;
+        GalagaHelper.RoundNumber = 1;
 	}
 	
 	// Update is called once per frame
@@ -47,6 +48,16 @@ public class MainEnemyFormation : MonoBehaviour {
                 isMovingRight = false;
             }
         }
+        // Check to see if enemies have all been killed.
+        if (GalagaHelper.EnemiesSpawned == 0)
+        {
+            Debug.Log("Round 2 about to begin".Colored(Colors.green));
+            // Reset Formations
+            GalagaHelper.ResetFormations();
+            GalagaHelper.RoundNumber += 1;
+        }
+        Debug.Log("Enemies Currently Spawned: " + GalagaHelper.EnemiesSpawned + " Round #: " + GalagaHelper.RoundNumber);
+        
 	}
 
     public void OnDrawGizmos()

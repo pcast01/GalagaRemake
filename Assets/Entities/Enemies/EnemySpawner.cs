@@ -36,10 +36,18 @@ public class EnemySpawner : MonoBehaviour {
         
         // Get the number of enemies in place on the current Formation
         enemiesInPlace = isEnemyInPlace();
-        //Debug.Log(gameObject.name + " - enemies in place: " + enemiesInPlace + " Enemies Spawned: " + GalagaHelper.EnemiesSpawned);
+        Debug.Log(gameObject.name.Bold() + " - enemies in place: " + enemiesInPlace.ToString().Colored(Colors.red) + " Enemies Spawned: " + GalagaHelper.EnemiesSpawned);
 
-        // Check if 8 enemies have spawned then run them
-        GalagaHelper.StartRound1();
+        if (gameObject.name == "Round1Phase1EnemyFormation")
+        {
+            // Check if 8 enemies have spawned then run them
+            GalagaHelper.StartRound1();
+            if (GalagaHelper.EnemiesSpawned == 0)
+            {
+                Debug.Log("Round2 started".Bold().Sized(11));
+                SpawnUntilFull();
+            }
+        }
 
         // Enable the next script to be able to run based on which script is running and if all
         // enemies are in place in the formation.
@@ -74,6 +82,20 @@ public class EnemySpawner : MonoBehaviour {
 	}
 
     /// <summary>
+    /// Remove child from positions in formation.
+    /// </summary>
+    public void DisownChildren()
+    {
+        for (int i = 0; i < transform.childCount; i++)
+        {
+            if (transform.GetChild(i).childCount == 1)
+            {
+                transform.GetChild(i).GetChild(0).parent = null;
+            }
+        }
+    }
+
+    /// <summary>
     /// Gets the next Free position in the formation for the enemy to fly to.
     /// </summary>
     /// <returns></returns>
@@ -98,25 +120,29 @@ public class EnemySpawner : MonoBehaviour {
         int x = 0;
         for (int i = 0; i < transform.childCount; i++)
         {
-            if (transform.GetChild(i).childCount == 1)
+            Debug.Log(transform.name + " Child count: " + transform.GetChild(i).childCount);
+            if (transform.GetChild(i).childCount > 1)
             {
                 //Debug.Log("child count = " + transform.GetChild(i).childCount);
                 //Debug.Log("Parent pos: " + transform.GetChild(i).position + " Child pos: " + transform.GetChild(i).GetChild(0).position);
                 int childZ = (int)Math.Round(transform.GetChild(i).GetChild(0).position.z, 0);
-
                 int parentZ = (int)Math.Round(transform.GetChild(i).position.z, 0);
                 Transform childEnemy = transform.GetChild(i).GetChild(0);
                 EnemyController childEnemyScript = childEnemy.GetComponent<EnemyController>();
                 
                 // if the child is in position or is dead from bullets
-                if (childZ == parentZ || childEnemyScript.isActiveAndEnabled == false)
+                if (childZ == parentZ || childEnemy.gameObject.activeSelf == false)
                 {
-                    if (childEnemyScript.isActiveAndEnabled == false)
+                    if (childEnemy.gameObject.activeSelf == false)
                     {
                         Debug.Log("Enemy obj disabled.".Italics().Colored(Colors.red));
                     }
                     x += 1;
                 }
+            }
+            else
+            {
+                //Debug.Log("Grandchild not present".Bold());
             }
         }
         return x;
