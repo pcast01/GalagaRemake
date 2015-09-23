@@ -20,10 +20,17 @@ public class MainEnemyFormation : MonoBehaviour {
         Vector3 rightMost = Camera.main.ViewportToWorldPoint(new Vector3(1, 0, distance));
         xMin = leftMost.x + padding;
         xMax = rightMost.x - padding;
-        moveFormation = true;
+        moveFormation = false;
         GalagaHelper.RoundNumber = 1;
+        Invoke("StartRound", 3.0f);
 	}
 	
+    void StartRound()
+    {
+        GameObject form1 = GameObject.FindGameObjectWithTag("phase1").gameObject;
+        form1.GetComponent<EnemySpawner>().enabled = true;
+        Debug.Log("Starting Round 1".Colored(Colors.purple).Bold());
+    }
 	// Update is called once per frame
 	void Update () {
         if (moveFormation)
@@ -49,15 +56,14 @@ public class MainEnemyFormation : MonoBehaviour {
             }
         }
         // Check to see if enemies have all been killed.
-        if (GalagaHelper.EnemiesSpawned == 0)
-        {
-            Debug.Log("Round 2 about to begin".Colored(Colors.green));
-            // Reset Formations
-            GalagaHelper.ResetFormations();
-            GalagaHelper.RoundNumber += 1;
-        }
-        Debug.Log("Enemies Currently Spawned: " + GalagaHelper.EnemiesSpawned + " Round #: " + GalagaHelper.RoundNumber);
-        
+        //if (GalagaHelper.EnemiesSpawned == 0)
+        //{
+        //    Debug.Log("Round 2 about to begin".Colored(Colors.green));
+        //    // Reset Formations
+        //    GalagaHelper.ResetFormations();
+        //    GalagaHelper.RoundNumber += 1;
+        //}
+        //Debug.Log("Enemies Currently Spawned: " + GalagaHelper.EnemiesSpawned + " Wave#: " + GalagaHelper.CurrentRoundPhase + " Round #: " + GalagaHelper.RoundNumber);
 	}
 
     public void OnDrawGizmos()

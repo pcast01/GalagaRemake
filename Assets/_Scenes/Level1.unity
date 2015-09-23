@@ -192,6 +192,10 @@ Prefab:
       propertyPath: m_RootOrder
       value: 11
       objectReference: {fileID: 0}
+    - target: {fileID: 438242, guid: c49f7e2333260df45b0771abf1e4adc3, type: 2}
+      propertyPath: m_LocalScale.x
+      value: 100
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: c49f7e2333260df45b0771abf1e4adc3, type: 2}
   m_IsPrefabParent: 0
@@ -257,7 +261,7 @@ GameObject:
   m_Layer: 0
   m_Name: Round1Phase5_1EnemyFormation
   m_TagString: phase51
-  m_Icon: {fileID: 5132851093641282708, guid: 0000000000000000d000000000000000, type: 0}
+  m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -272,7 +276,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dbb510193bb450944a72301dc77f4446, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemy1Prefab: {fileID: 172892, guid: c76fee44ab89ffe4099275ead8bf1a3e, type: 2}
+  enemy1Prefab: {fileID: 122214, guid: a8a150d4b14710d4996a9af0b22393e3, type: 2}
   width: 72
   height: -14.6000004
   padding: 1
@@ -473,7 +477,7 @@ GameObject:
   m_Layer: 0
   m_Name: Round1Phase4_1EnemyFormation
   m_TagString: phase41
-  m_Icon: {fileID: 3936346786652291628, guid: 0000000000000000d000000000000000, type: 0}
+  m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -488,7 +492,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dbb510193bb450944a72301dc77f4446, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemy1Prefab: {fileID: 117636, guid: 02ecc95ca522a5148a02456ef902e54c, type: 2}
+  enemy1Prefab: {fileID: 111300, guid: ef06c85ef3c013643a51e694d90b63f1, type: 2}
   width: 42.7999992
   height: -14.6000004
   padding: 1
@@ -2143,7 +2147,7 @@ GameObject:
   m_Layer: 0
   m_Name: Round1Phase3_1EnemyFormation
   m_TagString: phase31
-  m_Icon: {fileID: 419385456094870383, guid: 0000000000000000d000000000000000, type: 0}
+  m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -2178,7 +2182,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dbb510193bb450944a72301dc77f4446, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemy1Prefab: {fileID: 117636, guid: 02ecc95ca522a5148a02456ef902e54c, type: 2}
+  enemy1Prefab: {fileID: 122214, guid: a8a150d4b14710d4996a9af0b22393e3, type: 2}
   width: 57.7999992
   height: -14.6000004
   padding: 1
@@ -3684,6 +3688,10 @@ Prefab:
       propertyPath: m_Name
       value: EnemyProjectileWall
       objectReference: {fileID: 0}
+    - target: {fileID: 438242, guid: c49f7e2333260df45b0771abf1e4adc3, type: 2}
+      propertyPath: m_LocalScale.x
+      value: 100
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: c49f7e2333260df45b0771abf1e4adc3, type: 2}
   m_IsPrefabParent: 0
@@ -4091,7 +4099,7 @@ GameObject:
   m_Layer: 0
   m_Name: Round1Phase1EnemyFormation
   m_TagString: phase1
-  m_Icon: {fileID: 7250588514170254948, guid: 0000000000000000d000000000000000, type: 0}
+  m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -4121,7 +4129,7 @@ MonoBehaviour:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1770887233}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: dbb510193bb450944a72301dc77f4446, type: 3}
   m_Name: 
@@ -4133,6 +4141,33 @@ MonoBehaviour:
   currentSpawnPos: {fileID: 0}
   spawnDelay: .5
   spawnEntranceRight: 0
+--- !u!1 &1796474510
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 1796474511}
+  m_Layer: 0
+  m_Name: GameManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1796474511
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1796474510}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 12
 --- !u!1 &1831515700
 GameObject:
   m_ObjectHideFlags: 0
@@ -5248,7 +5283,7 @@ GameObject:
   m_Layer: 0
   m_Name: Round1Phase2EnemyFormation
   m_TagString: phase2
-  m_Icon: {fileID: -964228994112308473, guid: 0000000000000000d000000000000000, type: 0}
+  m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -5283,7 +5318,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dbb510193bb450944a72301dc77f4446, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemy1Prefab: {fileID: 172892, guid: c76fee44ab89ffe4099275ead8bf1a3e, type: 2}
+  enemy1Prefab: {fileID: 111300, guid: ef06c85ef3c013643a51e694d90b63f1, type: 2}
   width: 29.2000008
   height: -23
   padding: 1
@@ -5649,7 +5684,7 @@ Transform:
   - {fileID: 1854216078}
   - {fileID: 1770887234}
   m_Father: {fileID: 0}
-  m_RootOrder: 11
+  m_RootOrder: 10
 --- !u!82 &2064273403
 AudioSource:
   m_ObjectHideFlags: 0
@@ -5661,7 +5696,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: 401fd24c4f7e6b14e8aad0d5944dc9a2, type: 3}
   m_PlayOnAwake: 1
-  m_Volume: .74000001
+  m_Volume: 1
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -5799,7 +5834,11 @@ MonoBehaviour:
   bullet: {fileID: 172490, guid: 4d0759e09ef9306419a04af7c36c5ee8, type: 2}
   projectileSpeed: 34
   speed: 44
-  firingRate: .800000012
+  firingRate: .300000012
+  shotTop:
+  - {fileID: 8300000, guid: aaef8abf1895c614692b8baed744b08b, type: 3}
+  - {fileID: 8300000, guid: a3d9ca2a87b46b946a0106db94e474fa, type: 3}
+  - {fileID: 8300000, guid: c3cb4f055c03a604ea63e9cc60c2218f, type: 3}
 --- !u!65 &2102576254
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -5812,3 +5851,72 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: .5, y: .49999994, z: .349999964}
   m_Center: {x: 4.07314936e-15, y: -.138309509, z: .099999994}
+--- !u!82 &2102576255
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 2102576252}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 8300000, guid: 744c8970238d0a649859b5ea1927cb6e, type: 3}
+  m_PlayOnAwake: 1
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    - time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2

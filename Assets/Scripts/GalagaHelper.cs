@@ -57,6 +57,8 @@ public static class GalagaHelper
     /// </summary>
     public static int EnemiesSpawned;
 
+    public static int EnemiesKilled;
+
     /// <summary>
     /// Gets the current wave of enemy.
     /// </summary>
@@ -470,4 +472,7 @@ public static class GalagaHelper
         //Debug.Log("<bold>Count of objects:</bold> " + x);
     }
     #endregion
+
+    public static float TimeToSpawn; //Time started
+    public static float TimeDone;
 }
