@@ -4,11 +4,12 @@ using System.Collections;
 public class MainEnemyFormation : MonoBehaviour {
 
     public bool isMovingRight;
-    public bool isStartFormation;
+    //public bool isStartFormation;
     public bool moveFormation;
     public float padding = 1f;
     public float speed = 5.0f;
     public float width = 10f;
+    public float height = 5f;
     private float xMin;
     private float xMax;
 
@@ -19,11 +20,13 @@ public class MainEnemyFormation : MonoBehaviour {
         Vector3 rightMost = Camera.main.ViewportToWorldPoint(new Vector3(1, 0, distance));
         xMin = leftMost.x + padding;
         xMax = rightMost.x - padding;
+        moveFormation = true;
+        GalagaHelper.RoundNumber = 1;
 	}
 	
 	// Update is called once per frame
 	void Update () {
-        if (moveFormation && isStartFormation)
+        if (moveFormation)
         {
             if (isMovingRight)
             {
@@ -45,5 +48,20 @@ public class MainEnemyFormation : MonoBehaviour {
                 isMovingRight = false;
             }
         }
+        // Check to see if enemies have all been killed.
+        if (GalagaHelper.EnemiesSpawned == 0)
+        {
+            Debug.Log("Round 2 about to begin".Colored(Colors.green));
+            // Reset Formations
+            GalagaHelper.ResetFormations();
+            GalagaHelper.RoundNumber += 1;
+        }
+        Debug.Log("Enemies Currently Spawned: " + GalagaHelper.EnemiesSpawned + " Round #: " + GalagaHelper.RoundNumber);
+        
 	}
+
+    public void OnDrawGizmos()
+    {
+        Gizmos.DrawWireCube(transform.position, new Vector3(width, 2, height));
+    }
 }

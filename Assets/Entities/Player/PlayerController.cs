@@ -6,11 +6,16 @@ public class PlayerController : MonoBehaviour {
     public GameObject bullet;
     public float projectileSpeed;
     public float speed = 15f;
-    public float firingRate = 1f;
+    public float firingRate;
     private float padding = 2f;
     private float xMin;
     private float xMax;
+    private bool allowFire = true;
 
+    void Awake()
+    {
+        SimplePool.Preload(bullet, 20);
+    }
 	// Use this for initialization
 	void Start () {
 	    float distance = transform.position.z - Camera.main.transform.position.z;
@@ -20,11 +25,16 @@ public class PlayerController : MonoBehaviour {
         xMax = rightMost.x - padding;
 	}
 	
-    void Fire()
+    IEnumerator Fire()
     {
+        allowFire = false;
         Vector3 offset = new Vector3(0, 0, 4);
-        GameObject laserBeam = Instantiate(bullet, transform.position + offset, Quaternion.identity) as GameObject;
+        //GameObject laserBeam = Instantiate(bullet, transform.position + offset, Quaternion.identity) as GameObject
+        GameObject laserBeam = SimplePool.Spawn(bullet, transform.position + offset, Quaternion.identity, true) as GameObject;
+        laserBeam.transform.position = transform.position + offset;
         laserBeam.GetComponent<Rigidbody>().velocity = new Vector3(0, 0, projectileSpeed);
+        yield return new WaitForSeconds(firingRate);
+        allowFire = true;
         //Debug.Log("Fire at speed: " + projectileSpeed);
     }
 
@@ -32,16 +42,17 @@ public class PlayerController : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
-        if (Input.GetButtonDown("Fire1"))
+        if (Input.GetButtonDown("Fire1") && allowFire)
         {
-            InvokeRepeating("Fire", 0.000001f, firingRate);
+            //InvokeRepeating("Fire", 0.000001f, firingRate);
+            StartCoroutine("Fire");
             //Debug.Log("Firing");
         }
 
-        if (Input.GetButtonUp("Fire1"))
-        {
-            CancelInvoke("Fire");
-        }
+        //if (Input.GetButtonUp("Fire1"))
+        //{
+        //    CancelInvoke("Fire");
+        //}
 
         if (Input.GetKey(KeyCode.A))
         {
