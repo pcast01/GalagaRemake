@@ -121,7 +121,7 @@ public class EnemySpawner : MonoBehaviour {
         for (int i = 0; i < transform.childCount; i++)
         {
             Debug.Log(transform.name + " Child count: " + transform.GetChild(i).childCount);
-            if (transform.GetChild(i).childCount > 1)
+            if (transform.GetChild(i).childCount >= 1)
             {
                 //Debug.Log("child count = " + transform.GetChild(i).childCount);
                 //Debug.Log("Parent pos: " + transform.GetChild(i).position + " Child pos: " + transform.GetChild(i).GetChild(0).position);
