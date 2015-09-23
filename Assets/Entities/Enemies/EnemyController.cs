@@ -22,7 +22,7 @@ public class EnemyController : MonoBehaviour {
 
     void Awake()
     {
-        SimplePool.Preload(enemyLaser, 25);
+        //SimplePool.Preload(enemyLaser, 25);
     }
 
     void Start () {
@@ -119,6 +119,8 @@ public class EnemyController : MonoBehaviour {
         {
             iTween.DrawPath(GalagaHelper.FourthWavePath);
         }
+        iTween.DrawPath(GalagaHelper.EntrancePatterns(GalagaHelper.EntranceFlightPatterns.round1_DownLeft));
+        iTween.DrawPath(GalagaHelper.EntrancePatterns(GalagaHelper.EntranceFlightPatterns.round1_DownRight));
     }
 
 	void Update () {
@@ -141,7 +143,7 @@ public class EnemyController : MonoBehaviour {
         //}
         // Until the enemy is in the position keep updating moveTo
 	}
-
+ 
     void Fire()
     {
         Vector3 startPos = transform.position + new Vector3(0, 0, -4);
@@ -163,16 +165,11 @@ public class EnemyController : MonoBehaviour {
             if (health <= 0)
             {
                 //gameObject.isDead = true;
-                GameObject test = new GameObject("Test");
-                test.transform.parent = gameObject.transform.parent;
-                test.transform.position = test.transform.parent.position;
                 //Debug.Log("parent ".Bold()+ gameObject.transform.parent);
                 SimplePool.Despawn(gameObject);
-                GalagaHelper.EnemiesSpawned -= 1;
+                GalagaHelper.EnemiesKilled += 1;
                 //gameObject.SetActive(false);
-                Debug.Log("Enemy is dead".Bold());
-                //Destroy(gameObject);
-                //end of game
+                Debug.Log("Enemy is dead".Bold()+ " Pos: " + gameObject.transform.parent.transform.parent.name);
                 scoreKeeper.Score(200);
                 //Application.LoadLevel("Win Screen");
                 //Die();
