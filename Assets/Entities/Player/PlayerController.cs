@@ -12,6 +12,7 @@ public class PlayerController : MonoBehaviour {
     private float xMax;
     private bool allowFire = true;
     public AudioClip[] shotTop;
+    public Vector3[] circlePath;
     //public AudioSource audio;
     //public AudioClip shotTop1;
     //public AudioClip shotTop2;
@@ -21,6 +22,7 @@ public class PlayerController : MonoBehaviour {
 
     void Awake()
     {
+        circlePath = new Vector3[9];
         //SimplePool.Preload(bullet, 20);
     }
 	// Use this for initialization
@@ -31,7 +33,25 @@ public class PlayerController : MonoBehaviour {
         xMin = leftMost.x + padding;
         xMax = rightMost.x - padding;
         //audio = GetComponents<AudioSource>();
+        // Get circle path
+        
+        //Debug.Log(circlePath[0]);
+        //circlePath[0]
 	}
+
+    public void GetCirclePath()
+    {
+        // Get all grandchildren
+        //Debug.Log(transform.GetChild(0).childCount.ToString().Bold());
+        for (int i = 0; i < transform.GetChild(0).childCount; i++)
+		{
+            //Debug.Log(transform.GetChild(0).GetChild(i).name.Bold());
+            if (transform.GetChild(0).GetChild(i))
+            {
+                circlePath[i] = transform.GetChild(0).GetChild(i).position;
+            }
+		}
+    }
 
     public AudioSource addShotSounds(AudioClip clip, float pitch)
     {
@@ -92,11 +112,19 @@ public class PlayerController : MonoBehaviour {
     void OnTriggerEnter(Collider other)
     {
         Projectile enemyProjectile = other.gameObject.GetComponent<Projectile>();
+        Enemy1Controller enemy1 = other.gameObject.GetComponent<Enemy1Controller>();
         if (enemyProjectile)
         {
             Destroy(gameObject);
             Debug.Log("Enemy hit Player.");
             Application.LoadLevel("Lose Screen");
         }
+        if (enemy1)
+        {
+            Destroy(gameObject);
+            Debug.Log("Enemy ran into Player".Colored(Colors.cyan));
+            Application.LoadLevel("Lose Screen");
+        }
+        Debug.Log("Something hit the player.".Colored(Colors.darkblue));
     }
 }

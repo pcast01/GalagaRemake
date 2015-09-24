@@ -12,6 +12,9 @@ public class MainEnemyFormation : MonoBehaviour {
     public float height = 5f;
     private float xMin;
     private float xMax;
+    private bool enemyPicked = false;
+    public GameObject[] enemy1;
+    public GameObject form1;
 
 	// Use this for initialization
 	void Start () {
@@ -24,15 +27,38 @@ public class MainEnemyFormation : MonoBehaviour {
         GalagaHelper.RoundNumber = 1;
         Invoke("StartRound", 3.0f);
 	}
+
+    void PickRandomEnemyOne()
+    {
+        enemy1 = GameObject.FindGameObjectsWithTag("enemy1");
+        //Enemy1Controller enemyOne = GameObject.FindGameObjectWithTag("enemy1").GetComponent<Enemy1Controller>();
+        int pickedAtRandom = Random.Range(0, enemy1.Length);
+        Debug.Log(enemy1[pickedAtRandom].transform.parent.name.Bold() + " Num: " + pickedAtRandom);
+        Enemy1Controller enemyOne = enemy1[pickedAtRandom].GetComponent<Enemy1Controller>();
+        if (enemyOne)
+        {
+            Debug.Log("Found EnemyOne");
+            //enemy1[pickedAtRandom]
+            enemyOne.CreatePath();
+            enemyPicked = true;
+        }
+    }
 	
     void StartRound()
     {
-        GameObject form1 = GameObject.FindGameObjectWithTag("phase1").gameObject;
+        form1 = GameObject.FindGameObjectWithTag("phase1").gameObject;
         form1.GetComponent<EnemySpawner>().enabled = true;
         Debug.Log("Starting Round 1".Colored(Colors.purple).Bold());
     }
 	// Update is called once per frame
 	void Update () {
+        //GameObject pt2 = GameObject.FindGameObjectWithTag("phase1").gameObject;
+
+        if (GalagaHelper.EnemiesSpawned > 8 && enemyPicked == false && form1.GetComponent<EnemySpawner>().isFormationUp == true)
+        {
+            PickRandomEnemyOne();
+        }
+
         if (moveFormation)
         {
             if (isMovingRight)
