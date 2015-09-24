@@ -107,7 +107,6 @@ public class Enemy1Controller : EnemyController
             //Debug.Log("Path = " + choosePath);
             // Path0 = circle then swoop back up
             // Path1 = circle then reappear on top
-            choosePath = 1;
             if (choosePath==0)
 	        {
                 for (int i = 0; i < 8; i++)
