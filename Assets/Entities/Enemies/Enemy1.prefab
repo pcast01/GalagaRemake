@@ -11,7 +11,8 @@ GameObject:
   - 33: {fileID: 3366146}
   - 23: {fileID: 2360304}
   - 114: {fileID: 11458946}
-  m_Layer: 0
+  - 64: {fileID: 6422238}
+  m_Layer: 10
   m_Name: Enemy1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -61,6 +62,18 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 117636}
   m_Mesh: {fileID: 4300000, guid: 1cb0b0ccdb8a6b24c863bed1f2df0441, type: 3}
+--- !u!64 &6422238
+MeshCollider:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 117636}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Convex: 1
+  m_Mesh: {fileID: 4300000, guid: 1cb0b0ccdb8a6b24c863bed1f2df0441, type: 3}
 --- !u!114 &11458946
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -77,9 +90,10 @@ MonoBehaviour:
   scoreValue: 150
   isMovingRight: 0
   enemyLaser: {fileID: 103356, guid: c59875210abc21544b4ee5e6df08bfeb, type: 2}
-  shotsPerSecond: .5
-  projectileSpeed: 16
-  pathSpeed: 30
+  shotsPerSecond: .0199999996
+  projectileSpeed: 30
+  pathSpeed: 40
+  movePathTime: 1
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1
@@ -89,12 +103,36 @@ Prefab:
     m_Modifications:
     - target: {fileID: 0}
       propertyPath: pathSpeed
-      value: 30
+      value: 40
       objectReference: {fileID: 0}
     - target: {fileID: 0}
       propertyPath: enemyLaser
       value: 
       objectReference: {fileID: 103356, guid: c59875210abc21544b4ee5e6df08bfeb, type: 2}
+    - target: {fileID: 0}
+      propertyPath: movePathTime
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: shotsPerSecond
+      value: .0199999996
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: projectileSpeed
+      value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: m_Convex
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: m_IsTrigger
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 117636}

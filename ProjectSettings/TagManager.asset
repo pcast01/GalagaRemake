@@ -14,6 +14,8 @@ TagManager:
   - Spawn_BottomRight
   - phase41
   - phase51
+  - MainFormation
+  - phase1
   layers:
   - Default
   - TransparentFX
@@ -23,7 +25,7 @@ TagManager:
   - UI
   - 
   - 
-  - EnermyProjectiles
+  - EnemyProjectiles
   - PlayerProjectiles
   - Enemy
   - Player
