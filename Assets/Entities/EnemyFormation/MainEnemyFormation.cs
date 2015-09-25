@@ -50,7 +50,7 @@ public class MainEnemyFormation : MonoBehaviour {
         form1.GetComponent<EnemySpawner>().enabled = true;
         Debug.Log("Starting Round 1".Colored(Colors.purple).Bold());
     }
-	// Update is called once per frame
+
 	void Update () {
         //GameObject pt2 = GameObject.FindGameObjectWithTag("phase1").gameObject;
 

@@ -12,6 +12,7 @@ public class PlayerController : MonoBehaviour {
     private float xMax;
     private bool allowFire = true;
     public AudioClip[] shotTop;
+    public AudioClip[] shotBottom;
     public Vector3[] circlePath;
     //public AudioSource audio;
     //public AudioClip shotTop1;
@@ -71,7 +72,7 @@ public class PlayerController : MonoBehaviour {
         laserBeam.GetComponent<Rigidbody>().velocity = new Vector3(0, 0, projectileSpeed);
         // pick one of 3 random top shots
         top = addShotSounds(shotTop[Random.Range(0, shotTop.Length)], Random.RandomRange(0.8f, 1.2f));
-        bottom = addShotSounds(shotTop[Random.Range(0, shotTop.Length)], Random.RandomRange(0.8f, 1.2f));
+        bottom = addShotSounds(shotBottom[Random.Range(0, shotTop.Length)], Random.RandomRange(0.8f, 1.2f));
         top.Play();
         bottom.Play();
         yield return new WaitForSeconds(firingRate);
