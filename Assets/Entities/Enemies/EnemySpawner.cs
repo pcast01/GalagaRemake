@@ -19,17 +19,18 @@ public class EnemySpawner : MonoBehaviour {
     public bool spawnEntranceRight = false;
     [Header("Formation")]
     private EnemySpawner round1Phase2spawner;
-    private bool isFormationUp = false;
+    //private bool isFormationUp = false;
     private int enemiesInPlace = 0;
-
+    //private float timetoForm;
     void Awake()
     {
-        SimplePool.Preload(enemy1Prefab, 8);
+        //SimplePool.Preload(enemy1Prefab, 8);
     }
 
 	void Start () {
         // Execute Spawn function
         SpawnUntilFull();
+        GalagaHelper.TimeToSpawn = Time.time;
 	}
 
 	void Update () {
@@ -42,9 +43,12 @@ public class EnemySpawner : MonoBehaviour {
         {
             // Check if 8 enemies have spawned then run them
             GalagaHelper.StartRound1();
-            if (GalagaHelper.EnemiesSpawned == 0)
+            if (GalagaHelper.EnemiesKilled == 40)
             {
                 Debug.Log("Round2 started".Bold().Sized(11));
+                // Reset Variables
+                GalagaHelper.EnemiesKilled = 0;
+                GalagaHelper.EnemiesSpawned = 0;
                 SpawnUntilFull();
             }
         }
@@ -53,6 +57,8 @@ public class EnemySpawner : MonoBehaviour {
         // enemies are in place in the formation.
         if (enemiesInPlace == 8 && gameObject.name == "Round1Phase1EnemyFormation")
         {
+            GalagaHelper.TimeDone = Time.time;
+            Debug.Log("Time to get to position: ".Bold() + (GalagaHelper.TimeDone - GalagaHelper.TimeToSpawn));
             GameObject pt2 = GameObject.FindGameObjectWithTag("phase2").gameObject;
             pt2.GetComponent<EnemySpawner>().enabled = true;
             //Debug.Log("*** ALL Enemies in place. ***");
@@ -120,15 +126,15 @@ public class EnemySpawner : MonoBehaviour {
         int x = 0;
         for (int i = 0; i < transform.childCount; i++)
         {
-            Debug.Log(transform.name + " Child count: " + transform.GetChild(i).childCount);
-            if (transform.GetChild(i).childCount > 1)
+            //Debug.Log(transform.name + " Child count: " + transform.GetChild(i).childCount);
+            if (transform.GetChild(i).childCount >= 1)
             {
                 //Debug.Log("child count = " + transform.GetChild(i).childCount);
                 //Debug.Log("Parent pos: " + transform.GetChild(i).position + " Child pos: " + transform.GetChild(i).GetChild(0).position);
                 int childZ = (int)Math.Round(transform.GetChild(i).GetChild(0).position.z, 0);
                 int parentZ = (int)Math.Round(transform.GetChild(i).position.z, 0);
                 Transform childEnemy = transform.GetChild(i).GetChild(0);
-                EnemyController childEnemyScript = childEnemy.GetComponent<EnemyController>();
+                //EnemyController childEnemyScript = childEnemy.GetComponent<EnemyController>();
                 
                 // if the child is in position or is dead from bullets
                 if (childZ == parentZ || childEnemy.gameObject.activeSelf == false)
@@ -170,7 +176,6 @@ public class EnemySpawner : MonoBehaviour {
                 spawnEntranceRight = true;
             }
             // Spawn enemy in enemy1Prefab.
-            //SimplePool.Spawn()
             //GameObject enemy = Instantiate(enemy1Prefab, spawnPoint.position, enemy1Prefab.transform.rotation) as GameObject;
             GameObject enemy = SimplePool.Spawn(enemy1Prefab, spawnPoint.position, enemy1Prefab.transform.rotation, true) as GameObject;
             enemy.transform.position = spawnPoint.position;
@@ -182,12 +187,12 @@ public class EnemySpawner : MonoBehaviour {
 
         if (NextFreePosition())
         {
-            //Debug.Log("Free position");
+            Debug.Log(gameObject.name.Bold() + " Free position");
             Invoke("SpawnUntilFull", spawnDelay);
         }
         else
         {
-            isFormationUp = false;
+            //isFormationUp = false;
             GalagaHelper.CurrentRoundPhase += 1;
         }
     }
