@@ -19,7 +19,7 @@ public class EnemySpawner : MonoBehaviour {
     public bool spawnEntranceRight = false;
     [Header("Formation")]
     private EnemySpawner round1Phase2spawner;
-    //private bool isFormationUp = false;
+    public bool isFormationUp = false;
     private int enemiesInPlace = 0;
     //private float timetoForm;
     void Awake()
@@ -192,7 +192,7 @@ public class EnemySpawner : MonoBehaviour {
         }
         else
         {
-            //isFormationUp = false;
+            isFormationUp = true;
             GalagaHelper.CurrentRoundPhase += 1;
         }
     }
