@@ -39,7 +39,7 @@ public class MainEnemyFormation : MonoBehaviour {
         Enemy1Controller enemyOne = enemy1[pickedAtRandom].GetComponent<Enemy1Controller>();
         if (enemyOne)
         {
-            Debug.Log("Found EnemyOne");
+            //Debug.Log("Found EnemyOne");
             //enemy1[pickedAtRandom]
             enemyOne.CreatePath();
             enemy1Picked = true;

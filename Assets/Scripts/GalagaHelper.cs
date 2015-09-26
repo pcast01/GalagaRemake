@@ -211,8 +211,8 @@ public static class GalagaHelper
     {
         Vector3[] path = null;
         // Get formation script
-        Debug.Log("Current Spawn: ".Bold().Colored(Colors.green) + CurrentRoundPhase + " Wave #:".Bold() + form);
-        Debug.Log("GetWavePaths Round#: ".Bold().Colored(Colors.green) + GalagaHelper.RoundNumber);
+        //Debug.Log("Current Spawn: ".Bold().Colored(Colors.green) + CurrentRoundPhase + " Wave #:".Bold() + form);
+        //Debug.Log("GetWavePaths Round#: ".Bold().Colored(Colors.green) + GalagaHelper.RoundNumber);
         EnemySpawner formSpawn = GetFormationScript(form);
         // FourthWavePath=8 is used for waves 4 & 5.
         // SecondWavePath=11 is used for waves 2 & 3.
