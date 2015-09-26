@@ -96,7 +96,7 @@ public class Enemy1Controller : EnemyController
             _waypoints.Clear();
             _waypoints.Add(transform.position);
             _originalPosition = transform.position;
-            Debug.Log(_waypoints[0].ToString().Bold());
+            //Debug.Log(_waypoints[0].ToString().Bold());
             player.GetCirclePath();
             Vector3[] pathToPlayer = new Vector3[9];
             pathToPlayer = player.circlePath;

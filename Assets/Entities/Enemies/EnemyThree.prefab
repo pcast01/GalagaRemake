@@ -1,47 +1,47 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &122214
+--- !u!1 &157008
 GameObject:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   serializedVersion: 4
   m_Component:
-  - 4: {fileID: 422844}
-  - 33: {fileID: 3389244}
-  - 23: {fileID: 2366414}
-  - 64: {fileID: 6462040}
-  - 114: {fileID: 11411386}
-  m_Layer: 10
-  m_Name: EnemyOne
-  m_TagString: enemy1
+  - 4: {fileID: 480106}
+  - 33: {fileID: 3335546}
+  - 23: {fileID: 2301626}
+  - 114: {fileID: 11444912}
+  - 64: {fileID: 6460652}
+  m_Layer: 0
+  m_Name: EnemyThree
+  m_TagString: enemy3
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &422844
+--- !u!4 &480106
 Transform:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 122214}
+  m_GameObject: {fileID: 157008}
   m_LocalRotation: {x: 0, y: 1, z: 0, w: -1.62920685e-07}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
---- !u!23 &2366414
+--- !u!23 &2301626
 MeshRenderer:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 122214}
+  m_GameObject: {fileID: 157008}
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_Materials:
-  - {fileID: 2100000, guid: 8085e1c153aa90f479b290cd26a5ef4d, type: 2}
+  - {fileID: 2100000, guid: 0b87d640298861e4dacb96908ad77a44, type: 2}
   m_SubsetIndices: 
   m_StaticBatchRoot: {fileID: 0}
   m_UseLightProbes: 1
@@ -55,34 +55,34 @@ MeshRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingOrder: 0
---- !u!33 &3389244
+--- !u!33 &3335546
 MeshFilter:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 122214}
-  m_Mesh: {fileID: 4300000, guid: 1cb0b0ccdb8a6b24c863bed1f2df0441, type: 3}
---- !u!64 &6462040
+  m_GameObject: {fileID: 157008}
+  m_Mesh: {fileID: 4300000, guid: cd4eeb48f36a7634cbe80ebcec670871, type: 3}
+--- !u!64 &6460652
 MeshCollider:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 122214}
+  m_GameObject: {fileID: 157008}
   m_Material: {fileID: 0}
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
   m_Convex: 1
-  m_Mesh: {fileID: 4300000, guid: b5528024b91f6b54ebb3382d581585e5, type: 3}
---- !u!114 &11411386
+  m_Mesh: {fileID: 4300000, guid: cd4eeb48f36a7634cbe80ebcec670871, type: 3}
+--- !u!114 &11444912
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 122214}
+  m_GameObject: {fileID: 157008}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4df470f4e3bab0c479c60b88ceb61ece, type: 3}
+  m_Script: {fileID: 11500000, guid: a66fcb8dc46164d4bb9212a375a69e41, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 30
@@ -91,11 +91,7 @@ MonoBehaviour:
   enemyLaser: {fileID: 103356, guid: c59875210abc21544b4ee5e6df08bfeb, type: 2}
   shotsPerSecond: .5
   projectileSpeed: 16
-  movePathTime: 2.20000005
-  returnPathSpeed: 10
-  PlayerTransform: {fileID: 0}
-  _originalPosition: {x: 0, y: 0, z: 0}
-  swoopDownSpeed: 1.79999995
+  movePathTime: 2
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1
@@ -103,10 +99,6 @@ Prefab:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 0}
-      propertyPath: playerOffsetPoints.Array.size
-      value: 9
-      objectReference: {fileID: 0}
     - target: {fileID: 0}
       propertyPath: enemyLaser
       value: 
@@ -120,38 +112,18 @@ Prefab:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 0}
-      propertyPath: m_Layer
-      value: 10
-      objectReference: {fileID: 0}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 0b87d640298861e4dacb96908ad77a44, type: 2}
     - target: {fileID: 0}
-      propertyPath: pathSpeed
-      value: 40
+      propertyPath: m_TagString
+      value: enemy3
       objectReference: {fileID: 0}
     - target: {fileID: 0}
       propertyPath: movePathTime
-      value: 2.20000005
+      value: 2
       objectReference: {fileID: 0}
-    - target: {fileID: 0}
-      propertyPath: m_TagString
-      value: enemy1
-      objectReference: {fileID: 0}
-    - target: {fileID: 0}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 0}
-      propertyPath: swoopDownSpeed
-      value: 1.79999995
-      objectReference: {fileID: 0}
-    - target: {fileID: 0}
-      propertyPath: m_Mesh
-      value: 
-      objectReference: {fileID: 4300000, guid: 1cb0b0ccdb8a6b24c863bed1f2df0441, type: 3}
-    - target: {fileID: 0}
-      propertyPath: m_Materials.Array.data[0]
-      value: 
-      objectReference: {fileID: 2100000, guid: 8085e1c153aa90f479b290cd26a5ef4d, type: 2}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
-  m_RootGameObject: {fileID: 122214}
+  m_RootGameObject: {fileID: 157008}
   m_IsPrefabParent: 1

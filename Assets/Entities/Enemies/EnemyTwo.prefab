@@ -41,7 +41,7 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_Materials:
-  - {fileID: 2100000, guid: fcf856c8461e26c49956c59084801a7e, type: 2}
+  - {fileID: 2100000, guid: fda2694c2bb50394aa9c5a81317ddfd7, type: 2}
   m_SubsetIndices: 
   m_StaticBatchRoot: {fileID: 0}
   m_UseLightProbes: 1
@@ -61,7 +61,7 @@ MeshFilter:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 111300}
-  m_Mesh: {fileID: 4300000, guid: c3ff927f565fd924c8d418610070e2f5, type: 3}
+  m_Mesh: {fileID: 4300000, guid: d8b716d796b877c428a90b7a39874e55, type: 3}
 --- !u!64 &6420058
 MeshCollider:
   m_ObjectHideFlags: 1
@@ -91,7 +91,7 @@ MonoBehaviour:
   enemyLaser: {fileID: 103356, guid: c59875210abc21544b4ee5e6df08bfeb, type: 2}
   shotsPerSecond: .5
   projectileSpeed: 16
-  movePathTime: 1
+  movePathTime: 2.0999999
   swoopSpeed: 25
   leftSwoop: {fileID: 0}
   rightSwoop: {fileID: 0}
@@ -110,7 +110,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 0}
       propertyPath: movePathTime
-      value: 1
+      value: 2.0999999
       objectReference: {fileID: 0}
     - target: {fileID: 0}
       propertyPath: m_Convex
@@ -136,6 +136,14 @@ Prefab:
       propertyPath: m_TagString
       value: enemy2
       objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: m_Mesh
+      value: 
+      objectReference: {fileID: 4300000, guid: d8b716d796b877c428a90b7a39874e55, type: 3}
+    - target: {fileID: 0}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: fda2694c2bb50394aa9c5a81317ddfd7, type: 2}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 111300}

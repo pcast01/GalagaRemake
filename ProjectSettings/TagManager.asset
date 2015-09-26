@@ -21,6 +21,7 @@ TagManager:
   - enemy2Left
   - Enemy2ChangePath
   - enemy2
+  - enemy3
   layers:
   - Default
   - TransparentFX
