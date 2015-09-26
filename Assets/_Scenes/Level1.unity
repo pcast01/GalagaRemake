@@ -2193,6 +2193,33 @@ Prefab:
 Transform:
   m_PrefabParentObject: {fileID: 452204, guid: dd84f4be1fa588042af54fbf76404667, type: 2}
   m_PrefabInternal: {fileID: 387111152}
+--- !u!1 &399634432
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 399634433}
+  m_Layer: 0
+  m_Name: Enemy2ChangePath
+  m_TagString: Untagged
+  m_Icon: {fileID: -964228994112308473, guid: 0000000000000000d000000000000000, type: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &399634433
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 399634432}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: -29.7999992}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 13
 --- !u!1 &443217274
 GameObject:
   m_ObjectHideFlags: 0
@@ -3686,7 +3713,7 @@ GameObject:
   - 4: {fileID: 1208070701}
   m_Layer: 11
   m_Name: Circle5
-  m_TagString: Untagged
+  m_TagString: enemy2Left
   m_Icon: {fileID: 419385456094870383, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -4321,7 +4348,7 @@ GameObject:
   - 4: {fileID: 1713612156}
   m_Layer: 11
   m_Name: Begin
-  m_TagString: Untagged
+  m_TagString: enemy2Right
   m_Icon: {fileID: 419385456094870383, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -6115,6 +6142,7 @@ MonoBehaviour:
   width: 72
   height: 38
   enemy1: []
+  enemy2: []
   form1: {fileID: 0}
 --- !u!4 &2064273402
 Transform:

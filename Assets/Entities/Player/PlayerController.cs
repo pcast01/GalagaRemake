@@ -14,10 +14,6 @@ public class PlayerController : MonoBehaviour {
     public AudioClip[] shotTop;
     public AudioClip[] shotBottom;
     public Vector3[] circlePath;
-    //public AudioSource audio;
-    //public AudioClip shotTop1;
-    //public AudioClip shotTop2;
-    //public AudioClip shotTop3;
     private AudioSource top;
     private AudioSource bottom;
 

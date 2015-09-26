@@ -63,6 +63,10 @@ public static class GalagaHelper
     /// Gets the current wave of enemy.
     /// </summary>
     public static Formations CurrentRoundPhase = Formations.Round1Phase1;
+
+    // Timer testing
+    public static float TimeToSpawn; //Time started
+    public static float TimeDone;
     #endregion
 
     /// <summary>
@@ -475,7 +479,4 @@ public static class GalagaHelper
         //Debug.Log("<bold>Count of objects:</bold> " + x);
     }
     #endregion
-
-    public static float TimeToSpawn; //Time started
-    public static float TimeDone;
 }

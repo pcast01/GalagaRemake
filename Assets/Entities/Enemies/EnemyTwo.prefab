@@ -14,7 +14,7 @@ GameObject:
   - 64: {fileID: 6420058}
   m_Layer: 10
   m_Name: EnemyTwo
-  m_TagString: Untagged
+  m_TagString: enemy2
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -82,18 +82,21 @@ MonoBehaviour:
   m_GameObject: {fileID: 111300}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a66fcb8dc46164d4bb9212a375a69e41, type: 3}
+  m_Script: {fileID: 11500000, guid: ea65fc80d1e8cde4d9485c7d287066e0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 30
   health: 150
   scoreValue: 150
-  isMovingRight: 0
-  enemyLaser: {fileID: 0}
+  enemyLaser: {fileID: 103356, guid: c59875210abc21544b4ee5e6df08bfeb, type: 2}
   shotsPerSecond: .5
   projectileSpeed: 16
-  pathSpeed: 40
   movePathTime: 1
+  swoopSpeed: 25
+  leftSwoop: {fileID: 0}
+  rightSwoop: {fileID: 0}
+  AttackPlayer: 0
+  _originalPosition: {x: 0, y: 0, z: 0}
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1
@@ -120,6 +123,18 @@ Prefab:
     - target: {fileID: 0}
       propertyPath: m_Layer
       value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: swoopSpeed
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: m_TagString
+      value: enemy2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}

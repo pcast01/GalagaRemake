@@ -30,9 +30,7 @@ public class Enemy1Controller : EnemyController
     private void Start()
     {
         base.Start();
-        //_originalPosition = transform.position;
         //Debug.Log("Original Pos in START: " + transform.position.ToString());
-        //Invoke("CreatePath", 2);
         _isOnPath = true;
         //path();
         //CreatePath();
@@ -71,7 +69,7 @@ public class Enemy1Controller : EnemyController
     }
 
     // Test path for ondrawgizmos
-    void path()
+    private void path()
     {
         PlayerController player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
         _waypoints.Add(_originalPosition);
@@ -84,6 +82,7 @@ public class Enemy1Controller : EnemyController
         }
         _waypoints.Add(pathToPlayer[0]);
     }
+
     /// <summary>
     /// Create path based on points around player.
     /// </summary>
@@ -127,7 +126,6 @@ public class Enemy1Controller : EnemyController
                 tweenPath.Add("orienttopath", true);
                 tweenPath.Add("onComplete", "Path1Complete");
                 tweenPath.Add("onCompleteTarget", gameObject);
-                //tweenPath.Add("oncompleteparams", choosePath);
                 iTween.MoveFrom(gameObject, tweenPath);
 	        }
             else
@@ -169,15 +167,11 @@ public class Enemy1Controller : EnemyController
 
     public void Path1Complete()
     {
-        //transform.Rotate(0, -180, 0);
         transform.rotation = _originalRotation;
-       // _finishedPath = true;
     }
 
     public void CircleComplete()
     {
-        //transform.Rotate(0, -180, 0);
-        //Debug.Log("Rotation set.");
         _finishedPath = true;
         transform.rotation = _originalRotation;
         //Debug.Log("Enemy completed circle".Bold().Italics());

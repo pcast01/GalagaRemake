@@ -12,8 +12,10 @@ public class MainEnemyFormation : MonoBehaviour {
     public float height = 5f;
     private float xMin;
     private float xMax;
-    private bool enemyPicked = false;
+    private bool enemy1Picked = false;
+    private bool enemy2Picked = false;
     public GameObject[] enemy1;
+    public GameObject[] enemy2;
     public GameObject form1;
 
 	// Use this for initialization
@@ -40,10 +42,26 @@ public class MainEnemyFormation : MonoBehaviour {
             Debug.Log("Found EnemyOne");
             //enemy1[pickedAtRandom]
             enemyOne.CreatePath();
-            enemyPicked = true;
+            enemy1Picked = true;
         }
     }
-	
+
+    void PickRandomEnemyTwo()
+    {
+        enemy2 = GameObject.FindGameObjectsWithTag("enemy2");
+        //Enemy1Controller enemyOne = GameObject.FindGameObjectWithTag("enemy1").GetComponent<Enemy1Controller>();
+        int pickedAtRandom = Random.Range(0, enemy1.Length);
+        Debug.Log(enemy2[pickedAtRandom].transform.parent.name.Bold() + " Num: " + pickedAtRandom);
+        Enemy2Controller enemyTwo = enemy2[pickedAtRandom].GetComponent<Enemy2Controller>();
+        if (enemyTwo)
+        {
+            Debug.Log("Found EnemyTwo");
+            //enemy1[pickedAtRandom]
+            enemyTwo.AttackPlayer = true;
+            enemy2Picked = true;
+        }
+    }
+
     void StartRound()
     {
         form1 = GameObject.FindGameObjectWithTag("phase1").gameObject;
@@ -54,9 +72,14 @@ public class MainEnemyFormation : MonoBehaviour {
 	void Update () {
         //GameObject pt2 = GameObject.FindGameObjectWithTag("phase1").gameObject;
 
-        if (GalagaHelper.EnemiesSpawned > 8 && enemyPicked == false && form1.GetComponent<EnemySpawner>().isFormationUp == true)
+        if (GalagaHelper.EnemiesSpawned > 8 && enemy1Picked == false && form1.GetComponent<EnemySpawner>().isFormationUp == true)
         {
             PickRandomEnemyOne();
+        }
+
+        if (GalagaHelper.EnemiesSpawned > 24 && enemy2Picked == false)
+        {
+            PickRandomEnemyTwo();
         }
 
         if (moveFormation)
