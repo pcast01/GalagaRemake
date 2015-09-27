@@ -1,20 +1,18 @@
 fileFormatVersion: 2
-guid: 4889627287f6dfa4b9ef1d604e4b77ef
-timeCreated: 1443365917
+guid: 4b2da45c8e0fae443b280e22ba964837
+timeCreated: 1443386721
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
     21300000: Start1
     21300002: Start2
-    21300004: Score
+    21300004: UI Sheet_2
     21300006: Options1
     21300008: Options2
     21300010: Quit1
     21300012: Quit2
     21300014: Restart1
     21300016: Restart2
-    21300018: Levels
-    21300020: Died
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0
@@ -41,7 +39,7 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     filterMode: 0
-    aniso: -1
+    aniso: 16
     mipBias: -1
     wrapMode: 1
   nPOTScale: 0
@@ -60,7 +58,7 @@ TextureImporter:
   buildTargetSettings:
   - buildTarget: Web
     maxTextureSize: 2048
-    textureFormat: -3
+    textureFormat: -1
     compressionQuality: 50
   spriteSheet:
     sprites:
@@ -68,21 +66,31 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 32
-        y: 418
-        width: 239
-        height: 113
+        y: 426
+        width: 229
+        height: 105
       alignment: 0
       pivot: {x: .5, y: .5}
-      border: {x: 1, y: 1, z: 1, w: 1}
-    - name: Score
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Start2
+      rect:
+        serializedVersion: 2
+        x: 283
+        y: 425
+        width: 231
+        height: 107
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: UI Sheet_2
       rect:
         serializedVersion: 2
         x: 525
-        y: 412
-        width: 499
-        height: 137
+        y: 147
+        width: 720
+        height: 402
       alignment: 0
-      pivot: {x: .5, y: .5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
     - name: Options1
       rect:
@@ -93,7 +101,7 @@ TextureImporter:
         height: 105
       alignment: 0
       pivot: {x: .5, y: .5}
-      border: {x: 1, y: 1, z: 1, w: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
     - name: Options2
       rect:
         serializedVersion: 2
@@ -103,7 +111,7 @@ TextureImporter:
         height: 107
       alignment: 0
       pivot: {x: .5, y: .5}
-      border: {x: 1, y: 1, z: 1, w: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
     - name: Quit1
       rect:
         serializedVersion: 2
@@ -113,17 +121,17 @@ TextureImporter:
         height: 105
       alignment: 0
       pivot: {x: .5, y: .5}
-      border: {x: 1, y: 1, z: 1, w: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
     - name: Quit2
       rect:
         serializedVersion: 2
         x: 283
-        y: 166
+        y: 165
         width: 231
         height: 107
       alignment: 0
       pivot: {x: .5, y: .5}
-      border: {x: 1, y: 1, z: 1, w: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
     - name: Restart1
       rect:
         serializedVersion: 2
@@ -133,7 +141,7 @@ TextureImporter:
         height: 105
       alignment: 0
       pivot: {x: .5, y: .5}
-      border: {x: 1, y: 1, z: 1, w: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
     - name: Restart2
       rect:
         serializedVersion: 2
@@ -143,37 +151,7 @@ TextureImporter:
         height: 107
       alignment: 0
       pivot: {x: .5, y: .5}
-      border: {x: 1, y: 1, z: 1, w: 1}
-    - name: Levels
-      rect:
-        serializedVersion: 2
-        x: 545
-        y: 286
-        width: 541
-        height: 122
-      alignment: 0
-      pivot: {x: .5, y: .5}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: Died
-      rect:
-        serializedVersion: 2
-        x: 544
-        y: 169
-        width: 687
-        height: 109
-      alignment: 0
-      pivot: {x: .5, y: .5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: Start2
-      rect:
-        serializedVersion: 2
-        x: 277
-        y: 418
-        width: 249
-        height: 113
-      alignment: 0
-      pivot: {x: .5, y: .5}
-      border: {x: 1, y: 1, z: 1, w: 1}
   spritePackingTag: 
   userData: 
   assetBundleName: 
