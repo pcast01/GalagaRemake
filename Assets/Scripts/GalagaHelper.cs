@@ -429,9 +429,8 @@ public static class GalagaHelper
         {
             try
             {
-                // Hide text
-                //GameObject.Find("PlayerText").SetActive(false);
-                //GameObject.Find("RoundTitle").SetActive(false);
+                GameObject.Find("PlayerText").SetActive(false);
+                GameObject.Find("RoundTitle").SetActive(false);
                 StartPaths();
                 Debug.Log("Start path.");
                 RemovePaths();

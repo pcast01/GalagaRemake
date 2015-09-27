@@ -54,6 +54,7 @@ public class Enemy2Controller : EnemyController
 
     private void CreateIncomingPath()
     {
+        //Vector3 lastPoint = _waypoints[_waypoints.Count - 1];
         _waypoints.Clear();
 
         Vector3 topSide = Camera.main.ViewportToWorldPoint(new Vector3(0, 1, 0));
@@ -70,6 +71,7 @@ public class Enemy2Controller : EnemyController
     {
         transform.LookAt(player);
         //move towards the center of the world (or where ever you like)
+        //Vector3 targetPosition = new Vector3(0, 0, 0);
         Vector3 targetPosition = player.transform.position;
         Vector3 currentPosition = this.transform.position;
         
@@ -127,6 +129,7 @@ public class Enemy2Controller : EnemyController
                 outOfPlayerRange = false;
                 gotOriginalPosition = false;
                 AttackPlayer = false;
+                //transform.rotation = _originalRotation;
             }
         }
     }
