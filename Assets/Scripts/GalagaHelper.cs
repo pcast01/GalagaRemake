@@ -63,6 +63,10 @@ public static class GalagaHelper
     /// Gets the current wave of enemy.
     /// </summary>
     public static Formations CurrentRoundPhase = Formations.Round1Phase1;
+
+    // Timer testing
+    public static float TimeToSpawn; //Time started
+    public static float TimeDone;
     #endregion
 
     /// <summary>
@@ -198,9 +202,7 @@ public static class GalagaHelper
         }
         return formSpawn;
     }
-    #endregion
-
-    #region FirstAndSecondWaves
+    
     /// <summary>
     /// Creates the paths for waves 2 - 5.
     /// </summary>
@@ -209,8 +211,8 @@ public static class GalagaHelper
     {
         Vector3[] path = null;
         // Get formation script
-        Debug.Log("Current Spawn: ".Bold().Colored(Colors.green) + CurrentRoundPhase + " Wave #:".Bold() + form);
-        Debug.Log("GetWavePaths Round#: ".Bold().Colored(Colors.green) + GalagaHelper.RoundNumber);
+        //Debug.Log("Current Spawn: ".Bold().Colored(Colors.green) + CurrentRoundPhase + " Wave #:".Bold() + form);
+        //Debug.Log("GetWavePaths Round#: ".Bold().Colored(Colors.green) + GalagaHelper.RoundNumber);
         EnemySpawner formSpawn = GetFormationScript(form);
         // FourthWavePath=8 is used for waves 4 & 5.
         // SecondWavePath=11 is used for waves 2 & 3.
@@ -373,7 +375,10 @@ public static class GalagaHelper
             SecondWavePath[10] = formSpawn.currentSpawnPos.position;
 	    }
     }
+    #endregion
 
+
+    #region FirstAndSecondWaves
     /// <summary>
     /// Stores the game object and the Path Parameters for the iTween paths.
     /// </summary>
@@ -424,6 +429,9 @@ public static class GalagaHelper
         {
             try
             {
+                // Hide text
+                //GameObject.Find("PlayerText").SetActive(false);
+                //GameObject.Find("RoundTitle").SetActive(false);
                 StartPaths();
                 Debug.Log("Start path.");
                 RemovePaths();
@@ -472,7 +480,4 @@ public static class GalagaHelper
         //Debug.Log("<bold>Count of objects:</bold> " + x);
     }
     #endregion
-
-    public static float TimeToSpawn; //Time started
-    public static float TimeDone;
 }

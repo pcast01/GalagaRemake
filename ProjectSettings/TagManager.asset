@@ -16,6 +16,12 @@ TagManager:
   - phase51
   - MainFormation
   - phase1
+  - enemy1
+  - enemy2Right
+  - enemy2Left
+  - Enemy2ChangePath
+  - enemy2
+  - enemy3
   layers:
   - Default
   - TransparentFX
