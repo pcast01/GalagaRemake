@@ -18,7 +18,7 @@ public class EnemySpawner : MonoBehaviour {
     //public bool isStartFormation = false;
     public bool spawnEntranceRight = false;
     [Header("Formation")]
-    private EnemySpawner round1Phase2spawner;
+    //private EnemySpawner round1Phase2spawner;
     public bool isFormationUp = false;
     private int enemiesInPlace = 0;
     //private float timetoForm;

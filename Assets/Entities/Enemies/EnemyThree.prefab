@@ -97,6 +97,8 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 9920dac581fef934ab1a1f9414022d47, type: 3}
   - {fileID: 8300000, guid: 7e40a909aafc79149b5ecc4ca217f1bf, type: 3}
   explosionBottom: {fileID: 8300000, guid: de45b0c58b5fe74479e3e0c5530a8255, type: 3}
+  top: {fileID: 0}
+  bottom: {fileID: 0}
   movePathTime: 2
 --- !u!1001 &100100000
 Prefab:
@@ -156,6 +158,10 @@ Prefab:
     - target: {fileID: 0}
       propertyPath: m_Layer
       value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: m_PlayOnAwake
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
