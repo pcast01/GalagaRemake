@@ -17,6 +17,9 @@ public class MainEnemyFormation : MonoBehaviour {
     public GameObject[] enemy1;
     public GameObject[] enemy2;
     public GameObject form1;
+    private GameObject playerText;
+    private GameObject roundText;
+    private GameObject playerTextHigh;
 
 	// Use this for initialization
 	void Start () {
@@ -28,6 +31,13 @@ public class MainEnemyFormation : MonoBehaviour {
         moveFormation = false;
         GalagaHelper.RoundNumber = 1;
         Invoke("StartRound", 3.0f);
+        playerText = GameObject.Find("PlayerText");
+        roundText = GameObject.Find("RoundTitle");
+        playerTextHigh = GameObject.Find("PlayerTextHigh");
+        playerText.SetActive(true);
+        roundText.SetActive(false);
+        //playerTextHigh.SetActive(false);
+        //roundTextPos = playerText.transform.position;
 	}
 
     void PickRandomEnemyOne()
@@ -71,6 +81,42 @@ public class MainEnemyFormation : MonoBehaviour {
 
 	void Update () {
         //GameObject pt2 = GameObject.FindGameObjectWithTag("phase1").gameObject;
+        GalagaHelper.TimeToSpawn = Time.time;
+        //Debug.Log(GalagaHelper.TimeToSpawn.ToString().Bold());
+        if (GalagaHelper.TimeToSpawn > 0f && GalagaHelper.TimeToSpawn < 3.6f)
+        {
+            //Debug.Log("See player text?".Bold());
+            // show player1 first
+            playerText.SetActive(true);
+            playerTextHigh.SetActive(false);
+        }
+        else if (GalagaHelper.TimeToSpawn > 2.0f && GalagaHelper.TimeToSpawn < 3.5f)
+        {
+            // show round title same place
+            playerText.SetActive(false);
+            roundText.transform.position = playerText.transform.position;
+            roundText.SetActive(true);
+            
+            //GameObject.Find("PlayerText").SetActive(false);
+            //playerText.SetActive(true);
+            //GameObject.Find("RoundTitle").SetActive(true);
+        }
+        else if (GalagaHelper.TimeToSpawn > 3.5f && GalagaHelper.TimeToSpawn < 5.3f)
+        {
+            // Show both
+            //Vector3 newPos = playerText.transform.position + Vector3.up;
+            playerText.transform.position = playerTextHigh.transform.position;
+            //roundText.transform.position = roundTextPos;
+            playerText.SetActive(true);
+            roundText.SetActive(true);
+            //playerText.SetActive(false);
+        }
+        else
+        {
+            playerText.SetActive(false);
+            roundText.SetActive(false);
+        }
+
 
         if (GalagaHelper.EnemiesSpawned > 8 && enemy1Picked == false && form1.GetComponent<EnemySpawner>().isFormationUp == true)
         {
