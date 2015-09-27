@@ -81,6 +81,7 @@ public class MainEnemyFormation : MonoBehaviour {
 
 	void Update () {
         //GameObject pt2 = GameObject.FindGameObjectWithTag("phase1").gameObject;
+
         GalagaHelper.TimeToSpawn = Time.time;
         //Debug.Log(GalagaHelper.TimeToSpawn.ToString().Bold());
         if (GalagaHelper.TimeToSpawn > 0f && GalagaHelper.TimeToSpawn < 3.6f)
@@ -96,7 +97,7 @@ public class MainEnemyFormation : MonoBehaviour {
             playerText.SetActive(false);
             roundText.transform.position = playerText.transform.position;
             roundText.SetActive(true);
-            
+
             //GameObject.Find("PlayerText").SetActive(false);
             //playerText.SetActive(true);
             //GameObject.Find("RoundTitle").SetActive(true);
@@ -116,7 +117,6 @@ public class MainEnemyFormation : MonoBehaviour {
             playerText.SetActive(false);
             roundText.SetActive(false);
         }
-
 
         if (GalagaHelper.EnemiesSpawned > 8 && enemy1Picked == false && form1.GetComponent<EnemySpawner>().isFormationUp == true)
         {

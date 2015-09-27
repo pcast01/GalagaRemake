@@ -18,7 +18,7 @@ public class Enemy1Controller : EnemyController
     [SerializeField]
     private float swoopDownSpeed;
 
-    void Awake()
+    private void Awake()
     {
         // Save the first transform so we can use that to create our path.
         //_originalPosition = transform.position;
@@ -27,7 +27,7 @@ public class Enemy1Controller : EnemyController
         //Debug.Log("Original Pos: " + transform.position.ToString());
     }
 
-    public override void Start()
+    private void Start()
     {
         base.Start();
         //Debug.Log("Original Pos in START: " + transform.position.ToString());
@@ -36,7 +36,7 @@ public class Enemy1Controller : EnemyController
         //CreatePath();
     }
 
-    public override void Update()
+    private void Update()
     {
         base.Update();
 
@@ -177,12 +177,13 @@ public class Enemy1Controller : EnemyController
         //Debug.Log("Enemy completed circle".Bold().Italics());
     }
 
-    public override void OnDrawGizmos()
+    public void OnDrawGizmos()
     {
         if (_waypoints != null)
         {
             iTween.DrawPathGizmos(_waypoints.ToArray());
         }
     }
+
 
 }
