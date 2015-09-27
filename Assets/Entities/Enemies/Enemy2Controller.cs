@@ -9,10 +9,10 @@ public class Enemy2Controller : EnemyController
     public GameObject leftSwoop;
     public GameObject rightSwoop;
     public bool AttackPlayer = false;
-    //private Hashtable tweenPath = new Hashtable();
-    //private bool moveRight = true;
-    //private Vector3 pos;
-    //private Vector3 axis;
+    private Hashtable tweenPath = new Hashtable();
+    private bool moveRight = true;
+    private Vector3 pos;
+    private Vector3 axis;
     private Transform enemyProjWall;
     private Transform player;
     private bool outOfPlayerRange = false;
@@ -24,21 +24,21 @@ public class Enemy2Controller : EnemyController
     private bool _isOnPath = false;
     private float _pathPercentage = 0f;
 
-    public override void Start() 
+    private void Start() 
     {
         base.Start();
         leftSwoop = GameObject.FindGameObjectWithTag("enemy2Left");
         rightSwoop = GameObject.FindGameObjectWithTag("enemy2Right");
         _waypoints = new List<Vector3>();
-        //pos = transform.position;
-        //axis = transform.right;
+        pos = transform.position;
+        axis = transform.right;
         player = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>();
         enemyProjWall = GameObject.Find("EnemyProjectileWall").GetComponent<Transform>();
         //AttackPlayer = true;
         //SetPath();
 	}
 
-    public override void Update()
+    private void Update()
     {
         base.Update();
         if (AttackPlayer)

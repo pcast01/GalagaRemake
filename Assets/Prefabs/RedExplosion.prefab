@@ -10,7 +10,6 @@ GameObject:
   - 4: {fileID: 491458}
   - 198: {fileID: 19847862}
   - 199: {fileID: 19968650}
-  - 114: {fileID: 11444274}
   m_Layer: 0
   m_Name: RedExplosion
   m_TagString: Untagged
@@ -25,22 +24,11 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 165760}
   m_LocalRotation: {x: -.707106829, y: 0, z: 0, w: .707106829}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 40.5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
---- !u!114 &11444274
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 165760}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3b38cc9c0fb375c4e8df40350392a883, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!198 &19847862
 ParticleSystem:
   m_ObjectHideFlags: 1
@@ -91,7 +79,7 @@ ParticleSystem:
         m_PostInfinity: 2
       minMaxState: 0
     startSpeed:
-      scalar: 30
+      scalar: 25
       maxCurve:
         serializedVersion: 2
         m_Curve:
@@ -218,7 +206,7 @@ ParticleSystem:
         rgba: 4294967295
       minMaxState: 0
     startSize:
-      scalar: .400000006
+      scalar: .5
       maxCurve:
         serializedVersion: 2
         m_Curve:
@@ -304,7 +292,7 @@ ParticleSystem:
     enabled: 1
     m_Type: 0
     rate:
-      scalar: 70
+      scalar: 50
       maxCurve:
         serializedVersion: 2
         m_Curve:
