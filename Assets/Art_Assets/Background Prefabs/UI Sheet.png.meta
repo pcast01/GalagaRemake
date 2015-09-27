@@ -1,0 +1,158 @@
+fileFormatVersion: 2
+guid: 4b2da45c8e0fae443b280e22ba964837
+timeCreated: 1443386721
+licenseType: Free
+TextureImporter:
+  fileIDToRecycleName:
+    21300000: Start1
+    21300002: Start2
+    21300004: UI Sheet_2
+    21300006: Options1
+    21300008: Options2
+    21300010: Quit1
+    21300012: Quit2
+    21300014: Restart1
+    21300016: Restart2
+  serializedVersion: 2
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    linearTexture: 0
+    correctGamma: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: .25
+    normalMapFilter: 0
+  isReadable: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 0
+  cubemapConvolution: 0
+  cubemapConvolutionSteps: 8
+  cubemapConvolutionExponent: 1.5
+  seamlessCubemap: 0
+  textureFormat: -1
+  maxTextureSize: 2048
+  textureSettings:
+    filterMode: 0
+    aniso: 16
+    mipBias: -1
+    wrapMode: 1
+  nPOTScale: 0
+  lightmap: 0
+  rGBM: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: .5, y: .5}
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spritePixelsToUnits: 100
+  alphaIsTransparency: 1
+  textureType: 8
+  buildTargetSettings:
+  - buildTarget: Web
+    maxTextureSize: 2048
+    textureFormat: -1
+    compressionQuality: 50
+  spriteSheet:
+    sprites:
+    - name: Start1
+      rect:
+        serializedVersion: 2
+        x: 32
+        y: 426
+        width: 229
+        height: 105
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Start2
+      rect:
+        serializedVersion: 2
+        x: 283
+        y: 425
+        width: 231
+        height: 107
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: UI Sheet_2
+      rect:
+        serializedVersion: 2
+        x: 525
+        y: 147
+        width: 720
+        height: 402
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Options1
+      rect:
+        serializedVersion: 2
+        x: 32
+        y: 296
+        width: 229
+        height: 105
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Options2
+      rect:
+        serializedVersion: 2
+        x: 283
+        y: 295
+        width: 231
+        height: 107
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Quit1
+      rect:
+        serializedVersion: 2
+        x: 32
+        y: 166
+        width: 229
+        height: 105
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Quit2
+      rect:
+        serializedVersion: 2
+        x: 283
+        y: 165
+        width: 231
+        height: 107
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Restart1
+      rect:
+        serializedVersion: 2
+        x: 32
+        y: 36
+        width: 229
+        height: 105
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Restart2
+      rect:
+        serializedVersion: 2
+        x: 283
+        y: 35
+        width: 231
+        height: 107
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+  spritePackingTag: 
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
