@@ -18,6 +18,7 @@ AnimationClip:
       m_Curve:
       - time: 0
         value: {x: 0, y: 0, z: 129.199997}
+<<<<<<< HEAD
         inSlope: {x: 0, y: 0, z: -20}
         outSlope: {x: 0, y: 0, z: -20}
         tangentMode: 0
@@ -25,6 +26,15 @@ AnimationClip:
         value: {x: 0, y: 0, z: 9.19999981}
         inSlope: {x: 0, y: 0, z: -20}
         outSlope: {x: 0, y: 0, z: -20}
+=======
+        inSlope: {x: 0, y: 0, z: -60}
+        outSlope: {x: 0, y: 0, z: -60}
+        tangentMode: 0
+      - time: 2
+        value: {x: 0, y: 0, z: 9.19999981}
+        inSlope: {x: 0, y: 0, z: -60}
+        outSlope: {x: 0, y: 0, z: -60}
+>>>>>>> parent of e7db120... Added UI to Start Menu, ui sounds, explosion sounds
         tangentMode: 0
       m_PreInfinity: 2
       m_PostInfinity: 2
@@ -91,7 +101,11 @@ AnimationClip:
         inSlope: 0
         outSlope: 0
         tangentMode: 10
+<<<<<<< HEAD
       - time: 6
+=======
+      - time: 2
+>>>>>>> parent of e7db120... Added UI to Start Menu, ui sounds, explosion sounds
         value: 0
         inSlope: 0
         outSlope: 0
@@ -107,6 +121,7 @@ AnimationClip:
       m_Curve:
       - time: 0
         value: 129.199997
+<<<<<<< HEAD
         inSlope: -20
         outSlope: -20
         tangentMode: 10
@@ -114,6 +129,15 @@ AnimationClip:
         value: 9.19999981
         inSlope: -20
         outSlope: -20
+=======
+        inSlope: -60
+        outSlope: -60
+        tangentMode: 10
+      - time: 2
+        value: 9.19999981
+        inSlope: -60
+        outSlope: -60
+>>>>>>> parent of e7db120... Added UI to Start Menu, ui sounds, explosion sounds
         tangentMode: 10
       m_PreInfinity: 2
       m_PostInfinity: 2

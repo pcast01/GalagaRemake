@@ -6,11 +6,11 @@ public class EnemyController : MonoBehaviour
     public float speed = 30.0f;
     public float health = 150f;
     public int scoreValue = 150;
-    public GameObject explosion;
     //public bool isMovingRight;
 
     [Header("Weapon Settings")]
     public GameObject enemyLaser;
+
     public float shotsPerSecond = 0.5f;
     public float projectileSpeed = 16f;
 
@@ -20,21 +20,12 @@ public class EnemyController : MonoBehaviour
     private EnemySpawner round1Phase1spawner;
     private const float fDelay = 0.06f;
 
-    [Header("Sound Settings")]
-    public AudioClip[] explosionTop;
-    public AudioClip explosionBottom;
-    private AudioSource top;
-    private AudioSource bottom;
-
     [SerializeField]
     private float movePathTime;
 
-    public AudioSource addShotSounds(AudioClip clip, float pitch)
+    private void Awake()
     {
-        AudioSource audio = gameObject.AddComponent<AudioSource>();
-        audio.clip = clip;
-        audio.pitch = pitch;
-        return audio;
+        //SimplePool.Preload(enemyLaser, 25);
     }
 
     public void Start()
@@ -169,7 +160,7 @@ public class EnemyController : MonoBehaviour
 
     public void OnTriggerEnter(Collider other)
     {
-        Debug.Log("Something hit an enemy");
+        //Debug.Log("Something hit an enemy");
         Projectile playerBullet = other.gameObject.GetComponent<Projectile>();
         if (playerBullet)
         {
@@ -181,12 +172,6 @@ public class EnemyController : MonoBehaviour
             {
                 //gameObject.isDead = true;
                 //Debug.Log("parent ".Bold()+ gameObject.transform.parent);
-                SimplePool.Spawn(explosion, gameObject.transform.position, gameObject.transform.rotation, true);
-                explosion.transform.position = gameObject.transform.position;
-                top = addShotSounds(explosionTop[Random.Range(0, explosionTop.Length)], Random.Range(0.8f, 1.2f));
-                bottom = addShotSounds(explosionBottom, Random.Range(0.8f, 1.2f));
-                top.Play();
-                bottom.Play();
                 SimplePool.Despawn(gameObject);
                 GalagaHelper.EnemiesKilled += 1;
                 //gameObject.SetActive(false);
