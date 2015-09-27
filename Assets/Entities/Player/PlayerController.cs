@@ -86,13 +86,6 @@ public class PlayerController : MonoBehaviour {
             StartCoroutine("Fire");
             //Debug.Log("Firing");
         }
-
-        //if (Input.GetButtonUp("Fire1"))
-        //{
-        //    CancelInvoke("Fire");
-        //}
-
-        
 	}
 
     void FixedUpdate()
@@ -104,6 +97,9 @@ public class PlayerController : MonoBehaviour {
         if (Input.GetKey(KeyCode.A))
         {
             transform.position += new Vector3(-speed * Time.deltaTime, 0, 0);
+            //float move = Input.GetAxis("Horizontal") * -speed * Time.deltaTime;
+            //transform.Translate(move, 0, 0);
+            //transform.rotation = Quaternion.RotateTowards(transform.rotation, transform.rotation, speed * Time.deltaTime);
             //z = Input.GetAxis("Horizontal") * -35.0f;
             //Debug.Log("z: " + z + " euler.z: " + euler.z);
             //euler.z = Mathf.Lerp(euler.z, z, Time.fixedDeltaTime);

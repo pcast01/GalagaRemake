@@ -37,7 +37,7 @@ public class EnemyController : MonoBehaviour
         return audio;
     }
 
-    public void Start()
+    public virtual void Start()
     {
         GalagaHelper.EnemiesSpawned += 1;
         round1Phase1spawner = GameObject.Find("Round1Phase1EnemyFormation").GetComponent<EnemySpawner>();
@@ -122,7 +122,7 @@ public class EnemyController : MonoBehaviour
         }
     }
 
-    public void OnDrawGizmos()
+    public virtual void OnDrawGizmos()
     {
         if (GalagaHelper.SecondWavePath.Length != 0)
         {
@@ -136,7 +136,7 @@ public class EnemyController : MonoBehaviour
        // iTween.DrawPath(GalagaHelper.EntrancePatterns(GalagaHelper.EntranceFlightPatterns.round1_DownRight));
     }
 
-    public void Update()
+    public virtual void Update()
     {
         // Fire random
         float probability = Time.deltaTime * shotsPerSecond;
@@ -181,9 +181,12 @@ public class EnemyController : MonoBehaviour
             {
                 //gameObject.isDead = true;
                 //Debug.Log("parent ".Bold()+ gameObject.transform.parent);
-                SimplePool.Spawn(explosion, gameObject.transform.position, gameObject.transform.rotation, true);
-                explosion.transform.position = gameObject.transform.position;
-                top = addShotSounds(explosionTop[Random.Range(0, explosionTop.Length)], Random.Range(0.8f, 1.2f));
+                //SimplePool.Spawn(explosion, gameObject.transform.position, gameObject.transform.rotation, true);
+                Instantiate(explosion, gameObject.transform.position, gameObject.transform.rotation);
+                //explosion.transform.position = gameObject.transform.position;
+                int exp = Random.Range(0, explosionTop.Length);
+                Debug.Log("Explosion sound: " + explosionTop[exp].name);
+                top = addShotSounds(explosionTop[exp], Random.Range(0.8f, 1.2f));
                 bottom = addShotSounds(explosionBottom, Random.Range(0.8f, 1.2f));
                 top.Play();
                 bottom.Play();
