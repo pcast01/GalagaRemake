@@ -37,7 +37,7 @@ public class EnemySpawner : MonoBehaviour {
         
         // Get the number of enemies in place on the current Formation
         enemiesInPlace = isEnemyInPlace();
-        Debug.Log(gameObject.name.Bold() + " - enemies in place: " + enemiesInPlace.ToString().Colored(Colors.red) + " Enemies Spawned: " + GalagaHelper.EnemiesSpawned);
+        //Debug.Log(gameObject.name.Bold() + " - enemies in place: " + enemiesInPlace.ToString().Colored(Colors.red) + " Enemies Spawned: " + GalagaHelper.EnemiesSpawned);
 
         if (gameObject.name == "Round1Phase1EnemyFormation")
         {
@@ -58,7 +58,7 @@ public class EnemySpawner : MonoBehaviour {
         if (enemiesInPlace == 8 && gameObject.name == "Round1Phase1EnemyFormation")
         {
             GalagaHelper.TimeDone = Time.time;
-            Debug.Log("Time to get to position: ".Bold() + (GalagaHelper.TimeDone - GalagaHelper.TimeToSpawn));
+            //Debug.Log("Time to get to position: ".Bold() + (GalagaHelper.TimeDone - GalagaHelper.TimeToSpawn));
             GameObject pt2 = GameObject.FindGameObjectWithTag("phase2").gameObject;
             pt2.GetComponent<EnemySpawner>().enabled = true;
             //Debug.Log("*** ALL Enemies in place. ***");
@@ -187,7 +187,7 @@ public class EnemySpawner : MonoBehaviour {
 
         if (NextFreePosition())
         {
-            Debug.Log(gameObject.name.Bold() + " Free position");
+            //Debug.Log(gameObject.name.Bold() + " Free position");
             Invoke("SpawnUntilFull", spawnDelay);
         }
         else
