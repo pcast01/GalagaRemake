@@ -10,12 +10,11 @@ GameObject:
   - 4: {fileID: 422844}
   - 33: {fileID: 3389244}
   - 23: {fileID: 2366414}
-  - 95: {fileID: 9596842}
-  - 114: {fileID: 11467610}
   - 64: {fileID: 6462040}
-  m_Layer: 0
+  - 114: {fileID: 11411386}
+  m_Layer: 10
   m_Name: EnemyOne
-  m_TagString: Untagged
+  m_TagString: enemy1
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -42,7 +41,7 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_Materials:
-  - {fileID: 2100000, guid: dc898d6d5dca6124f98124437016bcee, type: 2}
+  - {fileID: 2100000, guid: 8085e1c153aa90f479b290cd26a5ef4d, type: 2}
   m_SubsetIndices: 
   m_StaticBatchRoot: {fileID: 0}
   m_UseLightProbes: 1
@@ -62,7 +61,7 @@ MeshFilter:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 122214}
-  m_Mesh: {fileID: 4300000, guid: b5528024b91f6b54ebb3382d581585e5, type: 3}
+  m_Mesh: {fileID: 4300000, guid: 1cb0b0ccdb8a6b24c863bed1f2df0441, type: 3}
 --- !u!64 &6462040
 MeshCollider:
   m_ObjectHideFlags: 1
@@ -74,25 +73,8 @@ MeshCollider:
   m_Enabled: 1
   serializedVersion: 2
   m_Convex: 1
-  m_Mesh: {fileID: 4300000, guid: b5528024b91f6b54ebb3382d581585e5, type: 3}
---- !u!95 &9596842
-Animator:
-  serializedVersion: 3
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 122214}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 10e872da810a81c4a8368aa526ddc981, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
---- !u!114 &11467610
+  m_Mesh: {fileID: 4300000, guid: fce188cf0b2e1f3418137c3fe686ebbb, type: 3}
+--- !u!114 &11411386
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -100,18 +82,26 @@ MonoBehaviour:
   m_GameObject: {fileID: 122214}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a66fcb8dc46164d4bb9212a375a69e41, type: 3}
+  m_Script: {fileID: 11500000, guid: 4df470f4e3bab0c479c60b88ceb61ece, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 30
   health: 150
   scoreValue: 150
-  isMovingRight: 0
+  explosion: {fileID: 165760, guid: 2a81bd63e5dc3164a9edffac0f022725, type: 2}
   enemyLaser: {fileID: 103356, guid: c59875210abc21544b4ee5e6df08bfeb, type: 2}
   shotsPerSecond: .5
   projectileSpeed: 16
-  pathSpeed: 0
-  movePathTime: 0
+  explosionTop:
+  - {fileID: 8300000, guid: 7a13450c68eb6fa4f880566f1b3a136c, type: 3}
+  - {fileID: 8300000, guid: 9920dac581fef934ab1a1f9414022d47, type: 3}
+  - {fileID: 8300000, guid: 7e40a909aafc79149b5ecc4ca217f1bf, type: 3}
+  explosionBottom: {fileID: 8300000, guid: de45b0c58b5fe74479e3e0c5530a8255, type: 3}
+  movePathTime: 2.20000005
+  returnPathSpeed: 10
+  PlayerTransform: {fileID: 0}
+  _originalPosition: {x: 0, y: 0, z: 0}
+  swoopDownSpeed: 1.79999995
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1
@@ -119,6 +109,14 @@ Prefab:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 0}
+      propertyPath: explosionTop.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: playerOffsetPoints.Array.size
+      value: 9
+      objectReference: {fileID: 0}
     - target: {fileID: 0}
       propertyPath: enemyLaser
       value: 
@@ -131,6 +129,58 @@ Prefab:
       propertyPath: m_IsTrigger
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: pathSpeed
+      value: 40
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: movePathTime
+      value: 2.20000005
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: m_TagString
+      value: enemy1
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: swoopDownSpeed
+      value: 1.79999995
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: m_Mesh
+      value: 
+      objectReference: {fileID: 4300000, guid: fce188cf0b2e1f3418137c3fe686ebbb, type: 3}
+    - target: {fileID: 0}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 8085e1c153aa90f479b290cd26a5ef4d, type: 2}
+    - target: {fileID: 0}
+      propertyPath: explosion
+      value: 
+      objectReference: {fileID: 165760, guid: 2a81bd63e5dc3164a9edffac0f022725, type: 2}
+    - target: {fileID: 0}
+      propertyPath: explosionTop.Array.data[0]
+      value: 
+      objectReference: {fileID: 8300000, guid: 7a13450c68eb6fa4f880566f1b3a136c, type: 3}
+    - target: {fileID: 0}
+      propertyPath: explosionTop.Array.data[1]
+      value: 
+      objectReference: {fileID: 8300000, guid: 9920dac581fef934ab1a1f9414022d47, type: 3}
+    - target: {fileID: 0}
+      propertyPath: explosionTop.Array.data[2]
+      value: 
+      objectReference: {fileID: 8300000, guid: 7e40a909aafc79149b5ecc4ca217f1bf, type: 3}
+    - target: {fileID: 0}
+      propertyPath: explosionBottom
+      value: 
+      objectReference: {fileID: 8300000, guid: de45b0c58b5fe74479e3e0c5530a8255, type: 3}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 122214}

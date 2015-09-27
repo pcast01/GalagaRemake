@@ -1,31 +1,44 @@
-using UnityEngine;
 using System.Collections;
+using UnityEngine;
 
-public class EnemyController : MonoBehaviour {
-
+public class EnemyController : MonoBehaviour
+{
     public float speed = 30.0f;
     public float health = 150f;
     public int scoreValue = 150;
-    public bool isMovingRight;
+    public GameObject explosion;
+    //public bool isMovingRight;
+
     [Header("Weapon Settings")]
     public GameObject enemyLaser;
     public float shotsPerSecond = 0.5f;
     public float projectileSpeed = 16f;
+
     [Header("Flight Pattern Settings")]
-    public float pathSpeed;
     public Hashtable myTween = new Hashtable();
     private ScoreKeeper scoreKeeper;
     private EnemySpawner round1Phase1spawner;
     private const float fDelay = 0.06f;
+
+    [Header("Sound Settings")]
+    public AudioClip[] explosionTop;
+    public AudioClip explosionBottom;
+    private AudioSource top;
+    private AudioSource bottom;
+
     [SerializeField]
     private float movePathTime;
 
-    void Awake()
+    public AudioSource addShotSounds(AudioClip clip, float pitch)
     {
-        SimplePool.Preload(enemyLaser, 25);
+        AudioSource audio = gameObject.AddComponent<AudioSource>();
+        audio.clip = clip;
+        audio.pitch = pitch;
+        return audio;
     }
 
-    void Start () {
+    public void Start()
+    {
         GalagaHelper.EnemiesSpawned += 1;
         round1Phase1spawner = GameObject.Find("Round1Phase1EnemyFormation").GetComponent<EnemySpawner>();
         scoreKeeper = GameObject.Find("Score").GetComponent<ScoreKeeper>();
@@ -86,7 +99,7 @@ public class EnemyController : MonoBehaviour {
     /// Create path based on wave number.
     /// </summary>
     /// <param name="wave"></param>
-    public void CreatePathAndMove(GalagaHelper.Formations form , int RoundNumber)
+    public void CreatePathAndMove(GalagaHelper.Formations form, int RoundNumber)
     {
         GalagaHelper.ClearWavePath();
         GalagaHelper.GetWavePaths(form, RoundNumber);
@@ -119,9 +132,12 @@ public class EnemyController : MonoBehaviour {
         {
             iTween.DrawPath(GalagaHelper.FourthWavePath);
         }
+        //iTween.DrawPath(GalagaHelper.EntrancePatterns(GalagaHelper.EntranceFlightPatterns.round1_DownLeft));
+       // iTween.DrawPath(GalagaHelper.EntrancePatterns(GalagaHelper.EntranceFlightPatterns.round1_DownRight));
     }
 
-	void Update () {
+    public void Update()
+    {
         // Fire random
         float probability = Time.deltaTime * shotsPerSecond;
         if (Random.value < probability)
@@ -140,9 +156,9 @@ public class EnemyController : MonoBehaviour {
         //    }
         //}
         // Until the enemy is in the position keep updating moveTo
-	}
+    }
 
-    void Fire()
+    private void Fire()
     {
         Vector3 startPos = transform.position + new Vector3(0, 0, -4);
         //GameObject enemyBullet = Instantiate(enemyLaser, startPos, Quaternion.identity) as GameObject;
@@ -151,8 +167,9 @@ public class EnemyController : MonoBehaviour {
         enemyBullet.GetComponent<Rigidbody>().velocity = new Vector3(0, 0, -projectileSpeed);
     }
 
-    void OnTriggerEnter(Collider other)
+    public void OnTriggerEnter(Collider other)
     {
+        Debug.Log("Something hit an enemy");
         Projectile playerBullet = other.gameObject.GetComponent<Projectile>();
         if (playerBullet)
         {
@@ -163,16 +180,17 @@ public class EnemyController : MonoBehaviour {
             if (health <= 0)
             {
                 //gameObject.isDead = true;
-                GameObject test = new GameObject("Test");
-                test.transform.parent = gameObject.transform.parent;
-                test.transform.position = test.transform.parent.position;
                 //Debug.Log("parent ".Bold()+ gameObject.transform.parent);
+                SimplePool.Spawn(explosion, gameObject.transform.position, gameObject.transform.rotation, true);
+                explosion.transform.position = gameObject.transform.position;
+                top = addShotSounds(explosionTop[Random.Range(0, explosionTop.Length)], Random.Range(0.8f, 1.2f));
+                bottom = addShotSounds(explosionBottom, Random.Range(0.8f, 1.2f));
+                top.Play();
+                bottom.Play();
                 SimplePool.Despawn(gameObject);
-                GalagaHelper.EnemiesSpawned -= 1;
+                GalagaHelper.EnemiesKilled += 1;
                 //gameObject.SetActive(false);
-                Debug.Log("Enemy is dead".Bold());
-                //Destroy(gameObject);
-                //end of game
+                //Debug.Log("Enemy is dead".Bold() + " Pos: " + gameObject.transform.parent.transform.parent.name);
                 scoreKeeper.Score(200);
                 //Application.LoadLevel("Win Screen");
                 //Die();
