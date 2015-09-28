@@ -85,7 +85,7 @@ public class MainEnemyFormation : MonoBehaviour {
         //Debug.Log(GalagaHelper.TimeToSpawn.ToString().Bold());
         if (GalagaHelper.TimeToSpawn > 0f && GalagaHelper.TimeToSpawn < 2.0f)
         {
-            //Debug.Log("See player text?".Bold());
+            Debug.Log("See player text?".Bold());
             // show player1 first
             playerText.SetActive(true);
             playerTextHigh.SetActive(false);

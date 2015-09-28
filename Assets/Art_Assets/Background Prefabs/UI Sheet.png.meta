@@ -1,18 +1,20 @@
 fileFormatVersion: 2
 guid: 4b2da45c8e0fae443b280e22ba964837
-timeCreated: 1443386721
+timeCreated: 1443412248
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
     21300000: Start1
     21300002: Start2
-    21300004: UI Sheet_2
+    21300004: Score
     21300006: Options1
     21300008: Options2
     21300010: Quit1
     21300012: Quit2
     21300014: Restart1
     21300016: Restart2
+    21300018: Levels
+    21300020: Died
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0
@@ -82,16 +84,16 @@ TextureImporter:
       alignment: 0
       pivot: {x: .5, y: .5}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: UI Sheet_2
+    - name: Score
       rect:
         serializedVersion: 2
-        x: 525
-        y: 147
-        width: 720
-        height: 402
+        x: 534
+        y: 416
+        width: 500
+        height: 133
       alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
+      pivot: {x: .5, y: .5}
+      border: {x: 1, y: 1, z: 1, w: 1}
     - name: Options1
       rect:
         serializedVersion: 2
@@ -152,6 +154,26 @@ TextureImporter:
       alignment: 0
       pivot: {x: .5, y: .5}
       border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Levels
+      rect:
+        serializedVersion: 2
+        x: 535
+        y: 300
+        width: 554
+        height: 117
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 1, y: 1, z: 1, w: 1}
+    - name: Died
+      rect:
+        serializedVersion: 2
+        x: 537
+        y: 166
+        width: 694
+        height: 109
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 1, y: 1, z: 1, w: 1}
   spritePackingTag: 
   userData: 
   assetBundleName: 

@@ -475,6 +475,10 @@ public static class GalagaHelper
                 x += 1;
                 Object.Destroy(obj.gameObject);
             }
+            if (obj.name == "EnemyExplosion")
+            {
+                Object.Destroy(obj.gameObject);
+            }
         }
         //Debug.Log("<bold>Count of objects:</bold> " + x);
     }
