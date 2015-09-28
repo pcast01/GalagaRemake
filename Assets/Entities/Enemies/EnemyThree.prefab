@@ -89,7 +89,7 @@ MonoBehaviour:
   health: 150
   scoreValue: 150
   explosion: {fileID: 143732, guid: f6a75a75b4cb4e54d9fdd0e4dbcc8470, type: 2}
-  enemyLaser: {fileID: 103356, guid: c59875210abc21544b4ee5e6df08bfeb, type: 2}
+  enemyLaser: {fileID: 159908, guid: 6635a52a223ff2f48a4728ecf0781244, type: 2}
   shotsPerSecond: .5
   projectileSpeed: 16
   explosionTop:
@@ -112,7 +112,7 @@ Prefab:
     - target: {fileID: 0}
       propertyPath: enemyLaser
       value: 
-      objectReference: {fileID: 103356, guid: c59875210abc21544b4ee5e6df08bfeb, type: 2}
+      objectReference: {fileID: 159908, guid: 6635a52a223ff2f48a4728ecf0781244, type: 2}
     - target: {fileID: 0}
       propertyPath: m_Convex
       value: 1
