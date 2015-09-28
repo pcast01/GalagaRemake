@@ -120,7 +120,7 @@ public class PlayerController : MonoBehaviour {
             Destroy(gameObject);
             Debug.Log("Enemy hit Player.");
             Instantiate(explosion, gameObject.transform.position, gameObject.transform.rotation);
-            DestroyImmediate(explosion);
+            //DestroyImmediate(explosion);
             top = addShotSounds(explosionTop, Random.Range(0.8f, 1.2f));
             bottom = addShotSounds(explosionBottom, Random.Range(0.8f, 1.2f));
             top.Play();

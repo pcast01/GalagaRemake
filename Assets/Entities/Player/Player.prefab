@@ -400,9 +400,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bullet: {fileID: 154174, guid: 4da1fc0655bc79c40a8567411cc8b11f, type: 2}
-  projectileSpeed: 25
-  speed: 38
-  firingRate: 1.79999995
+  explosion: {fileID: 0}
+  projectileSpeed: 30
+  speed: 40
+  firingRate: .699999988
   shotTop:
   - {fileID: 8300000, guid: aaef8abf1895c614692b8baed744b08b, type: 3}
   - {fileID: 8300000, guid: a3d9ca2a87b46b946a0106db94e474fa, type: 3}
@@ -412,6 +413,8 @@ MonoBehaviour:
   - {fileID: 8300000, guid: cedb4bee0e421a64c8e45dedc3ab22c2, type: 3}
   - {fileID: 8300000, guid: 45559aaf48a199b4580e4297852f7e23, type: 3}
   circlePath: []
+  explosionTop: {fileID: 0}
+  explosionBottom: {fileID: 0}
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1
