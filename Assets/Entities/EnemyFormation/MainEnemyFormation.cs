@@ -44,7 +44,7 @@ public class MainEnemyFormation : MonoBehaviour {
     {
         enemy1 = GameObject.FindGameObjectsWithTag("enemy1");
         int pickedAtRandom = Random.Range(0, enemy1.Length);
-        Debug.Log(enemy1[pickedAtRandom].transform.parent.name.Bold() + " Num: " + pickedAtRandom);
+        //Debug.Log(enemy1[pickedAtRandom].transform.parent.name.Bold() + " Num: " + pickedAtRandom);
         Enemy1Controller enemyOne = enemy1[pickedAtRandom].GetComponent<Enemy1Controller>();
         if (enemyOne)
         {
@@ -60,7 +60,7 @@ public class MainEnemyFormation : MonoBehaviour {
         enemy2 = GameObject.FindGameObjectsWithTag("enemy2");
         //Enemy1Controller enemyOne = GameObject.FindGameObjectWithTag("enemy1").GetComponent<Enemy1Controller>();
         int pickedAtRandom = Random.Range(0, enemy1.Length);
-        Debug.Log(enemy2[pickedAtRandom].transform.parent.name.Bold() + " Num: " + pickedAtRandom);
+        //Debug.Log(enemy2[pickedAtRandom].transform.parent.name.Bold() + " Num: " + pickedAtRandom);
         Enemy2Controller enemyTwo = enemy2[pickedAtRandom].GetComponent<Enemy2Controller>();
         if (enemyTwo)
         {
