@@ -43,7 +43,6 @@ public class MainEnemyFormation : MonoBehaviour {
     void PickRandomEnemyOne()
     {
         enemy1 = GameObject.FindGameObjectsWithTag("enemy1");
-        //Enemy1Controller enemyOne = GameObject.FindGameObjectWithTag("enemy1").GetComponent<Enemy1Controller>();
         int pickedAtRandom = Random.Range(0, enemy1.Length);
         Debug.Log(enemy1[pickedAtRandom].transform.parent.name.Bold() + " Num: " + pickedAtRandom);
         Enemy1Controller enemyOne = enemy1[pickedAtRandom].GetComponent<Enemy1Controller>();
@@ -84,7 +83,7 @@ public class MainEnemyFormation : MonoBehaviour {
 
         GalagaHelper.TimeToSpawn = Time.time;
         //Debug.Log(GalagaHelper.TimeToSpawn.ToString().Bold());
-        if (GalagaHelper.TimeToSpawn > 0f && GalagaHelper.TimeToSpawn < 3.6f)
+        if (GalagaHelper.TimeToSpawn > 0f && GalagaHelper.TimeToSpawn < 2.0f)
         {
             //Debug.Log("See player text?".Bold());
             // show player1 first
@@ -97,20 +96,13 @@ public class MainEnemyFormation : MonoBehaviour {
             playerText.SetActive(false);
             roundText.transform.position = playerText.transform.position;
             roundText.SetActive(true);
-
-            //GameObject.Find("PlayerText").SetActive(false);
-            //playerText.SetActive(true);
-            //GameObject.Find("RoundTitle").SetActive(true);
         }
         else if (GalagaHelper.TimeToSpawn > 3.5f && GalagaHelper.TimeToSpawn < 5.3f)
         {
             // Show both
-            //Vector3 newPos = playerText.transform.position + Vector3.up;
             playerText.transform.position = playerTextHigh.transform.position;
-            //roundText.transform.position = roundTextPos;
             playerText.SetActive(true);
             roundText.SetActive(true);
-            //playerText.SetActive(false);
         }
         else
         {
