@@ -4,6 +4,7 @@ using System.Collections;
 public class PlayerController : MonoBehaviour {
 
     public GameObject bullet;
+    public GameObject explosion;
     public float projectileSpeed;
     public float speed = 15f;
     public float firingRate;
@@ -14,6 +15,8 @@ public class PlayerController : MonoBehaviour {
     public AudioClip[] shotTop;
     public AudioClip[] shotBottom;
     public Vector3[] circlePath;
+    public AudioClip explosionTop;
+    public AudioClip explosionBottom;
     private AudioSource top;
     private AudioSource bottom;
 
@@ -67,8 +70,10 @@ public class PlayerController : MonoBehaviour {
         laserBeam.transform.position = transform.position + offset;
         laserBeam.GetComponent<Rigidbody>().velocity = new Vector3(0, 0, projectileSpeed);
         // pick one of 3 random top shots
-        top = addShotSounds(shotTop[Random.Range(0, shotTop.Length)], Random.RandomRange(0.8f, 1.2f));
-        bottom = addShotSounds(shotBottom[Random.Range(0, shotTop.Length)], Random.RandomRange(0.8f, 1.2f));
+        top = addShotSounds(shotTop[Random.Range(0, shotTop.Length)], Random.Range(0.8f, 1.2f));
+        bottom = addShotSounds(shotBottom[Random.Range(0, shotBottom.Length)], Random.Range(0.8f, 1.2f));
+        top.volume = 0.5f;
+        bottom.volume = 0.5f;
         top.Play();
         bottom.Play();
         yield return new WaitForSeconds(firingRate);
@@ -114,6 +119,12 @@ public class PlayerController : MonoBehaviour {
         {
             Destroy(gameObject);
             Debug.Log("Enemy hit Player.");
+            Instantiate(explosion, gameObject.transform.position, gameObject.transform.rotation);
+            Destroy(explosion, 3.0f);
+            top = addShotSounds(explosionTop, Random.Range(0.8f, 1.2f));
+            bottom = addShotSounds(explosionBottom, Random.Range(0.8f, 1.2f));
+            top.Play();
+            bottom.Play();
             Application.LoadLevel("Lose Screen");
         }
         if (enemy1)

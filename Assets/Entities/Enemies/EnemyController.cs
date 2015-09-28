@@ -183,7 +183,7 @@ public class EnemyController : MonoBehaviour
                 //gameObject.isDead = true;
                 //Debug.Log("parent ".Bold()+ gameObject.transform.parent);
                 Instantiate(explosion, gameObject.transform.position, gameObject.transform.rotation);
-                //explosion.transform.position = gameObject.transform.position;
+                Destroy(explosion, 3.0f);
                 top = addShotSounds(explosionTop[Random.Range(0, explosionTop.Length)], Random.Range(0.8f, 1.2f));
                 bottom = addShotSounds(explosionBottom, Random.Range(0.8f, 1.2f));
                 top.Play();
