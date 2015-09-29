@@ -14,14 +14,12 @@ public class EnemySpawner : MonoBehaviour {
     [Header("Spawn Settings")]
     public Transform currentSpawnPos;
     public float spawnDelay = 0.5f;
-    //public bool moveFormation = false;
-    //public bool isStartFormation = false;
     public bool spawnEntranceRight = false;
     [Header("Formation")]
     private EnemySpawner round1Phase2spawner;
     public bool isFormationUp = false;
     private int enemiesInPlace = 0;
-    //private float timetoForm;
+
     void Awake()
     {
         //SimplePool.Preload(enemy1Prefab, 8);
@@ -83,7 +81,8 @@ public class EnemySpawner : MonoBehaviour {
         else if (enemiesInPlace == 8 && gameObject.name == "Round1Phase5_1EnemyFormation")
         {
             GameObject mef = GameObject.FindGameObjectWithTag("MainFormation").gameObject;
-            mef.GetComponent<MainEnemyFormation>().enabled = true;
+            mef.GetComponent<MainEnemyFormation>().moveFormation = true;
+
         }
 	}
 

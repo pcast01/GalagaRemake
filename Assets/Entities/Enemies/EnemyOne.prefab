@@ -90,13 +90,15 @@ MonoBehaviour:
   scoreValue: 150
   explosion: {fileID: 143732, guid: f6a75a75b4cb4e54d9fdd0e4dbcc8470, type: 2}
   enemyLaser: {fileID: 159908, guid: 6635a52a223ff2f48a4728ecf0781244, type: 2}
+  isEnemyFiring: 0
   shotsPerSecond: .5
-  projectileSpeed: 16
+  projectileSpeed: 30
   explosionTop:
   - {fileID: 8300000, guid: f203d269d2a20104fbf0eaee349cef4e, type: 3}
   - {fileID: 8300000, guid: 4bf810b82d8994b48acfd2d7209d8c17, type: 3}
   - {fileID: 8300000, guid: 617c45f62ba3ca440b2c2d5b25472802, type: 3}
   explosionBottom: {fileID: 8300000, guid: 470dc56cb6092604388b601ebb4c9579, type: 3}
+  swooshSound: {fileID: 8300000, guid: 6c3f33e757ffdf74c8733e3b1f1c0892, type: 3}
   movePathTime: 2.20000005
   returnPathSpeed: 10
   PlayerTransform: {fileID: 0}
@@ -181,6 +183,22 @@ Prefab:
       propertyPath: explosionBottom
       value: 
       objectReference: {fileID: 8300000, guid: 470dc56cb6092604388b601ebb4c9579, type: 3}
+    - target: {fileID: 0}
+      propertyPath: swooshSound
+      value: 
+      objectReference: {fileID: 8300000, guid: 6c3f33e757ffdf74c8733e3b1f1c0892, type: 3}
+    - target: {fileID: 0}
+      propertyPath: m_audioClip
+      value: 
+      objectReference: {fileID: 8300000, guid: 6c3f33e757ffdf74c8733e3b1f1c0892, type: 3}
+    - target: {fileID: 0}
+      propertyPath: BypassEffects
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: projectileSpeed
+      value: 30
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 122214}

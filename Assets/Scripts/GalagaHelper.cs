@@ -460,6 +460,25 @@ public static class GalagaHelper
     }
     #endregion
 
+    public static void SetAttackinMotion()
+    {
+        MainEnemyFormation mainEnemyForm = GameObject.FindGameObjectWithTag("MainFormation").GetComponent<MainEnemyFormation>();
+        if (mainEnemyForm && GalagaHelper.EnemiesKilled < 41)
+	    {
+            int x = Random.Range(0,3);
+            if (x == 1)
+	        {
+		        mainEnemyForm.enemy1Picked = true;
+	        }
+            else
+	        {
+                mainEnemyForm.enemy2Picked = true;
+	        }
+		 
+	    }
+
+    }
+
     #region Delete Emtpy GameObjects in Scene
     /// <summary>
     /// Finds and deletes all gameobjects named "New Game Object"

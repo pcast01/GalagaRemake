@@ -117,14 +117,14 @@ public class PlayerController : MonoBehaviour {
         Enemy1Controller enemy1 = other.gameObject.GetComponent<Enemy1Controller>();
         if (enemyProjectile)
         {
-            Destroy(gameObject);
-            Debug.Log("Enemy hit Player.");
             Instantiate(explosion, gameObject.transform.position, gameObject.transform.rotation);
             //DestroyImmediate(explosion);
+            Debug.Log("Enemy proj hit Player.");
             top = addShotSounds(explosionTop, Random.Range(0.8f, 1.2f));
             bottom = addShotSounds(explosionBottom, Random.Range(0.8f, 1.2f));
             top.Play();
             bottom.Play();
+            Destroy(gameObject);
             Application.LoadLevel("Lose Screen");
         }
         if (enemy1)
