@@ -413,8 +413,8 @@ MonoBehaviour:
   - {fileID: 8300000, guid: cedb4bee0e421a64c8e45dedc3ab22c2, type: 3}
   - {fileID: 8300000, guid: 45559aaf48a199b4580e4297852f7e23, type: 3}
   circlePath: []
-  explosionTop: {fileID: 0}
-  explosionBottom: {fileID: 0}
+  explosionTop: {fileID: 8300000, guid: 4bf810b82d8994b48acfd2d7209d8c17, type: 3}
+  explosionBottom: {fileID: 8300000, guid: 470dc56cb6092604388b601ebb4c9579, type: 3}
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1
