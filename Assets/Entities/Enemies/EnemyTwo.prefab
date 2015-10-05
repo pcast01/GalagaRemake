@@ -1,17 +1,17 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &111300
+--- !u!1 &157008
 GameObject:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   serializedVersion: 4
   m_Component:
-  - 4: {fileID: 462998}
-  - 33: {fileID: 3365406}
-  - 23: {fileID: 2327604}
-  - 114: {fileID: 11437304}
-  - 64: {fileID: 6420058}
+  - 4: {fileID: 480106}
+  - 33: {fileID: 3335546}
+  - 23: {fileID: 2301626}
+  - 114: {fileID: 11444912}
+  - 64: {fileID: 6460652}
   m_Layer: 10
   m_Name: EnemyTwo
   m_TagString: enemy2
@@ -19,24 +19,24 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &462998
+--- !u!4 &480106
 Transform:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 111300}
+  m_GameObject: {fileID: 157008}
   m_LocalRotation: {x: 0, y: 1, z: 0, w: -1.62920685e-07}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
---- !u!23 &2327604
+--- !u!23 &2301626
 MeshRenderer:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 111300}
+  m_GameObject: {fileID: 157008}
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
@@ -55,31 +55,31 @@ MeshRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingOrder: 0
---- !u!33 &3365406
+--- !u!33 &3335546
 MeshFilter:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 111300}
+  m_GameObject: {fileID: 157008}
   m_Mesh: {fileID: 4300000, guid: d8b716d796b877c428a90b7a39874e55, type: 3}
---- !u!64 &6420058
+--- !u!64 &6460652
 MeshCollider:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 111300}
+  m_GameObject: {fileID: 157008}
   m_Material: {fileID: 0}
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
   m_Convex: 1
-  m_Mesh: {fileID: 4300000, guid: c3ff927f565fd924c8d418610070e2f5, type: 3}
---- !u!114 &11437304
+  m_Mesh: {fileID: 4300000, guid: d8b716d796b877c428a90b7a39874e55, type: 3}
+--- !u!114 &11444912
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 111300}
+  m_GameObject: {fileID: 157008}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ea65fc80d1e8cde4d9485c7d287066e0, type: 3}
@@ -88,15 +88,24 @@ MonoBehaviour:
   speed: 30
   health: 150
   scoreValue: 150
-  enemyLaser: {fileID: 103356, guid: c59875210abc21544b4ee5e6df08bfeb, type: 2}
+  explosion: {fileID: 143732, guid: f6a75a75b4cb4e54d9fdd0e4dbcc8470, type: 2}
+  enemyLaser: {fileID: 159908, guid: 6635a52a223ff2f48a4728ecf0781244, type: 2}
+  isEnemyFiring: 0
   shotsPerSecond: .5
-  projectileSpeed: 16
-  movePathTime: 2.0999999
-  swoopSpeed: 25
+  projectileSpeed: 30
+  explosionTop:
+  - {fileID: 8300000, guid: f203d269d2a20104fbf0eaee349cef4e, type: 3}
+  - {fileID: 8300000, guid: 4bf810b82d8994b48acfd2d7209d8c17, type: 3}
+  - {fileID: 8300000, guid: 617c45f62ba3ca440b2c2d5b25472802, type: 3}
+  explosionBottom: {fileID: 8300000, guid: 470dc56cb6092604388b601ebb4c9579, type: 3}
+  swooshSound: {fileID: 8300000, guid: 6c3f33e757ffdf74c8733e3b1f1c0892, type: 3}
+  movePathTime: 2
+  swoopSpeed: 30
   leftSwoop: {fileID: 0}
   rightSwoop: {fileID: 0}
   AttackPlayer: 0
   _originalPosition: {x: 0, y: 0, z: 0}
+  attackSound: {fileID: 8300000, guid: 9f9b8573d3e62fc40a809a7139d4898a, type: 3}
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1
@@ -105,13 +114,13 @@ Prefab:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 0}
-      propertyPath: pathSpeed
-      value: 40
+      propertyPath: explosionTop.Array.size
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 0}
-      propertyPath: movePathTime
-      value: 2.0999999
-      objectReference: {fileID: 0}
+      propertyPath: enemyLaser
+      value: 
+      objectReference: {fileID: 159908, guid: 6635a52a223ff2f48a4728ecf0781244, type: 2}
     - target: {fileID: 0}
       propertyPath: m_Convex
       value: 1
@@ -121,30 +130,62 @@ Prefab:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 0}
-      propertyPath: m_Layer
-      value: 10
-      objectReference: {fileID: 0}
-    - target: {fileID: 0}
-      propertyPath: swoopSpeed
-      value: 20
-      objectReference: {fileID: 0}
-    - target: {fileID: 0}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: fda2694c2bb50394aa9c5a81317ddfd7, type: 2}
     - target: {fileID: 0}
       propertyPath: m_TagString
       value: enemy2
       objectReference: {fileID: 0}
     - target: {fileID: 0}
+      propertyPath: movePathTime
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: explosion
+      value: 
+      objectReference: {fileID: 143732, guid: f6a75a75b4cb4e54d9fdd0e4dbcc8470, type: 2}
+    - target: {fileID: 0}
+      propertyPath: explosionBottom
+      value: 
+      objectReference: {fileID: 8300000, guid: 470dc56cb6092604388b601ebb4c9579, type: 3}
+    - target: {fileID: 0}
+      propertyPath: explosionTop.Array.data[0]
+      value: 
+      objectReference: {fileID: 8300000, guid: f203d269d2a20104fbf0eaee349cef4e, type: 3}
+    - target: {fileID: 0}
+      propertyPath: explosionTop.Array.data[1]
+      value: 
+      objectReference: {fileID: 8300000, guid: 4bf810b82d8994b48acfd2d7209d8c17, type: 3}
+    - target: {fileID: 0}
+      propertyPath: explosionTop.Array.data[2]
+      value: 
+      objectReference: {fileID: 8300000, guid: 617c45f62ba3ca440b2c2d5b25472802, type: 3}
+    - target: {fileID: 0}
       propertyPath: m_Mesh
       value: 
       objectReference: {fileID: 4300000, guid: d8b716d796b877c428a90b7a39874e55, type: 3}
     - target: {fileID: 0}
-      propertyPath: m_Materials.Array.data[0]
+      propertyPath: swoopSpeed
+      value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: swooshSound
       value: 
-      objectReference: {fileID: 2100000, guid: fda2694c2bb50394aa9c5a81317ddfd7, type: 2}
+      objectReference: {fileID: 8300000, guid: 6c3f33e757ffdf74c8733e3b1f1c0892, type: 3}
+    - target: {fileID: 0}
+      propertyPath: attackSound
+      value: 
+      objectReference: {fileID: 8300000, guid: 9f9b8573d3e62fc40a809a7139d4898a, type: 3}
+    - target: {fileID: 0}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: projectileSpeed
+      value: 30
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
-  m_RootGameObject: {fileID: 111300}
+  m_RootGameObject: {fileID: 157008}
   m_IsPrefabParent: 1

@@ -12,7 +12,7 @@ GameObject:
   - 23: {fileID: 2301626}
   - 114: {fileID: 11444912}
   - 64: {fileID: 6460652}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: EnemyThree
   m_TagString: enemy3
   m_Icon: {fileID: 0}
@@ -82,16 +82,25 @@ MonoBehaviour:
   m_GameObject: {fileID: 157008}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a66fcb8dc46164d4bb9212a375a69e41, type: 3}
+  m_Script: {fileID: 11500000, guid: 38065dcc663114c4e8aee27a40c7e87f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 30
   health: 150
   scoreValue: 150
-  enemyLaser: {fileID: 103356, guid: c59875210abc21544b4ee5e6df08bfeb, type: 2}
+  explosion: {fileID: 143732, guid: f6a75a75b4cb4e54d9fdd0e4dbcc8470, type: 2}
+  enemyLaser: {fileID: 159908, guid: 6635a52a223ff2f48a4728ecf0781244, type: 2}
+  isEnemyFiring: 0
   shotsPerSecond: .5
-  projectileSpeed: 16
+  projectileSpeed: 30
+  explosionTop:
+  - {fileID: 8300000, guid: f203d269d2a20104fbf0eaee349cef4e, type: 3}
+  - {fileID: 8300000, guid: 4bf810b82d8994b48acfd2d7209d8c17, type: 3}
+  - {fileID: 8300000, guid: 617c45f62ba3ca440b2c2d5b25472802, type: 3}
+  explosionBottom: {fileID: 8300000, guid: 470dc56cb6092604388b601ebb4c9579, type: 3}
+  swooshSound: {fileID: 8300000, guid: 0b7f61156ff7451429d298a66a877515, type: 3}
   movePathTime: 2
+  enemy3: 0
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1
@@ -100,9 +109,13 @@ Prefab:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 0}
+      propertyPath: explosionTop.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
       propertyPath: enemyLaser
       value: 
-      objectReference: {fileID: 103356, guid: c59875210abc21544b4ee5e6df08bfeb, type: 2}
+      objectReference: {fileID: 159908, guid: 6635a52a223ff2f48a4728ecf0781244, type: 2}
     - target: {fileID: 0}
       propertyPath: m_Convex
       value: 1
@@ -122,6 +135,38 @@ Prefab:
     - target: {fileID: 0}
       propertyPath: movePathTime
       value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: explosion
+      value: 
+      objectReference: {fileID: 143732, guid: f6a75a75b4cb4e54d9fdd0e4dbcc8470, type: 2}
+    - target: {fileID: 0}
+      propertyPath: explosionBottom
+      value: 
+      objectReference: {fileID: 8300000, guid: 470dc56cb6092604388b601ebb4c9579, type: 3}
+    - target: {fileID: 0}
+      propertyPath: explosionTop.Array.data[0]
+      value: 
+      objectReference: {fileID: 8300000, guid: f203d269d2a20104fbf0eaee349cef4e, type: 3}
+    - target: {fileID: 0}
+      propertyPath: explosionTop.Array.data[1]
+      value: 
+      objectReference: {fileID: 8300000, guid: 4bf810b82d8994b48acfd2d7209d8c17, type: 3}
+    - target: {fileID: 0}
+      propertyPath: explosionTop.Array.data[2]
+      value: 
+      objectReference: {fileID: 8300000, guid: 617c45f62ba3ca440b2c2d5b25472802, type: 3}
+    - target: {fileID: 0}
+      propertyPath: swooshSound
+      value: 
+      objectReference: {fileID: 8300000, guid: 0b7f61156ff7451429d298a66a877515, type: 3}
+    - target: {fileID: 0}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: projectileSpeed
+      value: 30
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
