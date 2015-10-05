@@ -88,7 +88,7 @@ public class MainEnemyFormation : MonoBehaviour {
         //Debug.Log(GalagaHelper.TimeToSpawn.ToString().Bold());
         if (GalagaHelper.TimeToSpawn > 0f && GalagaHelper.TimeToSpawn < 2.0f)
         {
-            Debug.Log("See player text?".Bold());
+            //Debug.Log("See player text?".Bold());
             // show player1 first
             playerText.SetActive(true);
             playerTextHigh.SetActive(false);
@@ -126,25 +126,25 @@ public class MainEnemyFormation : MonoBehaviour {
         // Move formation left and right
         if (moveFormation)
         {
-            if (isMovingRight)
-            {
-                transform.position += Vector3.right * speed * Time.deltaTime;
-            }
-            else
-            {
-                transform.position += Vector3.left * speed * Time.deltaTime;
-            }
+            //if (isMovingRight)
+            //{
+            //    transform.position += Vector3.right * speed * Time.deltaTime;
+            //}
+            //else
+            //{
+            //    transform.position += Vector3.left * speed * Time.deltaTime;
+            //}
 
-            float rightEdgeOfFormation = transform.position.x + (0.5f * width);
-            float leftEdgeOfFormation = transform.position.x - (0.5f * width);
-            if (leftEdgeOfFormation < xMin)
-            {
-                isMovingRight = true;
-            }
-            else if (rightEdgeOfFormation > xMax)
-            {
-                isMovingRight = false;
-            }
+            //float rightEdgeOfFormation = transform.position.x + (0.5f * width);
+            //float leftEdgeOfFormation = transform.position.x - (0.5f * width);
+            //if (leftEdgeOfFormation < xMin)
+            //{
+            //    isMovingRight = true;
+            //}
+            //else if (rightEdgeOfFormation > xMax)
+            //{
+            //    isMovingRight = false;
+            //}
 
             GalagaHelper.SetAttackinMotion();
             
@@ -154,7 +154,7 @@ public class MainEnemyFormation : MonoBehaviour {
         {
             enemyAttacks = 1;
             isEnemy1Done = true;
-            isEnemy2Done = true;
+            isEnemy2Done = true;    
         }
 
         if (enemy1Picked && isEnemy1Done == true)

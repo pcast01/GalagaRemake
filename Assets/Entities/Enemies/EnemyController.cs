@@ -200,10 +200,10 @@ public class EnemyController : MonoBehaviour
                 //gameObject.isDead = true;
                 //Debug.Log("parent ".Bold()+ gameObject.transform.parent);
                 Instantiate(explosion, gameObject.transform.position, gameObject.transform.rotation);
-                top = addShotSounds(explosionTop[Random.Range(0, explosionTop.Length)], Random.Range(0.8f, 1.2f));
-                bottom = addShotSounds(explosionBottom, Random.Range(0.8f, 1.2f));
-                top.Play();
-                bottom.Play();
+                //top = addShotSounds(explosionTop[Random.Range(0, explosionTop.Length)], Random.Range(0.8f, 1.2f));
+                //bottom = addShotSounds(explosionBottom, Random.Range(0.8f, 1.2f));
+                //top.Play();
+                //bottom.Play();
                 SimplePool.Despawn(gameObject);
                 GalagaHelper.EnemiesKilled += 1;
                 //gameObject.SetActive(false);

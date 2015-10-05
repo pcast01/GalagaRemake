@@ -7,6 +7,8 @@ public class EnemySpawner : MonoBehaviour {
     // 8x8 size of one enemy
     [Header("Enemy Movement")]
     public GameObject enemy1Prefab;
+    public GameObject enemy2Prefab;
+    public GameObject enemy3Prefab;
     [Header("Gizmo Settings")]
     public float width = 10f;
     public float height = 5f;
@@ -45,6 +47,7 @@ public class EnemySpawner : MonoBehaviour {
             {
                 Debug.Log("Round2 started".Bold().Sized(11));
                 // Reset Variables
+                GalagaHelper.ResetFormations();
                 GalagaHelper.EnemiesKilled = 0;
                 GalagaHelper.EnemiesSpawned = 0;
                 SpawnUntilFull();
@@ -56,7 +59,7 @@ public class EnemySpawner : MonoBehaviour {
         if (enemiesInPlace == 8 && gameObject.name == "Round1Phase1EnemyFormation")
         {
             GalagaHelper.TimeDone = Time.time;
-            Debug.Log("Time to get to position: ".Bold() + (GalagaHelper.TimeDone - GalagaHelper.TimeToSpawn));
+            //Debug.Log("Time to get to position: ".Bold() + (GalagaHelper.TimeDone - GalagaHelper.TimeToSpawn));
             GameObject pt2 = GameObject.FindGameObjectWithTag("phase2").gameObject;
             pt2.GetComponent<EnemySpawner>().enabled = true;
             //Debug.Log("*** ALL Enemies in place. ***");
@@ -174,13 +177,18 @@ public class EnemySpawner : MonoBehaviour {
             {
                 spawnEntranceRight = true;
             }
+            
             // Spawn enemy in enemy1Prefab.
+            SpawnEnemy(spawnPoint, freePosition);
+            
             //GameObject enemy = Instantiate(enemy1Prefab, spawnPoint.position, enemy1Prefab.transform.rotation) as GameObject;
-            GameObject enemy = SimplePool.Spawn(enemy1Prefab, spawnPoint.position, enemy1Prefab.transform.rotation, true) as GameObject;
-            enemy.transform.position = spawnPoint.position;
+            //GameObject enemy = SimplePool.Spawn(enemy1Prefab, spawnPoint.position, enemy1Prefab.transform.rotation, true) as GameObject;
+            //enemy.transform.position = spawnPoint.position;
+            
             //Debug.Log("Enemy spawned." + "free pos=" + freePosition.position.z);
+            
             // Set free position's Parent
-            enemy.transform.parent = freePosition;
+            //enemy.transform.parent = freePosition;
             //Debug.Log("Enemy parent name: " + enemy.transform.parent.name + " FreePos: " + freePosition.name);
         }
 
@@ -194,6 +202,114 @@ public class EnemySpawner : MonoBehaviour {
             isFormationUp = true;
             GalagaHelper.CurrentRoundPhase += 1;
         }
+    }
+
+    void SpawnEnemy(Transform spawn, Transform freePos)
+    {
+        GameObject defaultEnemyPrefab = new GameObject();
+
+        if (GalagaHelper.RoundNumber == 1)
+        {
+            switch (GalagaHelper.CurrentRoundPhase)
+            {
+                case GalagaHelper.Formations.Round1Phase1:
+                    if (GalagaHelper.EnemiesSpawned < 4)
+                    {
+                        defaultEnemyPrefab = enemy1Prefab;
+                        Debug.Log("enemy1 spawned".Colored(Colors.yellow));
+                    }
+                    else if (GalagaHelper.EnemiesSpawned > 3 && GalagaHelper.EnemiesSpawned < 9)
+                    {
+                        defaultEnemyPrefab = enemy2Prefab;
+                        Debug.Log("enemy2 spawned".Colored(Colors.red));
+                    }
+                    break;
+                case GalagaHelper.Formations.Round1Phase2:
+                    Debug.Log("Free pos == " + freePos.gameObject.name);
+                    if (freePos.gameObject.name.Equals("Position") || freePos.gameObject.name.Equals("Position (1)") || freePos.gameObject.name.Equals("Position (6)") || freePos.gameObject.name.Equals("Position (7)"))
+                    {
+                        defaultEnemyPrefab = enemy3Prefab;
+                    }
+                    else
+                    {
+                        defaultEnemyPrefab = enemy2Prefab;
+                    }
+                    //if (spawnEntranceRight)
+                    //{
+                    //    defaultEnemyPrefab = enemy2Prefab;
+                    //}
+                    //else
+                    //{
+                    //    defaultEnemyPrefab = enemy3Prefab;
+                    //}
+                    break;
+                case GalagaHelper.Formations.Round1Phase3:
+                    defaultEnemyPrefab = enemy2Prefab;
+                    break;
+                case GalagaHelper.Formations.Round1Phase4:
+                    defaultEnemyPrefab = enemy1Prefab;
+                    break;
+                case GalagaHelper.Formations.Round1Phase5:
+                    defaultEnemyPrefab = enemy1Prefab;
+                    break;
+                default:
+                    defaultEnemyPrefab = enemy1Prefab;
+                    break;
+            }
+        }
+        else if (GalagaHelper.RoundNumber == 2)
+        {
+            switch (GalagaHelper.CurrentRoundPhase)
+            {
+                case GalagaHelper.Formations.Round1Phase1:
+                    if (GalagaHelper.EnemiesSpawned < 4)
+                    {
+                        defaultEnemyPrefab = enemy1Prefab;
+                        Debug.Log("enemy1 spawned".Colored(Colors.yellow));
+                    }
+                    else if (GalagaHelper.EnemiesSpawned > 3 && GalagaHelper.EnemiesSpawned < 9)
+                    {
+                        defaultEnemyPrefab = enemy2Prefab;
+                        Debug.Log("enemy2 spawned".Colored(Colors.red));
+                    }
+                    break;
+                case GalagaHelper.Formations.Round1Phase2:
+                    Debug.Log("Free pos == " + freePos.gameObject.name);
+                    if (freePos.gameObject.name.Equals("Position") || freePos.gameObject.name.Equals("Position (1)") || freePos.gameObject.name.Equals("Position (6)") || freePos.gameObject.name.Equals("Position (7)"))
+                    {
+                        defaultEnemyPrefab = enemy3Prefab;
+                    }
+                    else
+                    {
+                        defaultEnemyPrefab = enemy2Prefab;
+                    }
+                    //if (spawnEntranceRight)
+                    //{
+                    //    defaultEnemyPrefab = enemy2Prefab;
+                    //}
+                    //else
+                    //{
+                    //    defaultEnemyPrefab = enemy3Prefab;
+                    //}
+                    break;
+                case GalagaHelper.Formations.Round1Phase3:
+                    defaultEnemyPrefab = enemy2Prefab;
+                    break;
+                case GalagaHelper.Formations.Round1Phase4:
+                    defaultEnemyPrefab = enemy1Prefab;
+                    break;
+                case GalagaHelper.Formations.Round1Phase5:
+                    defaultEnemyPrefab = enemy1Prefab;
+                    break;
+                default:
+                    defaultEnemyPrefab = enemy1Prefab;
+                    break;
+            }
+        }
+
+        GameObject enemy = SimplePool.Spawn(defaultEnemyPrefab, spawn.position, defaultEnemyPrefab.transform.rotation, true) as GameObject;
+        enemy.transform.position = spawn.position;
+        enemy.transform.parent = freePos;
     }
 
     public void OnDrawGizmos()
