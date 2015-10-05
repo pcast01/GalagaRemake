@@ -8,6 +8,7 @@ public class Enemy1Controller : EnemyController
     public float returnPathSpeed = 10f;
     public Transform PlayerTransform;
     public Vector3 _originalPosition;
+    private MainEnemyFormation mainForm;
     private List<Vector3> _waypoints;
     private float _pathPercentage = 0f;
     private bool _isOnPath = false;
@@ -15,13 +16,13 @@ public class Enemy1Controller : EnemyController
     private Hashtable tweenPath = new Hashtable();
     private int choosePath;
     private Quaternion _originalRotation;
+    private AudioSource audio;
     [SerializeField]
     private float swoopDownSpeed;
 
     private void Awake()
     {
         // Save the first transform so we can use that to create our path.
-        //_originalPosition = transform.position;
         _originalRotation = transform.rotation;
         _waypoints = new List<Vector3>();
         //Debug.Log("Original Pos: " + transform.position.ToString());
@@ -30,6 +31,7 @@ public class Enemy1Controller : EnemyController
     private void Start()
     {
         base.Start();
+        mainForm = GameObject.FindGameObjectWithTag("MainFormation").GetComponent<MainEnemyFormation>();
         //Debug.Log("Original Pos in START: " + transform.position.ToString());
         _isOnPath = true;
         //path();
@@ -50,6 +52,7 @@ public class Enemy1Controller : EnemyController
         // of screen.
         if (_finishedPath)
         {
+            this.isEnemyFiring = false;
             CreateIncomingPath();
 
             if (_isOnPath)
@@ -63,6 +66,7 @@ public class Enemy1Controller : EnemyController
                     _finishedPath = false;
                     _pathPercentage = 0;
                     transform.rotation = _originalRotation;
+                    mainForm.isEnemy1Done = true;
                 }
             }
         }
@@ -127,6 +131,9 @@ public class Enemy1Controller : EnemyController
                 tweenPath.Add("onComplete", "Path1Complete");
                 tweenPath.Add("onCompleteTarget", gameObject);
                 iTween.MoveFrom(gameObject, tweenPath);
+                audio = base.addShotSounds(swooshSound, 1.0f);
+                audio.Play();
+                this.isEnemyFiring = true;
 	        }
             else
             {
@@ -148,6 +155,9 @@ public class Enemy1Controller : EnemyController
                 tweenPath.Add("onComplete", "CircleComplete");
                 tweenPath.Add("onCompleteTarget", gameObject);
                 iTween.MoveTo(gameObject, tweenPath);
+                audio = base.addShotSounds(swooshSound, 1.0f);
+                audio.Play();
+                this.isEnemyFiring = true;
             }
         }
 
@@ -162,7 +172,6 @@ public class Enemy1Controller : EnemyController
         _waypoints.Add(new Vector3(lastPoint.x, 0, topSide.z));
         _waypoints.Add(_originalPosition);
         _isOnPath = true;
-        
     }
 
     public void Path1Complete()
@@ -184,6 +193,4 @@ public class Enemy1Controller : EnemyController
             iTween.DrawPathGizmos(_waypoints.ToArray());
         }
     }
-
-
 }
