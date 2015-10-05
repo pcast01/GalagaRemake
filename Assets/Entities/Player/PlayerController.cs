@@ -4,6 +4,7 @@ using System.Collections;
 public class PlayerController : MonoBehaviour {
 
     public GameObject bullet;
+    public GameObject explosion;
     public float projectileSpeed;
     public float speed = 15f;
     public float firingRate;
@@ -14,6 +15,8 @@ public class PlayerController : MonoBehaviour {
     public AudioClip[] shotTop;
     public AudioClip[] shotBottom;
     public Vector3[] circlePath;
+    public AudioClip explosionTop;
+    public AudioClip explosionBottom;
     private AudioSource top;
     private AudioSource bottom;
 
@@ -68,7 +71,9 @@ public class PlayerController : MonoBehaviour {
         laserBeam.GetComponent<Rigidbody>().velocity = new Vector3(0, 0, projectileSpeed);
         // pick one of 3 random top shots
         top = addShotSounds(shotTop[Random.Range(0, shotTop.Length)], Random.Range(0.8f, 1.2f));
-        bottom = addShotSounds(shotBottom[Random.Range(0, shotTop.Length)], Random.Range(0.8f, 1.2f));
+        bottom = addShotSounds(shotBottom[Random.Range(0, shotBottom.Length)], Random.Range(0.8f, 1.2f));
+        top.volume = 0.5f;
+        bottom.volume = 0.5f;
         top.Play();
         bottom.Play();
         yield return new WaitForSeconds(firingRate);
@@ -92,41 +97,19 @@ public class PlayerController : MonoBehaviour {
         //    CancelInvoke("Fire");
         //}
 
-        
-	}
-
-    void FixedUpdate()
-    {
-        //float z = 0;
-        //Vector3 euler = transform.localEulerAngles;
-        //euler.z = Mathf.Lerp(euler.z, z, 2.0f * Time.deltaTime);
-        //transform.localEulerAngles = euler;
         if (Input.GetKey(KeyCode.A))
         {
             transform.position += new Vector3(-speed * Time.deltaTime, 0, 0);
-            //z = Input.GetAxis("Horizontal") * -35.0f;
-            //Debug.Log("z: " + z + " euler.z: " + euler.z);
-            //euler.z = Mathf.Lerp(euler.z, z, Time.fixedDeltaTime);
         }
         else if (Input.GetKey(KeyCode.D))
         {
             transform.position += new Vector3(speed * Time.deltaTime, 0, 0);
-            //z = Input.GetAxis("Horizontal") * 35.0f;
-            //Debug.Log(" Right z: " + z + " euler.z: " + euler.z);
-            //euler.z = Mathf.Lerp(euler.z, z, Time.fixedDeltaTime);
         }
-        //else
-        //{
-        //    z = Input.GetAxis("Horizontal");
-        //    euler.z = Mathf.Lerp(euler.z, 0f, 0f);
-        //}
 
         // restrict the player to the gamespaces
         float newX = Mathf.Clamp(transform.position.x, xMin, xMax);
         transform.position = new Vector3(newX, transform.position.y, transform.position.z);
-        //transform.localEulerAngles = euler;
-        //transform.rotation = Quaternion.Euler(0.0f, 0.0f, rot);
-    }
+	}
 
     void OnTriggerEnter(Collider other)
     {
@@ -134,8 +117,14 @@ public class PlayerController : MonoBehaviour {
         Enemy1Controller enemy1 = other.gameObject.GetComponent<Enemy1Controller>();
         if (enemyProjectile)
         {
+            Instantiate(explosion, gameObject.transform.position, gameObject.transform.rotation);
+            //DestroyImmediate(explosion);
+            Debug.Log("Enemy proj hit Player.");
+            top = addShotSounds(explosionTop, Random.Range(0.8f, 1.2f));
+            bottom = addShotSounds(explosionBottom, Random.Range(0.8f, 1.2f));
+            top.Play();
+            bottom.Play();
             Destroy(gameObject);
-            Debug.Log("Enemy hit Player.");
             Application.LoadLevel("Lose Screen");
         }
         if (enemy1)
