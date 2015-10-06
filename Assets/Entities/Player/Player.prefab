@@ -400,7 +400,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bullet: {fileID: 154174, guid: 4da1fc0655bc79c40a8567411cc8b11f, type: 2}
-  explosion: {fileID: 0}
+  explosion: {fileID: 143732, guid: f6a75a75b4cb4e54d9fdd0e4dbcc8470, type: 2}
   projectileSpeed: 30
   speed: 40
   firingRate: .699999988

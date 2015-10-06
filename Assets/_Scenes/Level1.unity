@@ -289,6 +289,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemy1Prefab: {fileID: 122214, guid: a8a150d4b14710d4996a9af0b22393e3, type: 2}
+  enemy2Prefab: {fileID: 157008, guid: d55b8202817e9354ba6bf17287abb636, type: 2}
+  enemy3Prefab: {fileID: 157008, guid: 9ea7d4128e061664fbc7dbfc047902b6, type: 2}
   width: 72
   height: -14.6000004
   padding: 1
@@ -505,7 +507,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dbb510193bb450944a72301dc77f4446, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemy1Prefab: {fileID: 157008, guid: d55b8202817e9354ba6bf17287abb636, type: 2}
+  enemy1Prefab: {fileID: 122214, guid: a8a150d4b14710d4996a9af0b22393e3, type: 2}
+  enemy2Prefab: {fileID: 157008, guid: d55b8202817e9354ba6bf17287abb636, type: 2}
+  enemy3Prefab: {fileID: 157008, guid: 9ea7d4128e061664fbc7dbfc047902b6, type: 2}
   width: 42.7999992
   height: -14.6000004
   padding: 1
@@ -2200,7 +2204,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dbb510193bb450944a72301dc77f4446, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemy1Prefab: {fileID: 157008, guid: 9ea7d4128e061664fbc7dbfc047902b6, type: 2}
+  enemy1Prefab: {fileID: 122214, guid: a8a150d4b14710d4996a9af0b22393e3, type: 2}
+  enemy2Prefab: {fileID: 157008, guid: d55b8202817e9354ba6bf17287abb636, type: 2}
+  enemy3Prefab: {fileID: 157008, guid: 9ea7d4128e061664fbc7dbfc047902b6, type: 2}
   width: 57.7999992
   height: -14.6000004
   padding: 1
@@ -2596,10 +2602,6 @@ Prefab:
       propertyPath: m_RootOrder
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 11480484, guid: 4a46a60baf35c0646ac228a800288717, type: 2}
-      propertyPath: explosion
-      value: 
-      objectReference: {fileID: 143732, guid: f6a75a75b4cb4e54d9fdd0e4dbcc8470, type: 2}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 4a46a60baf35c0646ac228a800288717, type: 2}
   m_IsPrefabParent: 0
@@ -4315,6 +4317,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemy1Prefab: {fileID: 122214, guid: a8a150d4b14710d4996a9af0b22393e3, type: 2}
+  enemy2Prefab: {fileID: 157008, guid: d55b8202817e9354ba6bf17287abb636, type: 2}
+  enemy3Prefab: {fileID: 157008, guid: 9ea7d4128e061664fbc7dbfc047902b6, type: 2}
   width: 14.1000004
   height: -29.1000004
   padding: 1
@@ -5565,7 +5569,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dbb510193bb450944a72301dc77f4446, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemy1Prefab: {fileID: 157008, guid: d55b8202817e9354ba6bf17287abb636, type: 2}
+  enemy1Prefab: {fileID: 122214, guid: a8a150d4b14710d4996a9af0b22393e3, type: 2}
+  enemy2Prefab: {fileID: 157008, guid: d55b8202817e9354ba6bf17287abb636, type: 2}
+  enemy3Prefab: {fileID: 157008, guid: 9ea7d4128e061664fbc7dbfc047902b6, type: 2}
   width: 29.2000008
   height: -23
   padding: 1
@@ -5950,7 +5956,7 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: 401fd24c4f7e6b14e8aad0d5944dc9a2, type: 3}
-  m_PlayOnAwake: 0
+  m_PlayOnAwake: 1
   m_Volume: .689999998
   m_Pitch: 1
   Loop: 0

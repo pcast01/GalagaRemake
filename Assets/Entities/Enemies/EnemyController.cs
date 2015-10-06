@@ -8,6 +8,7 @@ public class EnemyController : MonoBehaviour
     public int scoreValue = 150;
     public GameObject explosion;
     private GameObject hero;
+    private Renderer rend;
 
     [Header("Weapon Settings")]
     public GameObject enemyLaser;
@@ -42,6 +43,7 @@ public class EnemyController : MonoBehaviour
     public void Start()
     {
         hero = GameObject.FindGameObjectWithTag("Player");
+        rend = GetComponent<Renderer>();
         GalagaHelper.EnemiesSpawned += 1;
         round1Phase1spawner = GameObject.Find("Round1Phase1EnemyFormation").GetComponent<EnemySpawner>();
         scoreKeeper = GameObject.Find("Score").GetComponent<ScoreKeeper>();
@@ -199,12 +201,17 @@ public class EnemyController : MonoBehaviour
             {
                 //gameObject.isDead = true;
                 //Debug.Log("parent ".Bold()+ gameObject.transform.parent);
-                Instantiate(explosion, gameObject.transform.position, gameObject.transform.rotation);
+                //Instantiate(explosion, gameObject.transform.position, gameObject.transform.rotation);
                 top = addShotSounds(explosionTop[Random.Range(0, explosionTop.Length)], Random.Range(0.8f, 1.2f));
                 bottom = addShotSounds(explosionBottom, Random.Range(0.8f, 1.2f));
-                top.Play();
+                top.PlayScheduled(0.3);
                 bottom.Play();
-                SimplePool.Despawn(gameObject);
+                rend.enabled = false;
+                GameObject explosionPrefab = Instantiate(explosion, gameObject.transform.position, gameObject.transform.rotation) as GameObject;
+                Destroy(explosionPrefab, 3.0f);
+                Invoke("DisableEnemy", top.clip.length);
+                //SimplePool.Despawn(gameObject);
+                //gameObject.transform.parent = null;
                 GalagaHelper.EnemiesKilled += 1;
                 //gameObject.SetActive(false);
                 //Debug.Log("Enemy is dead".Bold() + " Pos: " + gameObject.transform.parent.transform.parent.name);
@@ -214,5 +221,11 @@ public class EnemyController : MonoBehaviour
                 //Destroy(explosion);
             }
         }
+    }
+
+    void DisableEnemy()
+    {
+        SimplePool.Despawn(gameObject);
+        gameObject.transform.parent = null;
     }
 }
