@@ -84,7 +84,7 @@ public class EnemySpawner : MonoBehaviour {
         else if (enemiesInPlace == 8 && gameObject.name == "Round1Phase5_1EnemyFormation")
         {
             GameObject mef = GameObject.FindGameObjectWithTag("MainFormation").gameObject;
-            mef.GetComponent<MainEnemyFormation>().moveFormation = true;
+            //mef.GetComponent<MainEnemyFormation>().moveFormation = true;
 
         }
 	}

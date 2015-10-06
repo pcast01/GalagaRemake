@@ -6,6 +6,7 @@ public class MainEnemyFormation : MonoBehaviour {
     public bool isMovingRight;
     //public bool isStartFormation;
     public bool moveFormation;
+    private bool isTextDone = false;
     public float padding = 1f;
     public float speed = 5.0f;
     public float width = 10f;
@@ -82,13 +83,13 @@ public class MainEnemyFormation : MonoBehaviour {
 
 	void Update () {
         //GameObject pt2 = GameObject.FindGameObjectWithTag("phase1").gameObject;
-
+        
         // Set the player text to show like Galaga
         GalagaHelper.TimeToSpawn = Time.time;
         //Debug.Log(GalagaHelper.TimeToSpawn.ToString().Bold());
         if (GalagaHelper.TimeToSpawn > 0f && GalagaHelper.TimeToSpawn < 2.0f)
         {
-            //Debug.Log("See player text?".Bold());
+            Debug.Log("See player text?".Bold());
             // show player1 first
             playerText.SetActive(true);
             playerTextHigh.SetActive(false);
@@ -96,12 +97,14 @@ public class MainEnemyFormation : MonoBehaviour {
         else if (GalagaHelper.TimeToSpawn > 2.0f && GalagaHelper.TimeToSpawn < 3.5f)
         {
             // show round title same place
+            Debug.Log("See player text?".Bold());
             playerText.SetActive(false);
             roundText.transform.position = playerText.transform.position;
             roundText.SetActive(true);
         }
         else if (GalagaHelper.TimeToSpawn > 3.5f && GalagaHelper.TimeToSpawn < 5.3f)
         {
+            Debug.Log("See player text?".Bold());
             // Show both
             playerText.transform.position = playerTextHigh.transform.position;
             playerText.SetActive(true);
@@ -111,18 +114,11 @@ public class MainEnemyFormation : MonoBehaviour {
         {
             playerText.SetActive(false);
             roundText.SetActive(false);
+            isTextDone = true;
+            Debug.Log("isTextDone eq true");
         }
-
-        //if (GalagaHelper.EnemiesSpawned > 8 && enemy1Picked == false && form1.GetComponent<EnemySpawner>().isFormationUp == true)
-        //{
-        //    PickRandomEnemyOne();
-        //}
-
-        //if (GalagaHelper.EnemiesSpawned > 24 && enemy2Picked == false)
-        //{
-        //    PickRandomEnemyTwo();
-        //}
-
+        
+       
         // Move formation left and right
         if (moveFormation)
         {
@@ -147,7 +143,6 @@ public class MainEnemyFormation : MonoBehaviour {
             //}
 
             GalagaHelper.SetAttackinMotion();
-            
         }
 
         if (enemyAttacks == 0)
@@ -170,20 +165,15 @@ public class MainEnemyFormation : MonoBehaviour {
             enemy2Picked = false;
             isEnemy2Done = false;
         }
-
-        // Check to see if enemies have all been killed.
-        //if (GalagaHelper.EnemiesSpawned == 0)
-        //{
-        //    Debug.Log("Round 2 about to begin".Colored(Colors.green));
-        //    // Reset Formations
-        //    GalagaHelper.ResetFormations();
-        //    GalagaHelper.RoundNumber += 1;
-        //}
-        //Debug.Log("Enemies Currently Spawned: " + GalagaHelper.EnemiesSpawned + " Wave#: " + GalagaHelper.CurrentRoundPhase + " Round #: " + GalagaHelper.RoundNumber);
 	}
 
     public void OnDrawGizmos()
     {
         Gizmos.DrawWireCube(transform.position, new Vector3(width, 2, height));
+    }
+
+    void SetRoundText()
+    {
+        
     }
 }
