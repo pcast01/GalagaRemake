@@ -101,6 +101,7 @@ public class Enemy2Controller : EnemyController
         }
         else
         {
+            // Is away from player now and set new target as enemyWall
             outOfPlayerRange = true;
             if (outOfPlayerRange)
             {
