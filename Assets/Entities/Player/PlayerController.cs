@@ -100,10 +100,17 @@ public class PlayerController : MonoBehaviour {
         if (Input.GetKey(KeyCode.A))
         {
             transform.position += new Vector3(-speed * Time.deltaTime, 0, 0);
+            transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.Euler(0, -7, 25), 50 * Time.deltaTime);
         }
         else if (Input.GetKey(KeyCode.D))
         {
             transform.position += new Vector3(speed * Time.deltaTime, 0, 0);
+            transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.Euler(0, 7, 25), 50 * Time.deltaTime);
+        }
+
+        if (!Input.GetKey(KeyCode.A) && !Input.GetKey(KeyCode.D))
+        {
+            transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.Euler(0, 0, 0), 50 * Time.deltaTime);
         }
 
         // restrict the player to the gamespaces
@@ -134,5 +141,10 @@ public class PlayerController : MonoBehaviour {
             Application.LoadLevel("Lose Screen");
         }
         Debug.Log("Something hit the player.".Colored(Colors.darkblue));
+    }
+
+    void OnCollisionEnter(Collision other)
+    {
+        Debug.Log("Something hit the player.".Colored(Colors.red));
     }
 }
