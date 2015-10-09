@@ -32,11 +32,6 @@ public class PlayerController : MonoBehaviour {
         Vector3 rightMost = Camera.main.ViewportToWorldPoint(new Vector3(1, 0, distance));
         xMin = leftMost.x + padding;
         xMax = rightMost.x - padding;
-        //audio = GetComponents<AudioSource>();
-        // Get circle path
-        
-        //Debug.Log(circlePath[0]);
-        //circlePath[0]
 	}
 
     public void GetCirclePath()
