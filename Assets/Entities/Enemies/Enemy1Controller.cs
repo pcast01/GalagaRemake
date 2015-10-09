@@ -123,7 +123,7 @@ public class Enemy1Controller : EnemyController
                     newVect30[i] = _waypoints[i];
                 }
 
-               // _waypoints.Add(_originalPosition);
+                // _waypoints.Add(_originalPosition);
                 tweenPath.Add("path", newVect30);
                 tweenPath.Add("time", swoopDownSpeed);
                 tweenPath.Add("easetype", "linear");

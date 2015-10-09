@@ -137,8 +137,6 @@ public class EnemyController : MonoBehaviour
         {
             iTween.DrawPath(GalagaHelper.FourthWavePath);
         }
-        //iTween.DrawPath(GalagaHelper.EntrancePatterns(GalagaHelper.EntranceFlightPatterns.round1_DownLeft));
-       // iTween.DrawPath(GalagaHelper.EntrancePatterns(GalagaHelper.EntranceFlightPatterns.round1_DownRight));
     }
 
     public void Update()
@@ -154,17 +152,6 @@ public class EnemyController : MonoBehaviour
             }  
         }
         
-        //EnemySpawner formSpawn = GalagaHelper.GetFormationScript(GalagaHelper.CurrentRoundPhase);
-
-        //if (GalagaHelper.CurrentRoundPhase == GalagaHelper.Formations.Round1Phase1 && GalagaHelper.EnemiesSpawned > 7)
-        //{
-        //    if (gameObject.transform.position == formSpawn.transform.position)
-        //    {
-        //        iTween.MoveUpdate(gameObject, formSpawn.currentSpawnPos.position, 0.5f);
-        //        Debug.Log("Move update called.".Bold());
-        //    }
-        //}
-        // Until the enemy is in the position keep updating moveTo
     }
 
     private void Fire()
@@ -219,6 +206,12 @@ public class EnemyController : MonoBehaviour
                 //Application.LoadLevel("Win Screen");
                 //Die();
                 //Destroy(explosion);
+            }
+            else
+            {
+                
+                //TODO: Change color for Enemy 3 here.
+
             }
         }
     }
