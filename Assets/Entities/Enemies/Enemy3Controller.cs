@@ -10,6 +10,7 @@ public class Enemy3Controller : EnemyController
     public GameObject tractorBeam;
     private Transform player;
     private bool outOfPlayerRange = false;
+    private bool enemy3hit = false;
     [Header("Path from Top of Screen Settings")]
     public Vector3 _originalPosition;
     private List<Vector3> _waypoints;
@@ -31,6 +32,7 @@ public class Enemy3Controller : EnemyController
     void Start()
     {
         base.Start();
+        // Player gameobject used for Tractor Beam
         player = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>();
         AttackPlayer = true;
         origRotation = transform.rotation;
@@ -39,6 +41,8 @@ public class Enemy3Controller : EnemyController
     void Update()
     {
         base.Update();
+
+        // If AttackPlayer is set then Attack with Tractor Beam
         if (AttackPlayer)
         {
             if (gotOriginalPosition == false)
@@ -48,6 +52,8 @@ public class Enemy3Controller : EnemyController
             }
             TractorBeamAttack();
 
+
+            // Get Enemy on Path to come from top to original position.
             if (_isOnPath)
             {
                 Debug.Log("Is on path now".Bold());
@@ -65,12 +71,17 @@ public class Enemy3Controller : EnemyController
             }
         }
 
+        // If Tractor beam is set then do raycast Sweep looking for player.
         if (sweepTractorBeam)
         {
             RaycastSweep();
         }
     }
-
+    /// <summary>
+    /// Tractor Beam attack.
+    /// Moves toward player and when 45.0f away it stops and sets in motion Particle system.
+    /// Sets bool sweepTractorBeam to true if tractor beam is on so to use the Raycast Sweep function.
+    /// </summary>
     public void TractorBeamAttack()
     {
         transform.LookAt(player);
@@ -102,6 +113,7 @@ public class Enemy3Controller : EnemyController
         }
         else
         {
+            // After enemy gets close enough then Clone TractorBeam Particle system.
             outOfPlayerRange = true;
             Vector3 directionOfTravel = targetPosition - currentPosition;
             transform.rotation = origRotation;
@@ -128,10 +140,11 @@ public class Enemy3Controller : EnemyController
     void RaycastSweep()
     {
         // Set the target as straight down offset
-        Vector3 targetOffset = new Vector3(0, 0, -24f);
+        Vector3 targetOffset = new Vector3(this.transform.position.x, 0, -24f);
         Vector3 targetPosition = this.transform.position + targetOffset;
         Vector3 currentPosition = this.transform.position;
         Vector3 directionOfTravel = targetPosition - currentPosition;
+        Debug.DrawLine(currentPosition, directionOfTravel, Color.yellow);
         Debug.Log("Raycast sweep init.");
         // set start point of the raycasts
         Vector3 offset = new Vector3(0, 0, -3.5f);
@@ -144,8 +157,8 @@ public class Enemy3Controller : EnemyController
         int inc = (int)(theAngle / segments);
 
         RaycastHit hit;
-        //amalanfinishAngle = 11;
         Debug.Log("Start angle: " + startAngle + " Finish Angle: " + finishAngle);
+        // Create sweep of raycasts to find player object.
         for (int i = startAngle; i < finishAngle; i+= inc)
         {
             targetPos = (Quaternion.Euler(0, i, 0) * directionOfTravel) * distance;
@@ -158,17 +171,19 @@ public class Enemy3Controller : EnemyController
             }
             Debug.DrawLine(startPos, targetPos, Color.green);
         }
+
         if (tractorFoundPlayer)
         {
             sweepTractorBeam = false;
             tractorFoundPlayer = false;
             Debug.Log("Player will now be captured.");
-
+            // Get Player animation of getting captured by tractor beam and play it.
             Animation anim = player.GetComponent<Animation>();
             Debug.Log("wrap mode: " + anim.wrapMode);
             anim.wrapMode = WrapMode.Once;
             anim.Play();
             Debug.Log((anim["PlayerCapture"].length * anim["PlayerCapture"].speed).ToString().Colored(Colors.aqua));
+            // Set Parent of Player equal to enemy and turn off tractor beam in SetParentAfterCapture function.
             Invoke("SetParentAfterCapture", (anim["PlayerCapture"].length * anim["PlayerCapture"].speed) + 0.5f);
         }
     }
@@ -179,6 +194,7 @@ public class Enemy3Controller : EnemyController
     /// </summary>
     void SetParentAfterCapture()
     {
+        // Set Player's parent to the Enemy.
         player.parent = transform;
         // Stop Tractor beam
         if (tractor)
@@ -186,6 +202,7 @@ public class Enemy3Controller : EnemyController
             Debug.Log("Path set in motion");
             tractor.enableEmission = false;
             Debug.Log(_originalPosition.ToString().Colored(Colors.black));
+            // Send Enemy and player back to original position after animation of tractor beam stops completely.
             Invoke("SendBackToOriginalPos", 3.2f);
         }
     }
@@ -198,6 +215,9 @@ public class Enemy3Controller : EnemyController
         rend.material.SetColor("_Color", Color.red);
     }
 
+    /// <summary>
+    /// Creates path for enemy to come back to original position from top of screen.
+    /// </summary>
     private void CreateIncomingPath()
     {
         _waypoints.Clear();
@@ -206,6 +226,20 @@ public class Enemy3Controller : EnemyController
         _waypoints.Add(new Vector3(-1.289417f, 0, topSide.z));
         _waypoints.Add(_originalPosition);
         _isOnPath = true;
+    }
+
+    public void OnTriggerEnter(Collider other)
+    {
+        Projectile playerBullet = other.gameObject.GetComponent<Projectile>();
+        if (playerBullet)
+        {
+            Renderer rend = GetComponent<Renderer>();
+            rend.material.SetColor("_Color", Color.red);
+            if (enemy3hit)
+            {
+                
+            }
+        }
     }
 
     public void OnDrawGizmos()

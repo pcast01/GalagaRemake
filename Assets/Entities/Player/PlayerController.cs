@@ -3,6 +3,9 @@ using System.Collections;
 
 public class PlayerController : MonoBehaviour {
 
+    [Header("Captured Player Settings")]
+    public bool playerCaptured= false;
+    [Header("Weapon Settings")]
     public GameObject bullet;
     public GameObject explosion;
     public float projectileSpeed;
@@ -12,6 +15,7 @@ public class PlayerController : MonoBehaviour {
     private float xMin;
     private float xMax;
     private bool allowFire = true;
+    [Header("Sound Settings")]
     public AudioClip[] shotTop;
     public AudioClip[] shotBottom;
     public Vector3[] circlePath;
