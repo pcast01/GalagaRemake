@@ -11,9 +11,9 @@ GameObject:
   - 33: {fileID: 3387304}
   - 23: {fileID: 2363044}
   - 114: {fileID: 11471584}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: EnemyFour
-  m_TagString: Untagged
+  m_TagString: enemy4
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -102,6 +102,14 @@ Prefab:
     - target: {fileID: 0}
       propertyPath: movePathTime
       value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: m_TagString
+      value: enemy4
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: m_Layer
+      value: 10
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}

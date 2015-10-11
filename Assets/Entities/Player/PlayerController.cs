@@ -4,7 +4,7 @@ using System.Collections;
 public class PlayerController : MonoBehaviour {
 
     [Header("Captured Player Settings")]
-    public bool playerCaptured= false;
+    public bool playerCaptured = false;
     [Header("Weapon Settings")]
     public GameObject bullet;
     public GameObject explosion;
@@ -86,15 +86,9 @@ public class PlayerController : MonoBehaviour {
 
         if (Input.GetButtonDown("Fire1") && allowFire)
         {
-            //InvokeRepeating("Fire", 0.000001f, firingRate);
             StartCoroutine("Fire");
             //Debug.Log("Firing");
         }
-
-        //if (Input.GetButtonUp("Fire1"))
-        //{
-        //    CancelInvoke("Fire");
-        //}
 
         if (Input.GetKey(KeyCode.A))
         {

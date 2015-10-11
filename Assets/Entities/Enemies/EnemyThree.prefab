@@ -26,7 +26,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 157008}
   m_LocalRotation: {x: 0, y: 1, z: 0, w: -1.62920685e-07}
-  m_LocalPosition: {x: 0, y: 0, z: 45.7999992}
+  m_LocalPosition: {x: -3.6500001, y: 0, z: 38.2099991}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -100,8 +100,9 @@ MonoBehaviour:
   explosionBottom: {fileID: 8300000, guid: 470dc56cb6092604388b601ebb4c9579, type: 3}
   swooshSound: {fileID: 8300000, guid: 0b7f61156ff7451429d298a66a877515, type: 3}
   movePathTime: 2
-  swoopSpeed: 15
-  AttackPlayer: 0
+  swoopSpeed: 25
+  isTractorBeamAttack: 0
+  isAttackPlayer: 0
   tractorBeam: {fileID: 158238, guid: 3b7ee3501ab6e3347a834b4cf6eefe64, type: 2}
   _originalPosition: {x: 0, y: 0, z: 0}
   sweepTractorBeam: 0

@@ -22,6 +22,9 @@ TagManager:
   - Enemy2ChangePath
   - enemy2
   - enemy3
+  - enemy4
+  - CapturedPlayer
+  - Starfield
   layers:
   - Default
   - TransparentFX
