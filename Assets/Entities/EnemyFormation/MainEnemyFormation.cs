@@ -18,12 +18,17 @@ public class MainEnemyFormation : MonoBehaviour {
     public bool enemy2Picked = false;
     public bool isEnemy1Done = false;
     public bool isEnemy2Done = false;
+    public bool isPlayerReady = false;
     public GameObject[] enemy1;
     public GameObject[] enemy2;
     public GameObject form1;
     private GameObject playerText;
     private GameObject roundText;
     private GameObject playerTextHigh;
+    private GameObject readyText;
+    private PlayerController playerController;
+    private ParticleSystem starfield;
+    private bool isReadyDone;
 
 	void Start () {
         float distance = transform.position.z - Camera.main.transform.position.z;
@@ -33,16 +38,23 @@ public class MainEnemyFormation : MonoBehaviour {
         xMax = rightMost.x - padding;
         moveFormation = false;
         GalagaHelper.RoundNumber = 1;
-        Invoke("StartRound", 3.0f);
+        // Starts the Game.
+        //Invoke("StartRound", 3.0f);
         playerText = GameObject.Find("PlayerText");
         roundText = GameObject.Find("RoundTitle");
         playerTextHigh = GameObject.Find("PlayerTextHigh");
+        readyText = GameObject.Find("ReadyText");
+        //playerController = GameObject.FindGameObjectWithTag("CapturedPlayer").GetComponent<PlayerController>();
+        starfield = GameObject.FindGameObjectWithTag("Starfield").GetComponent<ParticleSystem>();
         playerText.SetActive(true);
         roundText.SetActive(false);
-        //playerTextHigh.SetActive(false);
+        playerTextHigh.SetActive(false);
+        readyText.SetActive(false);
         //roundTextPos = playerText.transform.position;
 	}
 
+
+    #region RandomEnemyAttacks
     void PickRandomEnemyOne()
     {
         enemy1 = GameObject.FindGameObjectsWithTag("enemy1");
@@ -73,6 +85,7 @@ public class MainEnemyFormation : MonoBehaviour {
             enemy2Picked = false;
         }
     }
+    #endregion
 
     void StartRound()
     {
@@ -83,13 +96,14 @@ public class MainEnemyFormation : MonoBehaviour {
 
 	void Update () {
         //GameObject pt2 = GameObject.FindGameObjectWithTag("phase1").gameObject;
-        
+
+        #region SetBeginningText
         // Set the player text to show like Galaga
         GalagaHelper.TimeToSpawn = Time.time;
         //Debug.Log(GalagaHelper.TimeToSpawn.ToString().Bold());
         if (GalagaHelper.TimeToSpawn > 0f && GalagaHelper.TimeToSpawn < 2.0f)
         {
-            Debug.Log("See player text?".Bold());
+            //Debug.Log("See player text?".Bold());
             // show player1 first
             playerText.SetActive(true);
             playerTextHigh.SetActive(false);
@@ -97,14 +111,14 @@ public class MainEnemyFormation : MonoBehaviour {
         else if (GalagaHelper.TimeToSpawn > 2.0f && GalagaHelper.TimeToSpawn < 3.5f)
         {
             // show round title same place
-            Debug.Log("See player text?".Bold());
+           // Debug.Log("See player text?".Bold());
             playerText.SetActive(false);
             roundText.transform.position = playerText.transform.position;
             roundText.SetActive(true);
         }
         else if (GalagaHelper.TimeToSpawn > 3.5f && GalagaHelper.TimeToSpawn < 5.3f)
         {
-            Debug.Log("See player text?".Bold());
+            //Debug.Log("See player text?".Bold());
             // Show both
             playerText.transform.position = playerTextHigh.transform.position;
             playerText.SetActive(true);
@@ -115,10 +129,10 @@ public class MainEnemyFormation : MonoBehaviour {
             playerText.SetActive(false);
             roundText.SetActive(false);
             isTextDone = true;
-            Debug.Log("isTextDone eq true");
+            //Debug.Log("isTextDone eq true");
         }
-        
-       
+        #endregion
+
         // Move formation left and right
         if (moveFormation)
         {
@@ -165,15 +179,35 @@ public class MainEnemyFormation : MonoBehaviour {
             enemy2Picked = false;
             isEnemy2Done = false;
         }
+
+        // If found a player captured then set ready text.
+        if (GalagaHelper.isPlayerCaptured == true)
+        {
+            if (isReadyDone == false)
+            {
+                // turn on Ready text
+                // Pause starfield
+                if (!isPlayerReady)
+                {
+                    readyText.SetActive(true);
+                    starfield.Pause();
+                    Debug.Log("Paused starfield");
+                }
+                else if (isPlayerReady)
+                {
+                    readyText.SetActive(false);
+                    Debug.Log("Starfield Unpaused".Colored(Colors.green));
+                    starfield.Play();
+                    isPlayerReady = false;
+                    isReadyDone = true;
+                    //GalagaHelper.isPlayerCaptured = false;  
+                }
+            }
+        }
 	}
 
     public void OnDrawGizmos()
     {
         Gizmos.DrawWireCube(transform.position, new Vector3(width, 2, height));
-    }
-
-    void SetRoundText()
-    {
-        
     }
 }

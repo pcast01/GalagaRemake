@@ -306,9 +306,9 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 139312}
-  m_LocalRotation: {x: 2.18556941e-08, y: 0, z: -0, w: 1}
-  m_LocalPosition: {x: .00999999978, y: 0, z: -33}
-  m_LocalScale: {x: 1, y: .99999994, z: .99999994}
+  m_LocalRotation: {x: 2.18556941e-08, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -.299999237, y: 0, z: -33}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 487008}
   m_Father: {fileID: 0}
@@ -397,6 +397,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cdad36152474a4144a0c412818a728af, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerCaptured: 0
+  rotatePlayer: 0
   bullet: {fileID: 154174, guid: 4da1fc0655bc79c40a8567411cc8b11f, type: 2}
   explosion: {fileID: 143732, guid: f6a75a75b4cb4e54d9fdd0e4dbcc8470, type: 2}
   projectileSpeed: 30
@@ -413,6 +415,7 @@ MonoBehaviour:
   circlePath: []
   explosionTop: {fileID: 8300000, guid: 4bf810b82d8994b48acfd2d7209d8c17, type: 3}
   explosionBottom: {fileID: 8300000, guid: 470dc56cb6092604388b601ebb4c9579, type: 3}
+  myOffset: {x: 0, y: 0, z: 0}
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1

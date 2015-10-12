@@ -10,7 +10,6 @@ GameObject:
   - 4: {fileID: 481010}
   - 198: {fileID: 19843506}
   - 199: {fileID: 19963846}
-  - 111: {fileID: 11189492}
   m_Layer: 0
   m_Name: TractorBeam
   m_TagString: Untagged
@@ -30,33 +29,17 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
---- !u!111 &11189492
-Animation:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 158238}
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Animation: {fileID: 0}
-  m_Animations:
-  - {fileID: 7400000, guid: 9c54b658981affa4bb42b2953d9e922e, type: 2}
-  - {fileID: 7400000, guid: 1936a7f507f583f42b534b4a40594b9e, type: 2}
-  m_WrapMode: 0
-  m_PlayAutomatically: 1
-  m_AnimatePhysics: 0
-  m_CullingType: 0
 --- !u!198 &19843506
 ParticleSystem:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 158238}
-  lengthInSec: 5
+  lengthInSec: 10
   startDelay: 0
   speed: 1
   randomSeed: 0
-  looping: 1
+  looping: 0
   prewarm: 1
   playOnAwake: 0
   moveWithTransform: 1
@@ -67,10 +50,15 @@ ParticleSystem:
       maxCurve:
         serializedVersion: 2
         m_Curve:
-        - time: 0
-          value: 1
+        - time: .0220125783
+          value: .484375
           inSlope: 0
           outSlope: 0
+          tangentMode: 0
+        - time: .103192315
+          value: 1
+          inSlope: -.0344196558
+          outSlope: -.0344196558
           tangentMode: 0
         m_PreInfinity: 2
         m_PostInfinity: 2
@@ -89,9 +77,9 @@ ParticleSystem:
           tangentMode: 0
         m_PreInfinity: 2
         m_PostInfinity: 2
-      minMaxState: 0
+      minMaxState: 1
     startSpeed:
-      scalar: 16
+      scalar: 25
       maxCurve:
         serializedVersion: 2
         m_Curve:
@@ -335,10 +323,10 @@ ParticleSystem:
     cnt1: 100
     cnt2: 100
     cnt3: 100
-    time0: 1.5
-    time1: 3
-    time2: 4
-    time3: 5
+    time0: 2
+    time1: 4
+    time2: 6
+    time3: 8
     m_BurstCount: 4
   SizeModule:
     enabled: 1
@@ -1133,6 +1121,10 @@ Prefab:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 0}
+      propertyPath: m_Animations.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
       propertyPath: looping
       value: 0
       objectReference: {fileID: 0}
@@ -1142,7 +1134,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 0}
       propertyPath: m_PlayAutomatically
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 0}
       propertyPath: m_AnimatePhysics
@@ -1151,7 +1143,7 @@ Prefab:
     - target: {fileID: 0}
       propertyPath: m_Animation
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 7400000, guid: 9c54b658981affa4bb42b2953d9e922e, type: 2}
     - target: {fileID: 0}
       propertyPath: m_SendCollisionMessage
       value: 1
@@ -1220,6 +1212,10 @@ Prefab:
       propertyPath: ColorModule.gradient.maxGradient.key0.rgba
       value: 4291520000
       objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: m_Animations.Array.data[1]
+      value: 
+      objectReference: {fileID: 7400000, guid: 1936a7f507f583f42b534b4a40594b9e, type: 2}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 158238}

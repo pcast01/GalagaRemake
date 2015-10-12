@@ -73,8 +73,6 @@ public class Enemy2Controller : EnemyController
     public void Attack()
     {
         transform.LookAt(player);
-        //move towards the center of the world (or where ever you like)
-        //Vector3 targetPosition = new Vector3(0, 0, 0);
         Vector3 targetPosition = player.transform.position;
         Vector3 currentPosition = this.transform.position;
         this.isEnemyFiring = true;
