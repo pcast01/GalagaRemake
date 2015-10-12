@@ -5,6 +5,7 @@ public class PlayerController : MonoBehaviour {
 
     [Header("Captured Player Settings")]
     public bool playerCaptured = false;
+    public bool rotatePlayer = false;
     [Header("Weapon Settings")]
     public GameObject bullet;
     public GameObject explosion;
@@ -14,7 +15,9 @@ public class PlayerController : MonoBehaviour {
     private float padding = 2f;
     private float xMin;
     private float xMax;
+    private float playerWidth;
     private bool allowFire = true;
+    private float newX;
     [Header("Sound Settings")]
     public AudioClip[] shotTop;
     public AudioClip[] shotBottom;
@@ -23,6 +26,7 @@ public class PlayerController : MonoBehaviour {
     public AudioClip explosionBottom;
     private AudioSource top;
     private AudioSource bottom;
+    public Vector3 myOffset;
 
     void Awake()
     {
@@ -36,6 +40,10 @@ public class PlayerController : MonoBehaviour {
         Vector3 rightMost = Camera.main.ViewportToWorldPoint(new Vector3(1, 0, distance));
         xMin = leftMost.x + padding;
         xMax = rightMost.x - padding;
+        Mesh mesh = GetComponent<MeshFilter>().mesh;
+        playerWidth = mesh.bounds.size.x;
+        Debug.Log("PlayerWidth: " + playerWidth);
+        GalagaHelper.numOfPlayers += 1;
 	}
 
     public void GetCirclePath()
@@ -80,35 +88,53 @@ public class PlayerController : MonoBehaviour {
         //Debug.Log("Fire at speed: " + projectileSpeed);
     }
 
-
 	// Update is called once per frame
 	void Update () {
-
-        if (Input.GetButtonDown("Fire1") && allowFire)
+        // If there is no captured player then proceed.
+        if (!this.playerCaptured)
         {
-            StartCoroutine("Fire");
-            //Debug.Log("Firing");
+            if (Input.GetButtonDown("Fire1") && allowFire)
+            {
+                StartCoroutine("Fire");
+                //Debug.Log("Firing");
+            }
+
+            if (Input.GetKey(KeyCode.A))
+            {
+                transform.position += new Vector3(-speed * Time.deltaTime, 0, 0);
+                transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.Euler(0, -7, 25), 50 * Time.deltaTime);
+            }
+            else if (Input.GetKey(KeyCode.D))
+            {
+                transform.position += new Vector3(speed * Time.deltaTime, 0, 0);
+                transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.Euler(0, 7, 25), 50 * Time.deltaTime);
+            }
+
+            if (!Input.GetKey(KeyCode.A) && !Input.GetKey(KeyCode.D))
+            {
+                transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.Euler(0, 0, 0), 50 * Time.deltaTime);
+            }
+
+            // IF there are 2 players then change min(for left player) and max(for right player)
+            if (this.tag == "CapturedPlayer")
+            {
+                newX = Mathf.Clamp(transform.position.x, xMin + playerWidth, xMax);
+            }
+            else if (this.tag == "Player")
+            {
+                newX = Mathf.Clamp(transform.position.x, xMin, xMax - playerWidth);
+            }
+
+            // restrict the player to the gamespaces
+            // float newX = Mathf.Clamp(transform.position.x, xMin, xMax);
+            transform.position = new Vector3(newX, transform.position.y, transform.position.z);
+            
         }
 
-        if (Input.GetKey(KeyCode.A))
+        if (rotatePlayer)
         {
-            transform.position += new Vector3(-speed * Time.deltaTime, 0, 0);
-            transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.Euler(0, -7, 25), 50 * Time.deltaTime);
+              transform.Rotate(0, 360 * Time.deltaTime, 0, Space.World);
         }
-        else if (Input.GetKey(KeyCode.D))
-        {
-            transform.position += new Vector3(speed * Time.deltaTime, 0, 0);
-            transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.Euler(0, 7, 25), 50 * Time.deltaTime);
-        }
-
-        if (!Input.GetKey(KeyCode.A) && !Input.GetKey(KeyCode.D))
-        {
-            transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.Euler(0, 0, 0), 50 * Time.deltaTime);
-        }
-
-        // restrict the player to the gamespaces
-        float newX = Mathf.Clamp(transform.position.x, xMin, xMax);
-        transform.position = new Vector3(newX, transform.position.y, transform.position.z);
 	}
 
     void OnTriggerEnter(Collider other)
@@ -125,15 +151,28 @@ public class PlayerController : MonoBehaviour {
             top.Play();
             bottom.Play();
             Destroy(gameObject);
-            Application.LoadLevel("Lose Screen");
+            GalagaHelper.numOfPlayers -= 1;
+            if (GalagaHelper.numOfPlayers == 1)
+            {
+                Invoke("EndGame", 3.0f);
+            }
         }
         if (enemy1)
         {
             Destroy(gameObject);
+            GalagaHelper.numOfPlayers -= 1;
+            if (GalagaHelper.numOfPlayers == 1)
+            {
+                Invoke("EndGame", 3.0f);
+            }
             Debug.Log("Enemy ran into Player".Colored(Colors.cyan));
-            Application.LoadLevel("Lose Screen");
         }
         Debug.Log("Something hit the player.".Colored(Colors.darkblue));
+    }
+    
+    void EndGame()
+    {
+        Application.LoadLevel("Lose Screen");
     }
 
     void OnCollisionEnter(Collision other)

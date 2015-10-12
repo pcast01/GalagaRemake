@@ -12,7 +12,7 @@ public class Enemy3Controller : EnemyController
     private PlayerController playerController;
     private Transform player;
     private bool outOfPlayerRange = false;
-    private bool enemy3hit = false;
+    //private bool enemy3hit = false;
     [Header("Path from Top of Screen Settings")]
     public Vector3 _originalPosition;
     private List<Vector3> _waypoints;
@@ -23,6 +23,7 @@ public class Enemy3Controller : EnemyController
     private Transform enemyProjWall;
     [Header("Tractor Beam Settings")]
     public bool sweepTractorBeam = false;
+    public GameObject playerNew;
     private bool tractorFoundPlayer = false;
     private int theAngle = 32;
     private int segments = 10;
@@ -30,8 +31,13 @@ public class Enemy3Controller : EnemyController
     private Animator animator;
     private ParticleSystem tractor;
     private ParticleSystem starfield;
+    private bool isSentBack = false;
+    private GameObject playerSpawn;
+    private MainEnemyFormation mainEF;
+    private Color matColor;
     [Header("Sound Settings")]
     private AudioSource audio;
+    private GameObject gameManager;
 
     void Start()
     {
@@ -41,6 +47,9 @@ public class Enemy3Controller : EnemyController
         playerController = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
         enemyProjWall = GameObject.Find("EnemyProjectileWall").GetComponent<Transform>();
         starfield = GameObject.FindGameObjectWithTag("Starfield").GetComponent<ParticleSystem>();
+        gameManager = GameObject.Find("GameManager");
+        playerSpawn = GameObject.Find("PlayerSpawn");
+        mainEF = GameObject.FindGameObjectWithTag("MainFormation").GetComponent<MainEnemyFormation>();
         _waypoints = new List<Vector3>();
         //isAttackPlayer = true;
         origRotation = transform.rotation;
@@ -50,7 +59,8 @@ public class Enemy3Controller : EnemyController
     {
         base.Update();
 
-        // If AttackPlayer is set then Attack with Tractor Beam
+        // If AttackPlayer is set then Attack with Tractor Beam after getting
+        // the orginal position.
         if (isTractorBeamAttack)
         {
             if (gotOriginalPosition == false)
@@ -59,26 +69,9 @@ public class Enemy3Controller : EnemyController
                 gotOriginalPosition = true;
             }
             TractorBeamAttack();
-
-
-            // Get Enemy on Path to come from top to original position.
-            //if (_isOnPath)
-            //{
-            //    Debug.Log("Is on path now".Bold());
-            //    iTween.PutOnPath(gameObject, _waypoints.ToArray(), _pathPercentage);
-            //    _pathPercentage += Time.deltaTime * 10f / 10;
-            //    //Debug.Log("path Percent: " + _pathPercentage);
-            //    if (_pathPercentage > 1)
-            //    {
-            //        _isOnPath = false;
-            //        _pathPercentage = 0;
-            //        outOfPlayerRange = false;
-            //        gotOriginalPosition = false;
-            //        isTractorBeamAttack = false;
-            //    }
-            //}
         }
 
+        // Normal attack #1.
         if (isAttackPlayer)
         {
             if (gotOriginalPosition == false)
@@ -91,7 +84,7 @@ public class Enemy3Controller : EnemyController
             // Get Enemy on Path to come from top to original position.
             if (_isOnPath)
             {
-                Debug.Log("Is on path now".Bold());
+                //Debug.Log("Is on path now".Bold());
                 iTween.PutOnPath(gameObject, _waypoints.ToArray(), _pathPercentage);
                 _pathPercentage += Time.deltaTime * 10f / 10;
                 //Debug.Log("path Percent: " + _pathPercentage);
@@ -112,6 +105,7 @@ public class Enemy3Controller : EnemyController
             RaycastSweep();
         }
     }
+
     /// <summary>
     /// Tractor Beam attack.
     /// Moves toward player and when 45.0f away it stops and sets in motion Particle system.
@@ -131,7 +125,7 @@ public class Enemy3Controller : EnemyController
         //this.isEnemyFiring = true;
 
         //first, check to see if we're close enough to the target -- 45.0f for player
-        Debug.Log(Vector3.Distance(currentPosition, targetPosition).ToString().Bold());
+        //Debug.Log(Vector3.Distance(currentPosition, targetPosition).ToString().Bold());
         if (Vector3.Distance(currentPosition, targetPosition) > 83.0f && outOfPlayerRange == false)
         {
             Vector3 directionOfTravel = targetPosition - currentPosition;
@@ -206,9 +200,10 @@ public class Enemy3Controller : EnemyController
         int finishAngle = (int)(theAngle * 0.5);
 
         int inc = (int)(theAngle / segments);
-
+         
         RaycastHit hit;
         //Debug.Log("Start angle: " + startAngle + " Finish Angle: " + finishAngle);
+
         // Create sweep of raycasts to find player object.
         for (int i = startAngle; i < finishAngle; i+= inc)
         {
@@ -219,6 +214,8 @@ public class Enemy3Controller : EnemyController
                 if (hit.collider.gameObject.name == "Player")
                 {
                     tractorFoundPlayer = true;
+                    gameManager.transform.position = transform.position + new Vector3(0, 0, -10.5f);
+                    player.gameObject.transform.parent = gameManager.transform;
                 }
             }
             Debug.DrawLine(startPos, targetPos, Color.green);
@@ -230,14 +227,14 @@ public class Enemy3Controller : EnemyController
             tractorFoundPlayer = false;
             playerController.playerCaptured = true;
             player.gameObject.tag = "CapturedPlayer";
-            GalagaHelper.isPlayerCaptured = true;
+
+            
             Debug.Log("Player will now be captured.");
             // Get Player animation of getting captured by tractor beam and play it.
             Animation anim = player.GetComponent<Animation>();
             //Debug.Log("wrap mode: " + anim.wrapMode);
             anim.wrapMode = WrapMode.Once;
             anim.Play();
-            //Debug.Log((anim["PlayerCapture"].length * anim["PlayerCapture"].speed).ToString().Colored(Colors.aqua));
             // Set Parent of Player equal to enemy and turn off tractor beam in SetParentAfterCapture function.
             Invoke("SetParentAfterCapture", (anim["PlayerCapture"].length * anim["PlayerCapture"].speed) + 0.5f);
         }
@@ -255,6 +252,11 @@ public class Enemy3Controller : EnemyController
         if (tractor)
         {
             Debug.Log("Path set in motion");
+            Renderer rend = player.GetComponent<Renderer>();
+            matColor = rend.material.color;
+            //Debug.Log("Original mat color: " + matColor.ToString().Bold());
+            rend.material.SetColor("_Color", Color.red);
+            //rend.material.
             tractor.enableEmission = false;
             Debug.Log(_originalPosition.ToString().Colored(Colors.black));
             // Send Enemy and player back to original position after animation of tractor beam stops completely.
@@ -264,22 +266,39 @@ public class Enemy3Controller : EnemyController
 
     void SendBackToOriginalPos()
     {
-        iTween.MoveTo(gameObject, _originalPosition, 2.3f);
-        if (playerController.playerCaptured == true)
+        if (!isSentBack)
         {
-            player.position = player.position + new Vector3(0, 0, 13);
-            Renderer rend = player.GetComponent<Renderer>();
-            rend.material.SetColor("_Color", Color.red);
+            isSentBack = true;
+            iTween.MoveTo(gameObject, _originalPosition, 2.3f);
+            if (playerController.playerCaptured == true)
+            {
+                GalagaHelper.isPlayerCaptured = true;
+                GalagaHelper.numOfPlayers += 1;
+                player.position = player.position + new Vector3(0, 0, 11.5f);
+                //playerController.enabled = false;
+                CreateNewPlayer();
+            }
+            sweepTractorBeam = false;
+            outOfPlayerRange = false;
+            gotOriginalPosition = false;
+            isTractorBeamAttack = false;
         }
-        sweepTractorBeam = false;
-        outOfPlayerRange = false;
-        gotOriginalPosition = false;
-        isTractorBeamAttack = false;
-        // turn starfield back on
-        if (starfield.isPaused == true)
+    }
+
+    void CreateNewPlayer()
+    {
+        GameObject play =  Instantiate(playerNew, playerSpawn.transform.position, playerSpawn.transform.rotation) as GameObject;
+        player = play.gameObject.transform;
+        playerController = play.GetComponent<PlayerController>();
+        // Stop firing and then resume back on again later??
+        Invoke("ResumeGame", 4.0f);
+    }
+
+    void ResumeGame()
+    {
+        if (starfield.isPaused == true && GalagaHelper.isPlayerCaptured == true)
         {
-            starfield.Play();
-            Debug.Log("Starfield should play.".Colored(Colors.red));
+            mainEF.isPlayerReady = true;
         }
     }
 
@@ -298,15 +317,49 @@ public class Enemy3Controller : EnemyController
 
     public void OnTriggerEnter(Collider other)
     {
+        Debug.Log("Bullet hit enemy3.");
         Projectile playerBullet = other.gameObject.GetComponent<Projectile>();
         if (playerBullet)
         {
             Renderer rend = GetComponent<Renderer>();
             rend.material.SetColor("_Color", Color.red);
-            if (enemy3hit)
+            // Check if there is a captured player.
+            if (HaveChild())
             {
-                
+                // Set in motion extra player
+                // Rotate in place then move to center along with currentplayer and then combine both.
+                Transform child = this.transform.GetChild(0);
+                child.parent = null;
+                PlayerController capturedPlayer = GameObject.FindGameObjectWithTag("CapturedPlayer").GetComponent<PlayerController>();
+                // Rotate captured player.
+                capturedPlayer.rotatePlayer = true;
+                // Move back to playerSpawn.
+                iTween.MoveTo(child.gameObject, mainEF.transform.position, 2.0f);
+                iTween.MoveTo(child.gameObject, playerSpawn.transform.position, 2.0f);
+                // Turn off rotation.
+                capturedPlayer.rotatePlayer = false;
+                // Move current player next to captured player
+                // and turn off captured player bool. Set captured
+                // player back to original color.
+                iTween.MoveTo(player.gameObject, playerSpawn.transform.position + new Vector3(-5.3f, 0, 0), 1.5f);
+                capturedPlayer.playerCaptured = false;
+                capturedPlayer.tag = "Player";
+                Renderer newPlayerRend = capturedPlayer.GetComponent<Renderer>();
+                newPlayerRend.material.SetColor("_Color",matColor);
             }
+            Destroy(gameObject);
+        }
+    }
+
+    public bool HaveChild()
+    {
+        if (transform.GetChild(0).childCount > 0)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
         }
     }
 

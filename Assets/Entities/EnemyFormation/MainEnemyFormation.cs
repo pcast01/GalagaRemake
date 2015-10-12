@@ -18,6 +18,7 @@ public class MainEnemyFormation : MonoBehaviour {
     public bool enemy2Picked = false;
     public bool isEnemy1Done = false;
     public bool isEnemy2Done = false;
+    public bool isPlayerReady = false;
     public GameObject[] enemy1;
     public GameObject[] enemy2;
     public GameObject form1;
@@ -27,6 +28,7 @@ public class MainEnemyFormation : MonoBehaviour {
     private GameObject readyText;
     private PlayerController playerController;
     private ParticleSystem starfield;
+    private bool isReadyDone;
 
 	void Start () {
         float distance = transform.position.z - Camera.main.transform.position.z;
@@ -181,13 +183,25 @@ public class MainEnemyFormation : MonoBehaviour {
         // If found a player captured then set ready text.
         if (GalagaHelper.isPlayerCaptured == true)
         {
-            // turn on Ready text
-            readyText.SetActive(true);
-            // Pause starfield
-            if (starfield)
+            if (isReadyDone == false)
             {
-                starfield.Pause();
-                Debug.Log("Paused starfield");
+                // turn on Ready text
+                // Pause starfield
+                if (!isPlayerReady)
+                {
+                    readyText.SetActive(true);
+                    starfield.Pause();
+                    Debug.Log("Paused starfield");
+                }
+                else if (isPlayerReady)
+                {
+                    readyText.SetActive(false);
+                    Debug.Log("Starfield Unpaused".Colored(Colors.green));
+                    starfield.Play();
+                    isPlayerReady = false;
+                    isReadyDone = true;
+                    //GalagaHelper.isPlayerCaptured = false;  
+                }
             }
         }
 	}

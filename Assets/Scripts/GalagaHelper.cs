@@ -42,7 +42,7 @@ public static class GalagaHelper
     // 1st Wave collect and set on 2 waves together
     public static List<GameObject> enemyObjects = new List<GameObject>();
     public static List<Hashtable> EnemyPathParams = new List<Hashtable>();
-
+    public static int numOfPlayers;
     public static bool isPlayerCaptured;
     public static bool isWaveOneStarted;
     public static int RoundNumber;
