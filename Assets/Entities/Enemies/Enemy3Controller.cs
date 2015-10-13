@@ -38,6 +38,8 @@ public class Enemy3Controller : EnemyController
     [Header("Sound Settings")]
     private AudioSource audio;
     private GameObject gameManager;
+    private AudioSource top;
+    private AudioSource bottom;
 
     void Start()
     {
@@ -321,45 +323,73 @@ public class Enemy3Controller : EnemyController
         Projectile playerBullet = other.gameObject.GetComponent<Projectile>();
         if (playerBullet)
         {
+            health -= playerBullet.GetDamage();
+            playerBullet.Hit();
             Renderer rend = GetComponent<Renderer>();
             rend.material.SetColor("_Color", Color.red);
-            // Check if there is a captured player.
-            if (HaveChild())
+
+            if (health <= 0)
             {
-                // Set in motion extra player
-                // Rotate in place then move to center along with currentplayer and then combine both.
-                Transform child = this.transform.GetChild(0);
-                child.parent = null;
-                PlayerController capturedPlayer = GameObject.FindGameObjectWithTag("CapturedPlayer").GetComponent<PlayerController>();
-                // Rotate captured player.
-                capturedPlayer.rotatePlayer = true;
-                // Move back to playerSpawn.
-                iTween.MoveTo(child.gameObject, mainEF.transform.position, 2.0f);
-                iTween.MoveTo(child.gameObject, playerSpawn.transform.position, 2.0f);
-                // Turn off rotation.
-                capturedPlayer.rotatePlayer = false;
-                // Move current player next to captured player
-                // and turn off captured player bool. Set captured
-                // player back to original color.
-                iTween.MoveTo(player.gameObject, playerSpawn.transform.position + new Vector3(-5.3f, 0, 0), 1.5f);
-                capturedPlayer.playerCaptured = false;
-                capturedPlayer.tag = "Player";
-                Renderer newPlayerRend = capturedPlayer.GetComponent<Renderer>();
-                newPlayerRend.material.SetColor("_Color",matColor);
+                top = base.addShotSounds(base.explosionTop[Random.Range(0, explosionTop.Length)], Random.Range(0.8f, 1.2f));
+                bottom = base.addShotSounds(base.explosionBottom, Random.Range(0.8f, 1.2f));
+                top.PlayScheduled(0.3);
+                bottom.Play();
+                // Check if there is a captured player.
+                if (HaveChild())
+                {
+                    // Set in motion extra player
+                    // Rotate in place then move to center along with currentplayer and then combine both.
+                    Transform child = this.transform.GetChild(0);
+                    child.parent = null;
+                    PlayerController capturedPlayer = GameObject.FindGameObjectWithTag("CapturedPlayer").GetComponent<PlayerController>();
+                    // Rotate captured player.
+                    capturedPlayer.rotatePlayer = true;
+                    // Move back to playerSpawn.
+                    iTween.MoveTo(child.gameObject, mainEF.transform.position, 2.0f);
+                    iTween.MoveTo(child.gameObject, playerSpawn.transform.position, 2.0f);
+                    // Turn off rotation.
+                    capturedPlayer.rotatePlayer = false;
+                    // Move current player next to captured player
+                    // and turn off captured player bool. Set captured
+                    // player back to original color.
+                    iTween.MoveTo(player.gameObject, playerSpawn.transform.position + new Vector3(-5.3f, 0, 0), 1.5f);
+                    capturedPlayer.playerCaptured = false;
+                    capturedPlayer.tag = "Player";
+                    Renderer newPlayerRend = capturedPlayer.GetComponent<Renderer>();
+                    newPlayerRend.material.SetColor("_Color", matColor);
+                }
+                //GameObject empty = new GameObject("emptyGO");
+                //empty.transform.position = this.transform.parent.position;
+                //empty.transform.parent = this.transform.parent;
+                Invoke("DisableEnemy", top.clip.length);
             }
-            Destroy(gameObject);
         }
+    }
+
+    void DisableEnemy()
+    {
+        SimplePool.Despawn(gameObject);
+        gameObject.transform.parent = null;
     }
 
     public bool HaveChild()
     {
-        if (transform.GetChild(0).childCount > 0)
+        try
         {
-            return true;
+            if (transform.GetChild(0).childCount > 0)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+
         }
-        else
+        catch (System.Exception)
         {
             return false;
+            //throw;
         }
     }
 

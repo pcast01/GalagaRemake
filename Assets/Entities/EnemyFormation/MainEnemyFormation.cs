@@ -22,6 +22,15 @@ public class MainEnemyFormation : MonoBehaviour {
     public GameObject[] enemy1;
     public GameObject[] enemy2;
     public GameObject form1;
+    private GameObject form2;
+    private GameObject form3;
+    private GameObject form4;
+    private GameObject form5;
+    public bool secondWaveFinished;
+    public bool thirdWaveFinished;
+    public bool fourthWaveFinished;
+
+    private float timeBetweenSpawn;
     private GameObject playerText;
     private GameObject roundText;
     private GameObject playerTextHigh;
@@ -31,15 +40,25 @@ public class MainEnemyFormation : MonoBehaviour {
     private bool isReadyDone;
 
 	void Start () {
+
+        // Formations
+        form1 = GameObject.FindGameObjectWithTag("phase1").gameObject;
+        form2 = GameObject.FindGameObjectWithTag("phase2").gameObject;
+        form3 = GameObject.FindGameObjectWithTag("phase31").gameObject;
+        form4 = GameObject.FindGameObjectWithTag("phase41").gameObject;
+        form5 = GameObject.FindGameObjectWithTag("phase51").gameObject;
+        // Movement
         float distance = transform.position.z - Camera.main.transform.position.z;
         Vector3 leftMost = Camera.main.ViewportToWorldPoint(new Vector3(0, 0, distance));
         Vector3 rightMost = Camera.main.ViewportToWorldPoint(new Vector3(1, 0, distance));
         xMin = leftMost.x + padding;
         xMax = rightMost.x - padding;
         moveFormation = false;
+
+
         GalagaHelper.RoundNumber = 1;
         // Starts the Game.
-        //Invoke("StartRound", 3.0f);
+        Invoke("StartRound", 3.0f);
         playerText = GameObject.Find("PlayerText");
         roundText = GameObject.Find("RoundTitle");
         playerTextHigh = GameObject.Find("PlayerTextHigh");
@@ -52,7 +71,6 @@ public class MainEnemyFormation : MonoBehaviour {
         readyText.SetActive(false);
         //roundTextPos = playerText.transform.position;
 	}
-
 
     #region RandomEnemyAttacks
     void PickRandomEnemyOne()
@@ -89,7 +107,7 @@ public class MainEnemyFormation : MonoBehaviour {
 
     void StartRound()
     {
-        form1 = GameObject.FindGameObjectWithTag("phase1").gameObject;
+        //form1 = GameObject.FindGameObjectWithTag("phase1").gameObject;
         form1.GetComponent<EnemySpawner>().enabled = true;
         Debug.Log("Starting Round 1".Colored(Colors.purple).Bold());
     }
@@ -130,8 +148,48 @@ public class MainEnemyFormation : MonoBehaviour {
             roundText.SetActive(false);
             isTextDone = true;
             //Debug.Log("isTextDone eq true");
+            //timeBetweenSpawn = 0;
+
         }
         #endregion
+        Debug.Log(GalagaHelper.TimeToSpawn.ToString().Italics());
+        Debug.Log(GalagaHelper.CurrentRoundPhase.ToString().Bold());
+        if (GalagaHelper.CurrentRoundPhase == GalagaHelper.Formations.Round1Phase2 && GalagaHelper.TimeToSpawn > 8.0f)
+        {
+            //GameObject pt2 = GameObject.FindGameObjectWithTag("phase2").gameObject;
+            Debug.Log("Round2 enabled".Colored(Colors.purple));
+            form2.GetComponent<EnemySpawner>().enabled = true;
+            if (form2.GetComponent<EnemySpawner>().isFormationUp)
+            {
+                GalagaHelper.CurrentRoundPhase += 1;
+            }
+        }
+        else if (GalagaHelper.CurrentRoundPhase == GalagaHelper.Formations.Round1Phase3 && GalagaHelper.TimeToSpawn > 11.8 && secondWaveFinished)
+        {
+            Debug.Log("Round3 enabled".Colored(Colors.purple));
+            form3.GetComponent<EnemySpawner>().enabled = true;
+            if (form3.GetComponent<EnemySpawner>().isFormationUp)
+            {
+                GalagaHelper.CurrentRoundPhase += 1;
+                secondWaveFinished = false;
+            }
+        }
+        else if (GalagaHelper.CurrentRoundPhase == GalagaHelper.Formations.Round1Phase4 && GalagaHelper.TimeToSpawn > 15.1 && thirdWaveFinished)
+        {
+            Debug.Log("Round4 enabled".Colored(Colors.purple));
+            form4.GetComponent<EnemySpawner>().enabled = true;
+            if (form4.GetComponent<EnemySpawner>().isFormationUp)
+            {
+                GalagaHelper.CurrentRoundPhase += 1;
+                thirdWaveFinished = false;
+            }
+        }
+        else if (GalagaHelper.CurrentRoundPhase == GalagaHelper.Formations.Round1Phase5 && GalagaHelper.TimeToSpawn > 17.4 && fourthWaveFinished)
+        {
+            Debug.Log("Round5 enabled".Colored(Colors.purple));
+            form5.GetComponent<EnemySpawner>().enabled = true;
+            fourthWaveFinished = false;
+        }
 
         // Move formation left and right
         if (moveFormation)

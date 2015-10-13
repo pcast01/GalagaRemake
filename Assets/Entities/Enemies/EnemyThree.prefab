@@ -26,7 +26,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 157008}
   m_LocalRotation: {x: 0, y: 1, z: 0, w: -1.62920685e-07}
-  m_LocalPosition: {x: -31.9300003, y: 0, z: 45.2000008}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -86,7 +86,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 30
-  health: 150
+  health: 300
   scoreValue: 150
   explosion: {fileID: 143732, guid: f6a75a75b4cb4e54d9fdd0e4dbcc8470, type: 2}
   enemyLaser: {fileID: 159908, guid: 6635a52a223ff2f48a4728ecf0781244, type: 2}
@@ -99,7 +99,7 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 617c45f62ba3ca440b2c2d5b25472802, type: 3}
   explosionBottom: {fileID: 8300000, guid: 470dc56cb6092604388b601ebb4c9579, type: 3}
   swooshSound: {fileID: 8300000, guid: 0b7f61156ff7451429d298a66a877515, type: 3}
-  movePathTime: 2
+  movePathTime: 2.20000005
   swoopSpeed: 25
   isTractorBeamAttack: 0
   isAttackPlayer: 0
@@ -140,7 +140,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 0}
       propertyPath: movePathTime
-      value: 2
+      value: 2.20000005
       objectReference: {fileID: 0}
     - target: {fileID: 0}
       propertyPath: explosion
@@ -173,6 +173,10 @@ Prefab:
     - target: {fileID: 0}
       propertyPath: projectileSpeed
       value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: health
+      value: 300
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}

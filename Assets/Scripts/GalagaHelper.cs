@@ -212,7 +212,7 @@ public static class GalagaHelper
     {
         Vector3[] path = null;
         // Get formation script
-        //Debug.Log("Current Spawn: ".Bold().Colored(Colors.green) + CurrentRoundPhase + " Wave #:".Bold() + form);
+        Debug.Log("Current Spawn: ".Bold().Colored(Colors.green) + CurrentRoundPhase + " Wave #:".Bold() + form);
         //Debug.Log("GetWavePaths Round#: ".Bold().Colored(Colors.green) + GalagaHelper.RoundNumber);
         EnemySpawner formSpawn = GetFormationScript(form);
         // FourthWavePath=8 is used for waves 4 & 5.
@@ -311,6 +311,7 @@ public static class GalagaHelper
                     path[8] = middlePt.transform.position;
                     path[9] = formSpawn.transform.position;
                     path[10] = formSpawn.currentSpawnPos.position;
+                    //Debug.Log(formSpawn.currentSpawnPos.position.ToString().Bold());
                 }
             }
             else if ((int)form == 2)
@@ -370,10 +371,12 @@ public static class GalagaHelper
         if (path.Length == 8)
         {
             FourthWavePath[7] = formSpawn.currentSpawnPos.position;
+            Debug.Log(formSpawn.currentSpawnPos.position.ToString().Bold());
         }
         else
 	    {
             SecondWavePath[10] = formSpawn.currentSpawnPos.position;
+            Debug.Log(formSpawn.currentSpawnPos.position.ToString().Bold());
 	    }
     }
     #endregion
@@ -419,6 +422,7 @@ public static class GalagaHelper
         enemyObjects.Clear();
         EnemyPathParams.Clear();
         Debug.Log("<color=red>ENEMY OBJECTS CLEARED</color>");
+        CurrentRoundPhase += 1;
     }
 
     /// <summary>
