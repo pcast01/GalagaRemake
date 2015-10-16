@@ -99,10 +99,11 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 617c45f62ba3ca440b2c2d5b25472802, type: 3}
   explosionBottom: {fileID: 8300000, guid: 470dc56cb6092604388b601ebb4c9579, type: 3}
   swooshSound: {fileID: 8300000, guid: 6c3f33e757ffdf74c8733e3b1f1c0892, type: 3}
-  movePathTime: 2
+  movePathTime: 2.20000005
   swoopSpeed: 30
   leftSwoop: {fileID: 0}
   rightSwoop: {fileID: 0}
+  mainForm: {fileID: 0}
   AttackPlayer: 0
   _originalPosition: {x: 0, y: 0, z: 0}
   attackSound: {fileID: 8300000, guid: 9f9b8573d3e62fc40a809a7139d4898a, type: 3}
@@ -139,7 +140,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 0}
       propertyPath: movePathTime
-      value: 2
+      value: 2.20000005
       objectReference: {fileID: 0}
     - target: {fileID: 0}
       propertyPath: explosion

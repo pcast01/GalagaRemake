@@ -5,10 +5,13 @@ public class EnemyController : MonoBehaviour
 {
     public float speed = 30.0f;
     public float health = 150f;
-    public int scoreValue = 150;
+    //public int scoreValue = 150;
     public GameObject explosion;
+    public bool isNotInFormation = false;
     private GameObject hero;
-    private Renderer rend;
+    public Renderer rend;
+    public MainEnemyFormation main;
+    public bool isRandomPicked;
 
     [Header("Weapon Settings")]
     public GameObject enemyLaser;
@@ -18,7 +21,7 @@ public class EnemyController : MonoBehaviour
 
     [Header("Flight Pattern Settings")]
     public Hashtable myTween = new Hashtable();
-    private ScoreKeeper scoreKeeper;
+    public ScoreKeeper scoreKeeper;
     private EnemySpawner round1Phase1spawner;
     private const float fDelay = 0.06f;
 
@@ -26,8 +29,8 @@ public class EnemyController : MonoBehaviour
     public AudioClip[] explosionTop;
     public AudioClip explosionBottom;
     public AudioClip swooshSound;
-    private AudioSource top;
-    private AudioSource bottom;
+    public AudioSource top;
+    public AudioSource bottom;
 
     [SerializeField]
     private float movePathTime;
@@ -44,6 +47,7 @@ public class EnemyController : MonoBehaviour
     {
         hero = GameObject.FindGameObjectWithTag("Player");
         rend = GetComponent<Renderer>();
+        main = GameObject.FindGameObjectWithTag("MainFormation").GetComponent<MainEnemyFormation>();
         GalagaHelper.EnemiesSpawned += 1;
         round1Phase1spawner = GameObject.Find("Round1Phase1EnemyFormation").GetComponent<EnemySpawner>();
         scoreKeeper = GameObject.Find("Score").GetComponent<ScoreKeeper>();
@@ -75,29 +79,52 @@ public class EnemyController : MonoBehaviour
             myTween.Add("time", movePathTime);
             myTween.Add("easetype", "linear");
             GalagaHelper.CollectEnemyPaths(gameObject, myTween);
+            //GalagaHelper.CurrentRoundPhase += 1;
         }
-        else if (GalagaHelper.EnemiesSpawned > 8 && GalagaHelper.EnemiesSpawned < 17)
+
+        if (GalagaHelper.CurrentRoundPhase == GalagaHelper.Formations.Round1Phase2)
         {
             CreatePathAndMove(GalagaHelper.Formations.Round1Phase2, GalagaHelper.RoundNumber);
         }
-        else if (GalagaHelper.EnemiesSpawned > 16 && GalagaHelper.EnemiesSpawned < 25)
+        else if (GalagaHelper.CurrentRoundPhase == GalagaHelper.Formations.Round1Phase3)
         {
             CreatePathAndMove(GalagaHelper.Formations.Round1Phase3, GalagaHelper.RoundNumber);
         }
-        else if (GalagaHelper.EnemiesSpawned > 24 && GalagaHelper.EnemiesSpawned < 33)
+        else if (GalagaHelper.CurrentRoundPhase == GalagaHelper.Formations.Round1Phase4)
         {
             CreatePathAndMove(GalagaHelper.Formations.Round1Phase4, GalagaHelper.RoundNumber);
         }
-        else if (GalagaHelper.EnemiesSpawned > 32 && GalagaHelper.EnemiesSpawned < 41)
+        else if (GalagaHelper.CurrentRoundPhase == GalagaHelper.Formations.Round1Phase5)
         {
             CreatePathAndMove(GalagaHelper.Formations.Round1Phase5, GalagaHelper.RoundNumber);
         }
-        else
-        {
-            myTween.Add("time", movePathTime);
-            myTween.Add("easetype", "linear");
-            iTween.MoveTo(gameObject, myTween);
-        }
+
+        //else if (GalagaHelper.EnemiesSpawned > 8 && GalagaHelper.EnemiesSpawned < 17)
+        //{
+        //    CreatePathAndMove(GalagaHelper.Formations.Round1Phase2, GalagaHelper.RoundNumber);
+        //}
+        //else if (GalagaHelper.EnemiesSpawned > 16 && GalagaHelper.EnemiesSpawned < 25)
+        //{
+        //    Debug.Log(GalagaHelper.CurrentRoundPhase.ToString().Colored(Colors.lightblue));
+        //    CreatePathAndMove(GalagaHelper.Formations.Round1Phase3, GalagaHelper.RoundNumber);
+        //}
+        //else if (GalagaHelper.EnemiesSpawned > 24 && GalagaHelper.EnemiesSpawned < 33)
+        //{
+        //    Debug.Log(GalagaHelper.CurrentRoundPhase.ToString().Colored(Colors.lightblue));
+        //    CreatePathAndMove(GalagaHelper.Formations.Round1Phase4, GalagaHelper.RoundNumber);
+        //}
+        //else if (GalagaHelper.EnemiesSpawned > 32 && GalagaHelper.EnemiesSpawned < 41)
+        //{
+        //    Debug.Log(GalagaHelper.CurrentRoundPhase.ToString().Colored(Colors.lightblue));
+        //    CreatePathAndMove(GalagaHelper.Formations.Round1Phase5, GalagaHelper.RoundNumber);
+        //}
+        //else
+        //{
+        //    //Debug.Log("Else fired".Bold());
+        //    //myTween.Add("time", movePathTime);
+        //    //myTween.Add("easetype", "linear");
+        //    //iTween.MoveTo(gameObject, myTween);
+        //}
     }
 
     /// <summary>
@@ -112,18 +139,41 @@ public class EnemyController : MonoBehaviour
         if ((int)form == 2 || (int)form == 3)
         {
             myTween.Add("path", GalagaHelper.SecondWavePath);
+            if (gameObject.name == "EnemyTwo (16)" || gameObject.name == "EnemyOne (12)")
+            {
+                Debug.Log(GalagaHelper.SecondWavePath[10].ToString().Bold().Colored(Colors.darkblue));
+            }
         }
         else
         {
             myTween.Add("path", GalagaHelper.FourthWavePath);
+            if (gameObject.name == "EnemyTwo (16)" || gameObject.name == "EnemyOne (12)")
+            {
+                Debug.Log(GalagaHelper.FourthWavePath[7].ToString().Bold().Colored(Colors.darkblue));
+            }
         }
         myTween.Add("time", movePathTime);
         myTween.Add("delay", GalagaHelper.Wave1Delay);
+        Debug.Log("Wave1delay: " + GalagaHelper.Wave1Delay);
         myTween.Add("easetype", "linear");
         iTween.MoveTo(gameObject, myTween);
-        if ((int)form % 2 != 0)
+        //if (myTween.Contains("path"))
+        //{
+        //    Debug.Log(myTween["path"])
+        //}
+        if (GalagaHelper.EnemiesSpawned == 16)
         {
-            GalagaHelper.PrintAllGhostObjects();
+            // Last enemy done for 2nd wave
+            main.secondWaveFinished = true;
+        }
+        else if (GalagaHelper.EnemiesSpawned == 24)
+        {
+            main.thirdWaveFinished = true;
+            Debug.Log("third wave finished.");
+        }
+        else if (GalagaHelper.EnemiesSpawned == 32)
+        {
+            main.fourthWaveFinished = true;
         }
     }
 
@@ -151,7 +201,6 @@ public class EnemyController : MonoBehaviour
                 Fire();
             }  
         }
-        
     }
 
     private void Fire()
@@ -171,48 +220,6 @@ public class EnemyController : MonoBehaviour
             Vector3 directionOfTravel = targetPosition - currentPosition;
             Debug.Log("firing".Colored(Colors.red));
             enemyBullet.GetComponent<Rigidbody>().velocity = directionOfTravel.normalized * projectileSpeed;
-        }
-    }
-
-    public void OnTriggerEnter(Collider other)
-    {
-        //Debug.Log("Something hit an enemy");
-        Projectile playerBullet = other.gameObject.GetComponent<Projectile>();
-        if (playerBullet)
-        {
-            health -= playerBullet.GetDamage();
-            playerBullet.Hit();
-            Debug.Log("Enemy hit!".Bold().Colored(Colors.red));
-            scoreKeeper.Score(scoreValue);
-            if (health <= 0)
-            {
-                //gameObject.isDead = true;
-                //Debug.Log("parent ".Bold()+ gameObject.transform.parent);
-                //Instantiate(explosion, gameObject.transform.position, gameObject.transform.rotation);
-                top = addShotSounds(explosionTop[Random.Range(0, explosionTop.Length)], Random.Range(0.8f, 1.2f));
-                bottom = addShotSounds(explosionBottom, Random.Range(0.8f, 1.2f));
-                top.PlayScheduled(0.3);
-                bottom.Play();
-                rend.enabled = false;
-                GameObject explosionPrefab = Instantiate(explosion, gameObject.transform.position, gameObject.transform.rotation) as GameObject;
-                Destroy(explosionPrefab, 3.0f);
-                Invoke("DisableEnemy", top.clip.length);
-                //SimplePool.Despawn(gameObject);
-                //gameObject.transform.parent = null;
-                GalagaHelper.EnemiesKilled += 1;
-                //gameObject.SetActive(false);
-                //Debug.Log("Enemy is dead".Bold() + " Pos: " + gameObject.transform.parent.transform.parent.name);
-                scoreKeeper.Score(200);
-                //Application.LoadLevel("Win Screen");
-                //Die();
-                //Destroy(explosion);
-            }
-            else
-            {
-                
-                //TODO: Change color for Enemy 3 here.
-
-            }
         }
     }
 

@@ -18,9 +18,9 @@ public class EnemySpawner : MonoBehaviour {
     public float spawnDelay = 0.5f;
     public bool spawnEntranceRight = false;
     [Header("Formation")]
-    private EnemySpawner round1Phase2spawner;
+    //private EnemySpawner round1Phase2spawner;
     public bool isFormationUp = false;
-    private int enemiesInPlace = 0;
+    //private int enemiesInPlace = 0;
 
     void Awake()
     {
@@ -36,11 +36,12 @@ public class EnemySpawner : MonoBehaviour {
 	void Update () {
         
         // Get the number of enemies in place on the current Formation
-        enemiesInPlace = isEnemyInPlace();
-        Debug.Log(gameObject.name.Bold() + " - enemies in place: " + enemiesInPlace.ToString().Colored(Colors.red) + " Enemies Spawned: " + GalagaHelper.EnemiesSpawned);
+        //enemiesInPlace = isEnemyInPlace();
+        //+ " - enemies in place: " + enemiesInPlace.ToString().Colored(Colors.red
 
         if (gameObject.name == "Round1Phase1EnemyFormation")
         {
+            Debug.Log(gameObject.name.Bold() + " Enemies Spawned: " + GalagaHelper.EnemiesSpawned);
             // Check if 8 enemies have spawned then run them
             GalagaHelper.StartRound1();
             if (GalagaHelper.EnemiesKilled == 40)
@@ -56,37 +57,37 @@ public class EnemySpawner : MonoBehaviour {
 
         // Enable the next script to be able to run based on which script is running and if all
         // enemies are in place in the formation.
-        if (enemiesInPlace == 8 && gameObject.name == "Round1Phase1EnemyFormation")
-        {
-            GalagaHelper.TimeDone = Time.time;
-            //Debug.Log("Time to get to position: ".Bold() + (GalagaHelper.TimeDone - GalagaHelper.TimeToSpawn));
-            GameObject pt2 = GameObject.FindGameObjectWithTag("phase2").gameObject;
-            pt2.GetComponent<EnemySpawner>().enabled = true;
-            //Debug.Log("*** ALL Enemies in place. ***");
-        }
-        else if (enemiesInPlace == 8 && gameObject.name == "Round1Phase2EnemyFormation")
-        {
-            GameObject pt3 = GameObject.FindGameObjectWithTag("phase31").gameObject;
-            pt3.GetComponent<EnemySpawner>().enabled = true;
-            //var message = "Enemy formation 3 on";
-            //Debug.Log(message.Bold().Sized(8));
-        }
-        else if (enemiesInPlace == 8 && gameObject.name == "Round1Phase3_1EnemyFormation")
-        {
-            GameObject pt4 = GameObject.FindGameObjectWithTag("phase41").gameObject;
-            pt4.GetComponent<EnemySpawner>().enabled = true;
-        }
-        else if (enemiesInPlace == 8 && gameObject.name == "Round1Phase4_1EnemyFormation")
-        {
-            GameObject pt5 = GameObject.FindGameObjectWithTag("phase51").gameObject;
-            pt5.GetComponent<EnemySpawner>().enabled = true;
-        }
-        else if (enemiesInPlace == 8 && gameObject.name == "Round1Phase5_1EnemyFormation")
-        {
-            GameObject mef = GameObject.FindGameObjectWithTag("MainFormation").gameObject;
-            //mef.GetComponent<MainEnemyFormation>().moveFormation = true;
+        //if (GalagaHelper.EnemiesSpawned > 7 && gameObject.name == "Round1Phase1EnemyFormation")
+        //{
+        //    GalagaHelper.TimeDone = Time.time;
+        //    //Debug.Log("Time to get to position: ".Bold() + (GalagaHelper.TimeDone - GalagaHelper.TimeToSpawn));
+        //    GameObject pt2 = GameObject.FindGameObjectWithTag("phase2").gameObject;
+        //    pt2.GetComponent<EnemySpawner>().enabled = true;
+        //    //Debug.Log("*** ALL Enemies in place. ***");
+        //}
+        //else if (GalagaHelper.EnemiesSpawned > 15 && gameObject.name == "Round1Phase2EnemyFormation")
+        //{
+        //    GameObject pt3 = GameObject.FindGameObjectWithTag("phase31").gameObject;
+        //    pt3.GetComponent<EnemySpawner>().enabled = true;
+        //    //var message = "Enemy formation 3 on";
+        //    //Debug.Log(message.Bold().Sized(8));
+        //}
+        //else if (GalagaHelper.EnemiesSpawned > 23 && gameObject.name == "Round1Phase3_1EnemyFormation")
+        //{
+        //    GameObject pt4 = GameObject.FindGameObjectWithTag("phase41").gameObject;
+        //    pt4.GetComponent<EnemySpawner>().enabled = true;
+        //}
+        //else if (GalagaHelper.EnemiesSpawned > 31 && gameObject.name == "Round1Phase4_1EnemyFormation")
+        //{
+        //    GameObject pt5 = GameObject.FindGameObjectWithTag("phase51").gameObject;
+        //    pt5.GetComponent<EnemySpawner>().enabled = true;
+        //}
+        //else if (GalagaHelper.EnemiesSpawned > 40 && gameObject.name == "Round1Phase5_1EnemyFormation")
+        //{
+        //    GameObject mef = GameObject.FindGameObjectWithTag("MainFormation").gameObject;
+        //    //mef.GetComponent<MainEnemyFormation>().moveFormation = true;
 
-        }
+        //}
 	}
 
     /// <summary>
@@ -180,16 +181,6 @@ public class EnemySpawner : MonoBehaviour {
             
             // Spawn enemy in enemy1Prefab.
             SpawnEnemy(spawnPoint, freePosition);
-            
-            //GameObject enemy = Instantiate(enemy1Prefab, spawnPoint.position, enemy1Prefab.transform.rotation) as GameObject;
-            //GameObject enemy = SimplePool.Spawn(enemy1Prefab, spawnPoint.position, enemy1Prefab.transform.rotation, true) as GameObject;
-            //enemy.transform.position = spawnPoint.position;
-            
-            //Debug.Log("Enemy spawned." + "free pos=" + freePosition.position.z);
-            
-            // Set free position's Parent
-            //enemy.transform.parent = freePosition;
-            //Debug.Log("Enemy parent name: " + enemy.transform.parent.name + " FreePos: " + freePosition.name);
         }
 
         if (NextFreePosition())
@@ -200,7 +191,8 @@ public class EnemySpawner : MonoBehaviour {
         else
         {
             isFormationUp = true;
-            GalagaHelper.CurrentRoundPhase += 1;
+            Debug.Log(gameObject.name + " is formUp");
+            //GalagaHelper.CurrentRoundPhase += 1;
         }
     }
 
@@ -244,9 +236,11 @@ public class EnemySpawner : MonoBehaviour {
                     //}
                     break;
                 case GalagaHelper.Formations.Round1Phase3:
+                    Debug.Log("Free pos == " + freePos.gameObject.name);
                     defaultEnemyPrefab = enemy2Prefab;
                     break;
                 case GalagaHelper.Formations.Round1Phase4:
+                    Debug.Log("Free pos == " + freePos.gameObject.name);
                     defaultEnemyPrefab = enemy1Prefab;
                     break;
                 case GalagaHelper.Formations.Round1Phase5:

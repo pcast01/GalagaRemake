@@ -42,7 +42,7 @@ public static class GalagaHelper
     // 1st Wave collect and set on 2 waves together
     public static List<GameObject> enemyObjects = new List<GameObject>();
     public static List<Hashtable> EnemyPathParams = new List<Hashtable>();
-    public static int numOfPlayers;
+    public static int numOfPlayers=2;
     public static bool isPlayerCaptured;
     public static bool isWaveOneStarted;
     public static int RoundNumber;
@@ -68,6 +68,17 @@ public static class GalagaHelper
     // Timer testing
     public static float TimeToSpawn; //Time started
     public static float TimeDone;
+
+    //Function to get random number
+    private static readonly System.Random random = new System.Random();
+    private static readonly object syncLock = new object();
+    public static int RandomNumber(int min, int max)
+    {
+        lock (syncLock)
+        { // synchronize
+            return random.Next(min, max);
+        }
+    }
     #endregion
 
     /// <summary>
@@ -212,7 +223,7 @@ public static class GalagaHelper
     {
         Vector3[] path = null;
         // Get formation script
-        //Debug.Log("Current Spawn: ".Bold().Colored(Colors.green) + CurrentRoundPhase + " Wave #:".Bold() + form);
+        Debug.Log("Current Spawn: ".Bold().Colored(Colors.green) + CurrentRoundPhase + " Wave #:".Bold() + form);
         //Debug.Log("GetWavePaths Round#: ".Bold().Colored(Colors.green) + GalagaHelper.RoundNumber);
         EnemySpawner formSpawn = GetFormationScript(form);
         // FourthWavePath=8 is used for waves 4 & 5.
@@ -311,6 +322,7 @@ public static class GalagaHelper
                     path[8] = middlePt.transform.position;
                     path[9] = formSpawn.transform.position;
                     path[10] = formSpawn.currentSpawnPos.position;
+                    //Debug.Log(formSpawn.currentSpawnPos.position.ToString().Bold());
                 }
             }
             else if ((int)form == 2)
@@ -370,10 +382,12 @@ public static class GalagaHelper
         if (path.Length == 8)
         {
             FourthWavePath[7] = formSpawn.currentSpawnPos.position;
+            Debug.Log(formSpawn.currentSpawnPos.position.ToString().Bold());
         }
         else
 	    {
             SecondWavePath[10] = formSpawn.currentSpawnPos.position;
+            Debug.Log(formSpawn.currentSpawnPos.position.ToString().Bold());
 	    }
     }
     #endregion
@@ -419,6 +433,7 @@ public static class GalagaHelper
         enemyObjects.Clear();
         EnemyPathParams.Clear();
         Debug.Log("<color=red>ENEMY OBJECTS CLEARED</color>");
+        CurrentRoundPhase += 1;
     }
 
     /// <summary>
@@ -466,22 +481,140 @@ public static class GalagaHelper
         MainEnemyFormation mainEnemyForm = GameObject.FindGameObjectWithTag("MainFormation").GetComponent<MainEnemyFormation>();
         if (mainEnemyForm && GalagaHelper.EnemiesKilled < 41)
 	    {
-            int x = Random.Range(0,3);
+            Debug.Log("Ran random attacks".Colored(Colors.green));
+            int x = GalagaHelper.RandomNumber(0, 3);
             if (x == 1)
 	        {
 		        mainEnemyForm.enemy1Picked = true;
 	        }
+            else if (x == 2)
+            {
+                mainEnemyForm.enemy2Picked = true;
+            }
             else
 	        {
-                mainEnemyForm.enemy2Picked = true;
+                mainEnemyForm.enemy3Picked = true;
 	        }
 		 
 	    }
 
     }
 
+    public static int NumberOfPlayerIcons()
+    {
+        GameObject[] icons = GameObject.FindGameObjectsWithTag("PlayerIcon");
+        return icons.Length;
+    }
+
+    public static void SetPlayerIcons()
+    {
+        GameObject[] icons = GameObject.FindGameObjectsWithTag("PlayerIcon");
+        PlayerIcons = icons;
+    }
+
+    public static void PlacePlayerIcons()
+    {
+        switch (numOfPlayers)
+        {
+            case 1:
+                for (int i = 0; i < PlayerIcons.Length; i++)
+                {
+                    if (PlayerIcons[i].name.Equals("PlayerIcon"))
+                    {
+                        Renderer rend = PlayerIcons[i].GetComponent<Renderer>();
+                        rend.enabled = true;
+                    }
+                    else
+                    {
+                        Renderer rend = PlayerIcons[i].GetComponent<Renderer>();
+                        rend.enabled = false;
+                    }
+                }
+                break;
+            case 2:
+                for (int i = 0; i < PlayerIcons.Length; i++)
+                {
+                    if (PlayerIcons[i].name.Equals("PlayerIcon") || PlayerIcons[i].name.Equals("PlayerIcon (1)"))
+                    {
+                        Renderer rend = PlayerIcons[i].GetComponent<Renderer>();
+                        rend.enabled = true;
+                    }
+                    else
+                    {
+                        Renderer rend = PlayerIcons[i].GetComponent<Renderer>();
+                        rend.enabled = false;
+                    }
+                }
+                break;
+            case 3:
+                for (int i = 0; i < PlayerIcons.Length; i++)
+                {
+                    if (PlayerIcons[i].name.Equals("PlayerIcon") || PlayerIcons[i].name.Equals("PlayerIcon (1)") || PlayerIcons[i].name.Equals("PlayerIcon (2)"))
+                    {
+                        Renderer rend = PlayerIcons[i].GetComponent<Renderer>();
+                        rend.enabled = true;
+                    }
+                    else
+                    {
+                        Renderer rend = PlayerIcons[i].GetComponent<Renderer>();
+                        rend.enabled = false;
+                    }
+                }
+                break;
+            case 4:
+                for (int i = 0; i < PlayerIcons.Length; i++)
+                {
+                    if (PlayerIcons[i].name.Equals("PlayerIcon") || PlayerIcons[i].name.Equals("PlayerIcon (1)") || PlayerIcons[i].name.Equals("PlayerIcon (2)"))
+                    {
+                        Renderer rend = PlayerIcons[i].GetComponent<Renderer>();
+                        rend.enabled = true;
+                    }
+                    else
+                    {
+                        Renderer rend = PlayerIcons[i].GetComponent<Renderer>();
+                        rend.enabled = false;
+                    }
+                }
+                break;
+            case 5:
+                for (int i = 0; i < PlayerIcons.Length; i++)
+                {
+                    if (PlayerIcons[i].name.Equals("PlayerIcon") || PlayerIcons[i].name.Equals("PlayerIcon (1)") || PlayerIcons[i].name.Equals("PlayerIcon (2)") || PlayerIcons[i].name.Equals("PlayerIcon (3)"))
+                    {
+                        Renderer rend = PlayerIcons[i].GetComponent<Renderer>();
+                        rend.enabled = true;
+                    }
+                    else
+                    {
+                        Renderer rend = PlayerIcons[i].GetComponent<Renderer>();
+                        rend.enabled = false;
+                    }
+                }
+                break;
+            case 6:
+                for (int i = 0; i < PlayerIcons.Length; i++)
+                {
+                    if (PlayerIcons[i].name.Equals("PlayerIcon") || PlayerIcons[i].name.Equals("PlayerIcon (1)") || PlayerIcons[i].name.Equals("PlayerIcon (2)") || PlayerIcons[i].name.Equals("PlayerIcon (3)") || PlayerIcons[i].name.Equals("PlayerIcon (4)"))
+                    {
+                        Renderer rend = PlayerIcons[i].GetComponent<Renderer>();
+                        rend.enabled = true;
+                    }
+                    else
+                    {
+                        Renderer rend = PlayerIcons[i].GetComponent<Renderer>();
+                        rend.enabled = false;
+                    }
+                }
+                break;
+        }
+        
+    }
 
 
+
+    public static GameObject[] PlayerIcons;
+
+    
     #region Delete Emtpy GameObjects in Scene
     /// <summary>
     /// Finds and deletes all gameobjects named "New Game Object"
