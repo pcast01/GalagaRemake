@@ -16,11 +16,14 @@ public class MainEnemyFormation : MonoBehaviour {
     private int enemyAttacks = 0;
     public bool enemy1Picked = false;
     public bool enemy2Picked = false;
+    public bool enemy3Picked = false;
     public bool isEnemy1Done = false;
     public bool isEnemy2Done = false;
+    public bool isEnemy3Done = false;
     public bool isPlayerReady = false;
     public GameObject[] enemy1;
     public GameObject[] enemy2;
+    public GameObject[] enemy3;
     public GameObject form1;
     private GameObject form2;
     private GameObject form3;
@@ -55,10 +58,11 @@ public class MainEnemyFormation : MonoBehaviour {
         xMax = rightMost.x - padding;
         moveFormation = false;
 
-
         GalagaHelper.RoundNumber = 1;
         // Starts the Game.
         Invoke("StartRound", 3.0f);
+        GalagaHelper.SetPlayerIcons();
+        GalagaHelper.PlacePlayerIcons();
         playerText = GameObject.Find("PlayerText");
         roundText = GameObject.Find("RoundTitle");
         playerTextHigh = GameObject.Find("PlayerTextHigh");
@@ -76,14 +80,13 @@ public class MainEnemyFormation : MonoBehaviour {
     void PickRandomEnemyOne()
     {
         enemy1 = GameObject.FindGameObjectsWithTag("enemy1");
-        int pickedAtRandom = Random.Range(0, enemy1.Length);
         //Debug.Log(enemy1[pickedAtRandom].transform.parent.name.Bold() + " Num: " + pickedAtRandom);
-        Enemy1Controller enemyOne = enemy1[pickedAtRandom].GetComponent<Enemy1Controller>();
+        Enemy1Controller enemyOne = enemy1[GalagaHelper.RandomNumber(0, enemy1.Length)].GetComponent<Enemy1Controller>();
         if (enemyOne)
         {
             //Debug.Log("Found EnemyOne");
-            //enemy1[pickedAtRandom]
             enemyOne.CreatePath();
+            enemyOne.isRandomPicked = true;
             enemy1Picked = false;
         }
     }
@@ -91,18 +94,39 @@ public class MainEnemyFormation : MonoBehaviour {
     void PickRandomEnemyTwo()
     {
         enemy2 = GameObject.FindGameObjectsWithTag("enemy2");
-        //Enemy1Controller enemyOne = GameObject.FindGameObjectWithTag("enemy1").GetComponent<Enemy1Controller>();
-        int pickedAtRandom = Random.Range(0, enemy1.Length);
         //Debug.Log(enemy2[pickedAtRandom].transform.parent.name.Bold() + " Num: " + pickedAtRandom);
-        Enemy2Controller enemyTwo = enemy2[pickedAtRandom].GetComponent<Enemy2Controller>();
+        Enemy2Controller enemyTwo = enemy2[GalagaHelper.RandomNumber(0, enemy2.Length)].GetComponent<Enemy2Controller>();
         if (enemyTwo)
         {
             Debug.Log("Found EnemyTwo");
             //enemy1[pickedAtRandom]
             enemyTwo.AttackPlayer = true;
+            enemyTwo.isRandomPicked = true;
             enemy2Picked = false;
         }
     }
+
+    void PickRandomEnemyThreeAttack()
+    {
+        enemy3 = GameObject.FindGameObjectsWithTag("enemy3");;
+        Enemy3Controller enemyThree = enemy3[GalagaHelper.RandomNumber(0, enemy3.Length)].GetComponent<Enemy3Controller>();
+        if (enemyThree)
+        {
+            Debug.Log("Found Enemy Three");
+            int randomTractorBeam = GalagaHelper.RandomNumber(0, 6);
+            if (randomTractorBeam == 6)
+            {
+                enemyThree.TractorBeamAttack();
+            }
+            else
+            {
+                enemyThree.Attack();
+            }
+            enemyThree.isRandomPicked = true;
+            enemy3Picked = false;
+        }
+    }
+
     #endregion
 
     void StartRound()
@@ -152,8 +176,8 @@ public class MainEnemyFormation : MonoBehaviour {
 
         }
         #endregion
-        Debug.Log(GalagaHelper.TimeToSpawn.ToString().Italics());
-        Debug.Log(GalagaHelper.CurrentRoundPhase.ToString().Bold());
+        //Debug.Log(GalagaHelper.TimeToSpawn.ToString().Italics());
+        //Debug.Log(GalagaHelper.CurrentRoundPhase.ToString().Bold());
         if (GalagaHelper.CurrentRoundPhase == GalagaHelper.Formations.Round1Phase2 && GalagaHelper.TimeToSpawn > 8.0f)
         {
             //GameObject pt2 = GameObject.FindGameObjectWithTag("phase2").gameObject;
@@ -189,6 +213,9 @@ public class MainEnemyFormation : MonoBehaviour {
             Debug.Log("Round5 enabled".Colored(Colors.purple));
             form5.GetComponent<EnemySpawner>().enabled = true;
             fourthWaveFinished = false;
+            GalagaHelper.PrintAllGhostObjects();
+            Debug.Log("Deleting all ghosts.".Colored(Colors.green));
+            moveFormation = true;
         }
 
         // Move formation left and right
@@ -236,6 +263,13 @@ public class MainEnemyFormation : MonoBehaviour {
             PickRandomEnemyTwo();
             enemy2Picked = false;
             isEnemy2Done = false;
+        }
+
+        if (enemy3Picked && isEnemy3Done == true)
+        {
+            PickRandomEnemyThreeAttack();
+            enemy3Picked = false;
+            isEnemy3Done = false;
         }
 
         // If found a player captured then set ready text.

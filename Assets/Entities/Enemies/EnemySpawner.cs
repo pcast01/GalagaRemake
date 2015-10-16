@@ -18,9 +18,9 @@ public class EnemySpawner : MonoBehaviour {
     public float spawnDelay = 0.5f;
     public bool spawnEntranceRight = false;
     [Header("Formation")]
-    private EnemySpawner round1Phase2spawner;
+    //private EnemySpawner round1Phase2spawner;
     public bool isFormationUp = false;
-    private int enemiesInPlace = 0;
+    //private int enemiesInPlace = 0;
 
     void Awake()
     {
@@ -181,16 +181,6 @@ public class EnemySpawner : MonoBehaviour {
             
             // Spawn enemy in enemy1Prefab.
             SpawnEnemy(spawnPoint, freePosition);
-            
-            //GameObject enemy = Instantiate(enemy1Prefab, spawnPoint.position, enemy1Prefab.transform.rotation) as GameObject;
-            //GameObject enemy = SimplePool.Spawn(enemy1Prefab, spawnPoint.position, enemy1Prefab.transform.rotation, true) as GameObject;
-            //enemy.transform.position = spawnPoint.position;
-            
-            //Debug.Log("Enemy spawned." + "free pos=" + freePosition.position.z);
-            
-            // Set free position's Parent
-            //enemy.transform.parent = freePosition;
-            //Debug.Log("Enemy parent name: " + enemy.transform.parent.name + " FreePos: " + freePosition.name);
         }
 
         if (NextFreePosition())

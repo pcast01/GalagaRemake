@@ -12,7 +12,6 @@ public class Enemy3Controller : EnemyController
     private PlayerController playerController;
     private Transform player;
     private bool outOfPlayerRange = false;
-    //private bool enemy3hit = false;
     [Header("Path from Top of Screen Settings")]
     public Vector3 _originalPosition;
     private List<Vector3> _waypoints;
@@ -33,13 +32,10 @@ public class Enemy3Controller : EnemyController
     private ParticleSystem starfield;
     private bool isSentBack = false;
     private GameObject playerSpawn;
-    private MainEnemyFormation mainEF;
     private Color matColor;
     [Header("Sound Settings")]
     private AudioSource audio;
     private GameObject gameManager;
-    private AudioSource top;
-    private AudioSource bottom;
 
     void Start()
     {
@@ -51,7 +47,6 @@ public class Enemy3Controller : EnemyController
         starfield = GameObject.FindGameObjectWithTag("Starfield").GetComponent<ParticleSystem>();
         gameManager = GameObject.Find("GameManager");
         playerSpawn = GameObject.Find("PlayerSpawn");
-        mainEF = GameObject.FindGameObjectWithTag("MainFormation").GetComponent<MainEnemyFormation>();
         _waypoints = new List<Vector3>();
         //isAttackPlayer = true;
         origRotation = transform.rotation;
@@ -97,6 +92,7 @@ public class Enemy3Controller : EnemyController
                     outOfPlayerRange = false;
                     gotOriginalPosition = false;
                     isAttackPlayer = false;
+                    isNotInFormation = false;
                 }
             }
         }
@@ -115,6 +111,7 @@ public class Enemy3Controller : EnemyController
     /// </summary>
     public void TractorBeamAttack()
     {
+        isNotInFormation = true;
         Transform enemyProjWall = GameObject.Find("EnemyProjectileWall").GetComponent<Transform>();
         if (enemyProjWall)
         {
@@ -280,10 +277,11 @@ public class Enemy3Controller : EnemyController
                 //playerController.enabled = false;
                 CreateNewPlayer();
             }
-            sweepTractorBeam = false;
-            outOfPlayerRange = false;
-            gotOriginalPosition = false;
-            isTractorBeamAttack = false;
+            sweepTractorBeam = false; // Turn off raycast sweep
+            outOfPlayerRange = false; // this sets the tractor beam in place
+            gotOriginalPosition = false; // first position of enemy3
+            isTractorBeamAttack = false; // Tractor beam attack setup
+            isNotInFormation = false; // set for getting scorevalues and for ??
         }
     }
 
@@ -300,7 +298,7 @@ public class Enemy3Controller : EnemyController
     {
         if (starfield.isPaused == true && GalagaHelper.isPlayerCaptured == true)
         {
-            mainEF.isPlayerReady = true;
+            main.isPlayerReady = true;
         }
     }
 
@@ -330,10 +328,22 @@ public class Enemy3Controller : EnemyController
 
             if (health <= 0)
             {
+                if (isNotInFormation)
+                {
+                    scoreKeeper.Score(400);
+                }
+                else
+                {
+                    scoreKeeper.Score(150);
+                }
+
                 top = base.addShotSounds(base.explosionTop[Random.Range(0, explosionTop.Length)], Random.Range(0.8f, 1.2f));
                 bottom = base.addShotSounds(base.explosionBottom, Random.Range(0.8f, 1.2f));
                 top.PlayScheduled(0.3);
                 bottom.Play();
+                rend.enabled = false;
+                GameObject explosionPrefab = Instantiate(explosion, gameObject.transform.position, gameObject.transform.rotation) as GameObject;
+                Destroy(explosionPrefab, 3.0f);
                 // Check if there is a captured player.
                 if (HaveChild())
                 {
@@ -345,7 +355,7 @@ public class Enemy3Controller : EnemyController
                     // Rotate captured player.
                     capturedPlayer.rotatePlayer = true;
                     // Move back to playerSpawn.
-                    iTween.MoveTo(child.gameObject, mainEF.transform.position, 2.0f);
+                    iTween.MoveTo(child.gameObject, main.transform.position, 2.0f);
                     iTween.MoveTo(child.gameObject, playerSpawn.transform.position, 2.0f);
                     // Turn off rotation.
                     capturedPlayer.rotatePlayer = false;
@@ -358,10 +368,13 @@ public class Enemy3Controller : EnemyController
                     Renderer newPlayerRend = capturedPlayer.GetComponent<Renderer>();
                     newPlayerRend.material.SetColor("_Color", matColor);
                 }
-                //GameObject empty = new GameObject("emptyGO");
-                //empty.transform.position = this.transform.parent.position;
-                //empty.transform.parent = this.transform.parent;
                 Invoke("DisableEnemy", top.clip.length);
+                GalagaHelper.EnemiesKilled += 1;
+                if (base.isRandomPicked == true)
+                {
+                    isRandomPicked = false;
+                    main.isEnemy3Done = true;
+                }
             }
         }
     }
@@ -399,6 +412,7 @@ public class Enemy3Controller : EnemyController
     /// </summary>
     public void Attack()
     {
+        isNotInFormation = true;
         transform.LookAt(player);
         Vector3 targetPosition = player.transform.position;
         Vector3 currentPosition = this.transform.position;
@@ -448,6 +462,7 @@ public class Enemy3Controller : EnemyController
                 Debug.Log("Enemy made it to wall".Bold());
                 CreateIncomingPath();
                 //mainForm.isEnemy2Done = true;
+                main.isEnemy3Done = true;
             }
         }
 

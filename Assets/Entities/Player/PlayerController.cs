@@ -12,12 +12,14 @@ public class PlayerController : MonoBehaviour {
     public float projectileSpeed;
     public float speed = 15f;
     public float firingRate;
+    public int playerLives = 3;
     private float padding = 2f;
     private float xMin;
     private float xMax;
     private float playerWidth;
     private bool allowFire = true;
     private float newX;
+    private Renderer rend;
     [Header("Sound Settings")]
     public AudioClip[] shotTop;
     public AudioClip[] shotBottom;
@@ -33,6 +35,7 @@ public class PlayerController : MonoBehaviour {
         circlePath = new Vector3[9];
         //SimplePool.Preload(bullet, 20);
     }
+
 	// Use this for initialization
 	void Start () {
 	    float distance = transform.position.z - Camera.main.transform.position.z;
@@ -41,9 +44,10 @@ public class PlayerController : MonoBehaviour {
         xMin = leftMost.x + padding;
         xMax = rightMost.x - padding;
         Mesh mesh = GetComponent<MeshFilter>().mesh;
+        rend = GetComponent<Renderer>();
         playerWidth = mesh.bounds.size.x;
         Debug.Log("PlayerWidth: " + playerWidth);
-        GalagaHelper.numOfPlayers += 1;
+        //GalagaHelper.numOfPlayers += 1;
 	}
 
     public void GetCirclePath()
@@ -141,9 +145,32 @@ public class PlayerController : MonoBehaviour {
     {
         Projectile enemyProjectile = other.gameObject.GetComponent<Projectile>();
         Enemy1Controller enemy1 = other.gameObject.GetComponent<Enemy1Controller>();
+        if (other.gameObject.layer == 10)
+        {
+            GameObject explosionPrefab = Instantiate(explosion, gameObject.transform.position, gameObject.transform.rotation) as GameObject;
+            Destroy(explosionPrefab, 3.0f);
+            top = addShotSounds(explosionTop, Random.Range(0.8f, 1.2f));
+            bottom = addShotSounds(explosionBottom, Random.Range(0.8f, 1.2f));
+            top.Play();
+            bottom.Play();
+            rend.enabled = false;
+            SimplePool.Despawn(gameObject);
+            GalagaHelper.numOfPlayers -= 1;
+            if (!CanPlayerStillPlay())
+            {
+                Invoke("EndGame", 3.0f);
+            }
+            else
+            {
+                CreatePlayer();
+            }
+            Debug.Log("Enemy ran into Player".Colored(Colors.cyan));
+        }
+
         if (enemyProjectile)
         {
-            Instantiate(explosion, gameObject.transform.position, gameObject.transform.rotation);
+            GameObject explosionPrefab = Instantiate(explosion, gameObject.transform.position, gameObject.transform.rotation) as GameObject;
+            Destroy(explosionPrefab, 3.0f);
             //DestroyImmediate(explosion);
             Debug.Log("Enemy proj hit Player.");
             top = addShotSounds(explosionTop, Random.Range(0.8f, 1.2f));
@@ -152,22 +179,39 @@ public class PlayerController : MonoBehaviour {
             bottom.Play();
             Destroy(gameObject);
             GalagaHelper.numOfPlayers -= 1;
-            if (GalagaHelper.numOfPlayers == 1)
+            GalagaHelper.PlacePlayerIcons();
+            if (!CanPlayerStillPlay())
             {
                 Invoke("EndGame", 3.0f);
             }
-        }
-        if (enemy1)
-        {
-            Destroy(gameObject);
-            GalagaHelper.numOfPlayers -= 1;
-            if (GalagaHelper.numOfPlayers == 1)
+            else
             {
-                Invoke("EndGame", 3.0f);
+                CreatePlayer();
             }
-            Debug.Log("Enemy ran into Player".Colored(Colors.cyan));
         }
+
         Debug.Log("Something hit the player.".Colored(Colors.darkblue));
+    }
+
+    void CreatePlayer()
+    {
+        Debug.Log("Created new player".Colored(Colors.black));
+        GameObject playerSpawn = GameObject.Find("PlayerSpawn");
+        GameObject newPlayer = SimplePool.Spawn(gameObject, playerSpawn.transform.position, playerSpawn.transform.rotation,true) as GameObject;
+        newPlayer.GetComponent<PlayerController>().enabled = true;
+        newPlayer.transform.position = playerSpawn.transform.position;
+    }
+
+    bool CanPlayerStillPlay()
+    {
+        if (GalagaHelper.numOfPlayers == 0)
+        {
+            return false;
+        }
+        else
+        {
+            return true;
+        }
     }
     
     void EndGame()

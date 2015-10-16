@@ -8,7 +8,6 @@ public class Enemy2Controller : EnemyController
     public float swoopSpeed;
     public GameObject leftSwoop;
     public GameObject rightSwoop;
-    public MainEnemyFormation mainForm;
     public bool AttackPlayer = false;
     private Hashtable tweenPath = new Hashtable();
     //private bool moveRight = true;
@@ -29,14 +28,15 @@ public class Enemy2Controller : EnemyController
     private void Start() 
     {
         base.Start();
-        mainForm = GameObject.FindGameObjectWithTag("MainFormation").GetComponent<MainEnemyFormation>();
+        //mainForm = GameObject.FindGameObjectWithTag("MainFormation").GetComponent<MainEnemyFormation>();
         leftSwoop = GameObject.FindGameObjectWithTag("enemy2Left");
         rightSwoop = GameObject.FindGameObjectWithTag("enemy2Right");
+        player = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>();
+        enemyProjWall = GameObject.Find("EnemyProjectileWall").GetComponent<Transform>();
+        //scoreKeeper = GameObject.Find("Score").GetComponent<ScoreKeeper>();
         _waypoints = new List<Vector3>();
         pos = transform.position;
         axis = transform.right;
-        player = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>();
-        enemyProjWall = GameObject.Find("EnemyProjectileWall").GetComponent<Transform>();
         //AttackPlayer = true;
         //SetPath();
 	}
@@ -72,6 +72,12 @@ public class Enemy2Controller : EnemyController
     /// </summary>
     public void Attack()
     {
+        isNotInFormation = true;
+
+        if (!player)
+        {
+            player = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>(); ;
+        }
         transform.LookAt(player);
         Vector3 targetPosition = player.transform.position;
         Vector3 currentPosition = this.transform.position;
@@ -120,7 +126,7 @@ public class Enemy2Controller : EnemyController
             {
                 Debug.Log("Enemy made it to wall".Bold());
                 CreateIncomingPath();
-                mainForm.isEnemy2Done = true;
+                main.isEnemy2Done = true;
             }
         }
 
@@ -133,13 +139,58 @@ public class Enemy2Controller : EnemyController
             if (_pathPercentage > 1)
             {
                 _isOnPath = false;
-                //_finishedPath = false;
                 _pathPercentage = 0;
                 outOfPlayerRange = false;
                 gotOriginalPosition = false;
                 AttackPlayer = false;
-                //transform.rotation = _originalRotation;
+                isNotInFormation = false;
             }
         }
+    }
+
+    public void OnTriggerEnter(Collider other)
+    {
+        //Debug.Log("Something hit an enemy");
+        Projectile playerBullet = other.gameObject.GetComponent<Projectile>();
+        if (playerBullet)
+        {
+            health -= playerBullet.GetDamage();
+            playerBullet.Hit();
+            Debug.Log("Enemy hit!".Bold().Colored(Colors.red));
+
+            // Butterfly: if formation = 80 points, diving == 160
+            if (isNotInFormation)
+            {
+                scoreKeeper.Score(160);
+            }
+            else
+            {
+                scoreKeeper.Score(80);
+            }
+
+            if (health <= 0)
+            {
+                top = base.addShotSounds(explosionTop[Random.Range(0, explosionTop.Length)], Random.Range(0.8f, 1.2f));
+                bottom = base.addShotSounds(explosionBottom, Random.Range(0.8f, 1.2f));
+                top.PlayScheduled(0.3);
+                bottom.Play();
+                rend.enabled = false;
+                GameObject explosionPrefab = Instantiate(explosion, gameObject.transform.position, gameObject.transform.rotation) as GameObject;
+                Destroy(explosionPrefab, 3.0f);
+                Invoke("DisableEnemy", top.clip.length);
+                GalagaHelper.EnemiesKilled += 1;
+                if (base.isRandomPicked == true)
+                {
+                    isRandomPicked = false;
+                    main.isEnemy2Done = true;
+                }
+            }
+        }
+    }
+
+    void DisableEnemy()
+    {
+        SimplePool.Despawn(gameObject);
+        gameObject.transform.parent = null;
     }
 }

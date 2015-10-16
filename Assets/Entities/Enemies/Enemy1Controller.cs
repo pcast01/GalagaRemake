@@ -8,7 +8,6 @@ public class Enemy1Controller : EnemyController
     public float returnPathSpeed = 10f;
     public Transform PlayerTransform;
     public Vector3 _originalPosition;
-    private MainEnemyFormation mainForm;
     private List<Vector3> _waypoints;
     private float _pathPercentage = 0f;
     private bool _isOnPath = false;
@@ -31,10 +30,8 @@ public class Enemy1Controller : EnemyController
     private void Start()
     {
         base.Start();
-        mainForm = GameObject.FindGameObjectWithTag("MainFormation").GetComponent<MainEnemyFormation>();
         //Debug.Log("Original Pos in START: " + transform.position.ToString());
         _isOnPath = true;
-        //path();
         //CreatePath();
     }
 
@@ -44,7 +41,7 @@ public class Enemy1Controller : EnemyController
 
         if (Input.GetKeyDown(KeyCode.RightControl))
         {
-            //tweenPath.Clear();
+            // attack player either come right back up or go below screen and come back on top.
             CreatePath();
         }
 
@@ -66,7 +63,8 @@ public class Enemy1Controller : EnemyController
                     _finishedPath = false;
                     _pathPercentage = 0;
                     transform.rotation = _originalRotation;
-                    mainForm.isEnemy1Done = true;
+                    main.isEnemy1Done = true;
+                    isNotInFormation = false;
                 }
             }
         }
@@ -92,8 +90,8 @@ public class Enemy1Controller : EnemyController
     /// </summary>
     public void CreatePath()
     {
+        isNotInFormation = true;
         PlayerController player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
-        //_originalTransform = transform.position;
         tweenPath.Clear();
         if (player)
         {
@@ -184,6 +182,52 @@ public class Enemy1Controller : EnemyController
         _finishedPath = true;
         transform.rotation = _originalRotation;
         //Debug.Log("Enemy completed circle".Bold().Italics());
+    }
+
+    public void OnTriggerEnter(Collider other)
+    {
+        //Debug.Log("Something hit an enemy");
+        Projectile playerBullet = other.gameObject.GetComponent<Projectile>();
+        if (playerBullet)
+        {
+            health -= playerBullet.GetDamage();
+            playerBullet.Hit();
+            Debug.Log("Enemy hit!".Bold().Colored(Colors.red));
+
+            // BEE: if formation = 50 points, diving == 100
+            if (isNotInFormation)
+            {
+                scoreKeeper.Score(100);
+            }
+            else
+            {
+                scoreKeeper.Score(50);
+            }
+
+            if (health <= 0)
+            {
+                top = base.addShotSounds(explosionTop[Random.Range(0, explosionTop.Length)], Random.Range(0.8f, 1.2f));
+                bottom = base.addShotSounds(explosionBottom, Random.Range(0.8f, 1.2f));
+                top.PlayScheduled(0.3);
+                bottom.Play();
+                rend.enabled = false;
+                GameObject explosionPrefab = Instantiate(explosion, gameObject.transform.position, gameObject.transform.rotation) as GameObject;
+                Destroy(explosionPrefab, 3.0f);
+                Invoke("DisableEnemy", top.clip.length);
+                GalagaHelper.EnemiesKilled += 1;
+                if (base.isRandomPicked == true)
+                {
+                    isRandomPicked = false;
+                    main.isEnemy1Done = true;
+                }
+            }
+        }
+    }
+
+    void DisableEnemy()
+    {
+        SimplePool.Despawn(gameObject);
+        gameObject.transform.parent = null;
     }
 
     public void OnDrawGizmos()

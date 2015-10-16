@@ -5,11 +5,13 @@ public class EnemyController : MonoBehaviour
 {
     public float speed = 30.0f;
     public float health = 150f;
-    public int scoreValue = 150;
+    //public int scoreValue = 150;
     public GameObject explosion;
+    public bool isNotInFormation = false;
     private GameObject hero;
-    private Renderer rend;
-    private MainEnemyFormation main;
+    public Renderer rend;
+    public MainEnemyFormation main;
+    public bool isRandomPicked;
 
     [Header("Weapon Settings")]
     public GameObject enemyLaser;
@@ -19,7 +21,7 @@ public class EnemyController : MonoBehaviour
 
     [Header("Flight Pattern Settings")]
     public Hashtable myTween = new Hashtable();
-    private ScoreKeeper scoreKeeper;
+    public ScoreKeeper scoreKeeper;
     private EnemySpawner round1Phase1spawner;
     private const float fDelay = 0.06f;
 
@@ -27,8 +29,8 @@ public class EnemyController : MonoBehaviour
     public AudioClip[] explosionTop;
     public AudioClip explosionBottom;
     public AudioClip swooshSound;
-    private AudioSource top;
-    private AudioSource bottom;
+    public AudioSource top;
+    public AudioSource bottom;
 
     [SerializeField]
     private float movePathTime;
@@ -137,16 +139,28 @@ public class EnemyController : MonoBehaviour
         if ((int)form == 2 || (int)form == 3)
         {
             myTween.Add("path", GalagaHelper.SecondWavePath);
+            if (gameObject.name == "EnemyTwo (16)" || gameObject.name == "EnemyOne (12)")
+            {
+                Debug.Log(GalagaHelper.SecondWavePath[10].ToString().Bold().Colored(Colors.darkblue));
+            }
         }
         else
         {
             myTween.Add("path", GalagaHelper.FourthWavePath);
+            if (gameObject.name == "EnemyTwo (16)" || gameObject.name == "EnemyOne (12)")
+            {
+                Debug.Log(GalagaHelper.FourthWavePath[7].ToString().Bold().Colored(Colors.darkblue));
+            }
         }
         myTween.Add("time", movePathTime);
         myTween.Add("delay", GalagaHelper.Wave1Delay);
+        Debug.Log("Wave1delay: " + GalagaHelper.Wave1Delay);
         myTween.Add("easetype", "linear");
         iTween.MoveTo(gameObject, myTween);
-
+        //if (myTween.Contains("path"))
+        //{
+        //    Debug.Log(myTween["path"])
+        //}
         if (GalagaHelper.EnemiesSpawned == 16)
         {
             // Last enemy done for 2nd wave
@@ -206,51 +220,6 @@ public class EnemyController : MonoBehaviour
             Vector3 directionOfTravel = targetPosition - currentPosition;
             Debug.Log("firing".Colored(Colors.red));
             enemyBullet.GetComponent<Rigidbody>().velocity = directionOfTravel.normalized * projectileSpeed;
-        }
-    }
-
-    public void OnTriggerEnter(Collider other)
-    {
-        //Debug.Log("Something hit an enemy");
-        Projectile playerBullet = other.gameObject.GetComponent<Projectile>();
-        if (playerBullet)
-        {
-            health -= playerBullet.GetDamage();
-            playerBullet.Hit();
-            Debug.Log("Enemy hit!".Bold().Colored(Colors.red));
-            scoreKeeper.Score(scoreValue);
-            if (health <= 0)
-            {
-                //gameObject.isDead = true;
-                //Debug.Log("parent ".Bold()+ gameObject.transform.parent);
-                //Instantiate(explosion, gameObject.transform.position, gameObject.transform.rotation);
-                top = addShotSounds(explosionTop[Random.Range(0, explosionTop.Length)], Random.Range(0.8f, 1.2f));
-                bottom = addShotSounds(explosionBottom, Random.Range(0.8f, 1.2f));
-                top.PlayScheduled(0.3);
-                bottom.Play();
-                rend.enabled = false;
-                GameObject explosionPrefab = Instantiate(explosion, gameObject.transform.position, gameObject.transform.rotation) as GameObject;
-                Destroy(explosionPrefab, 3.0f);
-                //GameObject empty = new GameObject("emptyGO");
-                //empty.transform.position = this.transform.parent.position;
-                //empty.transform.parent = this.transform.parent;
-                Invoke("DisableEnemy", top.clip.length);
-                //SimplePool.Despawn(gameObject);
-                //gameObject.transform.parent = null;
-                GalagaHelper.EnemiesKilled += 1;
-                //gameObject.SetActive(false);
-                //Debug.Log("Enemy is dead".Bold() + " Pos: " + gameObject.transform.parent.transform.parent.name);
-                scoreKeeper.Score(200);
-                //Application.LoadLevel("Win Screen");
-                //Die();
-                //Destroy(explosion);
-            }
-            else
-            {
-                
-                //TODO: Change color for Enemy 3 here.
-
-            }
         }
     }
 
