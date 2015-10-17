@@ -7,6 +7,7 @@ public class Enemy1Controller : EnemyController
     [Header("Enemy 1 Settings")]
     public float returnPathSpeed = 10f;
     public Transform PlayerTransform;
+    public GameObject enemy4Prefab;
     public Vector3 _originalPosition;
     private List<Vector3> _waypoints;
     private float _pathPercentage = 0f;
@@ -39,11 +40,11 @@ public class Enemy1Controller : EnemyController
     {
         base.Update();
 
-        if (Input.GetKeyDown(KeyCode.RightControl))
-        {
-            // attack player either come right back up or go below screen and come back on top.
-            CreatePath();
-        }
+        //if (Input.GetKeyDown(KeyCode.RightControl))
+        //{
+        //    // attack player either come right back up or go below screen and come back on top.
+        //    CreatePath();
+        //}
 
         // if enemy has made it to last point then reappear from top
         // of screen.
@@ -157,6 +158,46 @@ public class Enemy1Controller : EnemyController
                 audio.Play();
                 this.isEnemyFiring = true;
             }
+        }
+
+    }
+
+    public void CreatePathForEnemy4Trio()
+    {
+        //isNotInFormation = true;
+        PlayerController player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
+        tweenPath.Clear();
+        if (player)
+        {
+            _waypoints.Clear();
+            _waypoints.Add(transform.position);
+            _originalPosition = transform.position;
+            //Debug.Log(_waypoints[0].ToString().Bold());
+            player.GetCirclePath();
+            Vector3[] pathToPlayer = new Vector3[9];
+            pathToPlayer = player.circlePath;
+            
+            for (int i = 0; i < 9; i++)
+            {
+                _waypoints.Add(pathToPlayer[i]);
+            }
+            //Debug.Log("Waypoints Count: " + _waypoints.Count);
+            Vector3[] newVect3 = new Vector3[_waypoints.Count];
+            //Debug.Log(_waypoints.Count.ToString().Bold().Italics());
+            for (int i = 0; i < _waypoints.Count; i++)
+            {
+                newVect3[i] = _waypoints[i];
+            }
+            tweenPath.Add("path", newVect3);
+            tweenPath.Add("time", swoopDownSpeed);
+            tweenPath.Add("easetype", "linear");
+            tweenPath.Add("orienttopath", true);
+            tweenPath.Add("onComplete", "CircleComplete");
+            tweenPath.Add("onCompleteTarget", gameObject);
+            iTween.MoveTo(gameObject, tweenPath);
+            audio = base.addShotSounds(swooshSound, 1.0f);
+            audio.Play();
+            //this.isEnemyFiring = true;
         }
 
     }

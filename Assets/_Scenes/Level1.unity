@@ -291,6 +291,7 @@ MonoBehaviour:
   enemy1Prefab: {fileID: 122214, guid: a8a150d4b14710d4996a9af0b22393e3, type: 2}
   enemy2Prefab: {fileID: 157008, guid: d55b8202817e9354ba6bf17287abb636, type: 2}
   enemy3Prefab: {fileID: 157008, guid: 9ea7d4128e061664fbc7dbfc047902b6, type: 2}
+  enemy4Prefab: {fileID: 194404, guid: 85aab911e3543fc4fb8d6cb37088c181, type: 2}
   width: 72
   height: -14.6000004
   padding: 1
@@ -510,6 +511,7 @@ MonoBehaviour:
   enemy1Prefab: {fileID: 122214, guid: a8a150d4b14710d4996a9af0b22393e3, type: 2}
   enemy2Prefab: {fileID: 157008, guid: d55b8202817e9354ba6bf17287abb636, type: 2}
   enemy3Prefab: {fileID: 157008, guid: 9ea7d4128e061664fbc7dbfc047902b6, type: 2}
+  enemy4Prefab: {fileID: 0}
   width: 42.7999992
   height: -14.6000004
   padding: 1
@@ -2344,6 +2346,7 @@ MonoBehaviour:
   enemy1Prefab: {fileID: 122214, guid: a8a150d4b14710d4996a9af0b22393e3, type: 2}
   enemy2Prefab: {fileID: 157008, guid: d55b8202817e9354ba6bf17287abb636, type: 2}
   enemy3Prefab: {fileID: 157008, guid: 9ea7d4128e061664fbc7dbfc047902b6, type: 2}
+  enemy4Prefab: {fileID: 0}
   width: 57.7999992
   height: -14.6000004
   padding: 1
@@ -4619,6 +4622,7 @@ MonoBehaviour:
   enemy1Prefab: {fileID: 122214, guid: a8a150d4b14710d4996a9af0b22393e3, type: 2}
   enemy2Prefab: {fileID: 157008, guid: d55b8202817e9354ba6bf17287abb636, type: 2}
   enemy3Prefab: {fileID: 157008, guid: 9ea7d4128e061664fbc7dbfc047902b6, type: 2}
+  enemy4Prefab: {fileID: 0}
   width: 14.1000004
   height: -29.1000004
   padding: 1
@@ -5872,6 +5876,7 @@ MonoBehaviour:
   enemy1Prefab: {fileID: 122214, guid: a8a150d4b14710d4996a9af0b22393e3, type: 2}
   enemy2Prefab: {fileID: 157008, guid: d55b8202817e9354ba6bf17287abb636, type: 2}
   enemy3Prefab: {fileID: 157008, guid: 9ea7d4128e061664fbc7dbfc047902b6, type: 2}
+  enemy4Prefab: {fileID: 0}
   width: 29.2000008
   height: -23
   padding: 1

@@ -5,7 +5,6 @@ public class EnemyController : MonoBehaviour
 {
     public float speed = 30.0f;
     public float health = 150f;
-    //public int scoreValue = 150;
     public GameObject explosion;
     public bool isNotInFormation = false;
     private GameObject hero;

@@ -9,6 +9,7 @@ public class EnemySpawner : MonoBehaviour {
     public GameObject enemy1Prefab;
     public GameObject enemy2Prefab;
     public GameObject enemy3Prefab;
+    public GameObject enemy4Prefab;
     [Header("Gizmo Settings")]
     public float width = 10f;
     public float height = 5f;
@@ -304,6 +305,21 @@ public class EnemySpawner : MonoBehaviour {
         GameObject enemy = SimplePool.Spawn(defaultEnemyPrefab, spawn.position, defaultEnemyPrefab.transform.rotation, true) as GameObject;
         enemy.transform.position = spawn.position;
         enemy.transform.parent = freePos;
+    }
+
+    public void CreateEnemy4Trio(Transform spawn, Transform freepos)
+    {
+        GameObject first = SimplePool.Spawn(enemy4Prefab, spawn.position, enemy4Prefab.transform.rotation, true) as GameObject;
+        first.transform.position = spawn.position;
+        first.transform.parent = freepos;
+
+        GameObject second = SimplePool.Spawn(enemy4Prefab, spawn.position, enemy4Prefab.transform.rotation, true) as GameObject;
+        second.transform.position = spawn.position;
+        second.transform.parent = freepos;
+
+        GameObject third = SimplePool.Spawn(enemy4Prefab, spawn.position, enemy4Prefab.transform.rotation, true) as GameObject;
+        third.transform.position = spawn.position;
+        third.transform.parent = freepos;
     }
 
     public void OnDrawGizmos()
