@@ -111,7 +111,9 @@ public class Enemy2Controller : EnemyController
             {
                 this.isEnemyFiring = false;
                 //Debug.Log("Not close anymore to player".Colored(Colors.red));
-                targetPosition = enemyProjWall.transform.position;
+
+                targetPosition = GalagaHelper.Enemy2PathEnd;
+
                 Vector3 directionAfterPlayer = targetPosition - currentPosition;
                 directionAfterPlayer.Normalize();
                 this.transform.Translate(
@@ -119,12 +121,14 @@ public class Enemy2Controller : EnemyController
                     (directionAfterPlayer.y * swoopSpeed * Time.deltaTime),
                     (directionAfterPlayer.z * swoopSpeed * Time.deltaTime),
                     Space.World);
-                transform.LookAt(enemyProjWall);
+
+                transform.LookAt(GalagaHelper.Enemy2LookAtTransform);
+                
             }
-            Debug.Log(gameObject.transform.position.z.ToString().Bold());
+            //Debug.Log(gameObject.transform.position.z.ToString().Bold());
             if (gameObject.transform.position.z < -70f)
             {
-                Debug.Log("Enemy made it to wall".Bold());
+                //Debug.Log("Enemy made it to wall".Bold());
                 CreateIncomingPath();
                 main.isEnemy2Done = true;
             }
@@ -132,7 +136,7 @@ public class Enemy2Controller : EnemyController
 
         if (_isOnPath)
         {
-            Debug.Log("Is on path now".Bold());
+            //Debug.Log("Is on path now".Bold());
             iTween.PutOnPath(gameObject, _waypoints.ToArray(), _pathPercentage);
             _pathPercentage += Time.deltaTime * 10f / 10;
             //Debug.Log("path Percent: " + _pathPercentage);
@@ -175,9 +179,10 @@ public class Enemy2Controller : EnemyController
                 top.PlayScheduled(0.3);
                 bottom.Play();
                 rend.enabled = false;
+                meshcol.enabled = false;
                 GameObject explosionPrefab = Instantiate(explosion, gameObject.transform.position, gameObject.transform.rotation) as GameObject;
                 Destroy(explosionPrefab, 3.0f);
-                Invoke("DisableEnemy", top.clip.length);
+                Invoke("DisableEnemy", 3.8f);
                 GalagaHelper.EnemiesKilled += 1;
                 if (base.isRandomPicked == true)
                 {

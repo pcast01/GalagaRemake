@@ -128,7 +128,7 @@ MonoBehaviour:
   PlayerTransform: {fileID: 0}
   enemy4Prefab: {fileID: 194404, guid: 85aab911e3543fc4fb8d6cb37088c181, type: 2}
   _originalPosition: {x: 0, y: 0, z: 0}
-  swoopDownSpeed: 4.5
+  swoopDownSpeed: 2.5
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1
@@ -178,7 +178,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 0}
       propertyPath: swoopDownSpeed
-      value: 4.5
+      value: 2.5
       objectReference: {fileID: 0}
     - target: {fileID: 0}
       propertyPath: m_Mesh

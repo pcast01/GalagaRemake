@@ -132,7 +132,7 @@ public class Enemy1Controller : EnemyController
                 iTween.MoveFrom(gameObject, tweenPath);
                 audio = base.addShotSounds(swooshSound, 1.0f);
                 audio.Play();
-                this.isEnemyFiring = true;
+                //this.isEnemyFiring = true;
 	        }
             else
             {
@@ -156,48 +156,8 @@ public class Enemy1Controller : EnemyController
                 iTween.MoveTo(gameObject, tweenPath);
                 audio = base.addShotSounds(swooshSound, 1.0f);
                 audio.Play();
-                this.isEnemyFiring = true;
+                //this.isEnemyFiring = true;
             }
-        }
-
-    }
-
-    public void CreatePathForEnemy4Trio()
-    {
-        //isNotInFormation = true;
-        PlayerController player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
-        tweenPath.Clear();
-        if (player)
-        {
-            _waypoints.Clear();
-            _waypoints.Add(transform.position);
-            _originalPosition = transform.position;
-            //Debug.Log(_waypoints[0].ToString().Bold());
-            player.GetCirclePath();
-            Vector3[] pathToPlayer = new Vector3[9];
-            pathToPlayer = player.circlePath;
-            
-            for (int i = 0; i < 9; i++)
-            {
-                _waypoints.Add(pathToPlayer[i]);
-            }
-            //Debug.Log("Waypoints Count: " + _waypoints.Count);
-            Vector3[] newVect3 = new Vector3[_waypoints.Count];
-            //Debug.Log(_waypoints.Count.ToString().Bold().Italics());
-            for (int i = 0; i < _waypoints.Count; i++)
-            {
-                newVect3[i] = _waypoints[i];
-            }
-            tweenPath.Add("path", newVect3);
-            tweenPath.Add("time", swoopDownSpeed);
-            tweenPath.Add("easetype", "linear");
-            tweenPath.Add("orienttopath", true);
-            tweenPath.Add("onComplete", "CircleComplete");
-            tweenPath.Add("onCompleteTarget", gameObject);
-            iTween.MoveTo(gameObject, tweenPath);
-            audio = base.addShotSounds(swooshSound, 1.0f);
-            audio.Play();
-            //this.isEnemyFiring = true;
         }
 
     }
@@ -216,6 +176,7 @@ public class Enemy1Controller : EnemyController
     public void Path1Complete()
     {
         transform.rotation = _originalRotation;
+        Debug.Log("Path 1 Enemy completed,".Bold().Italics());
     }
 
     public void CircleComplete()
@@ -225,9 +186,9 @@ public class Enemy1Controller : EnemyController
         //Debug.Log("Enemy completed circle".Bold().Italics());
     }
 
-    public void OnTriggerEnter(Collider other)
+    void OnTriggerEnter(Collider other)
     {
-        //Debug.Log("Something hit an enemy");
+        Debug.Log("Something hit an enemy1".Colored(Colors.navy));
         Projectile playerBullet = other.gameObject.GetComponent<Projectile>();
         if (playerBullet)
         {
@@ -252,9 +213,10 @@ public class Enemy1Controller : EnemyController
                 top.PlayScheduled(0.3);
                 bottom.Play();
                 rend.enabled = false;
+                meshcol.enabled = false;
                 GameObject explosionPrefab = Instantiate(explosion, gameObject.transform.position, gameObject.transform.rotation) as GameObject;
                 Destroy(explosionPrefab, 3.0f);
-                Invoke("DisableEnemy", top.clip.length);
+                Invoke("DisableEnemy", 3.8f);
                 GalagaHelper.EnemiesKilled += 1;
                 if (base.isRandomPicked == true)
                 {

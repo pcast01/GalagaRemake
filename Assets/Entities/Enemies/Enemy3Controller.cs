@@ -272,7 +272,9 @@ public class Enemy3Controller : EnemyController
             if (playerController.playerCaptured == true)
             {
                 GalagaHelper.isPlayerCaptured = true;
+                main.isReadyDone = false;
                 GalagaHelper.numOfPlayers += 1;
+                GalagaHelper.PlacePlayerIcons();
                 player.position = player.position + new Vector3(0, 0, 11.5f);
                 //playerController.enabled = false;
                 CreateNewPlayer();
@@ -326,6 +328,11 @@ public class Enemy3Controller : EnemyController
             Renderer rend = GetComponent<Renderer>();
             rend.material.SetColor("_Color", Color.red);
 
+            if (base.isRandomPicked == true)
+            {
+                isRandomPicked = false;
+                main.isEnemy3Done = true;
+            }
             if (health <= 0)
             {
                 if (isNotInFormation)
@@ -342,8 +349,11 @@ public class Enemy3Controller : EnemyController
                 top.PlayScheduled(0.3);
                 bottom.Play();
                 rend.enabled = false;
+                meshcol.enabled = false;
                 GameObject explosionPrefab = Instantiate(explosion, gameObject.transform.position, gameObject.transform.rotation) as GameObject;
                 Destroy(explosionPrefab, 3.0f);
+                Invoke("DisableEnemy", 3.8f);
+                GalagaHelper.EnemiesKilled += 1;
                 // Check if there is a captured player.
                 if (HaveChild())
                 {
@@ -368,8 +378,6 @@ public class Enemy3Controller : EnemyController
                     Renderer newPlayerRend = capturedPlayer.GetComponent<Renderer>();
                     newPlayerRend.material.SetColor("_Color", matColor);
                 }
-                Invoke("DisableEnemy", top.clip.length);
-                GalagaHelper.EnemiesKilled += 1;
                 if (base.isRandomPicked == true)
                 {
                     isRandomPicked = false;
@@ -413,6 +421,10 @@ public class Enemy3Controller : EnemyController
     public void Attack()
     {
         isNotInFormation = true;
+        if (!player)
+        {
+           player = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>();
+        }
         transform.LookAt(player);
         Vector3 targetPosition = player.transform.position;
         Vector3 currentPosition = this.transform.position;

@@ -9,7 +9,9 @@ public class EnemyController : MonoBehaviour
     public bool isNotInFormation = false;
     private GameObject hero;
     public Renderer rend;
+    public MeshCollider meshcol;
     public MainEnemyFormation main;
+    
     public bool isRandomPicked;
 
     [Header("Weapon Settings")]
@@ -46,8 +48,14 @@ public class EnemyController : MonoBehaviour
     {
         hero = GameObject.FindGameObjectWithTag("Player");
         rend = GetComponent<Renderer>();
+        meshcol = GetComponent<MeshCollider>();
         main = GameObject.FindGameObjectWithTag("MainFormation").GetComponent<MainEnemyFormation>();
-        GalagaHelper.EnemiesSpawned += 1;
+        // get end direction random
+        GalagaHelper.SetEnemy2Random();
+        GalagaHelper.Enemy2PathEnd = GalagaHelper.Enemy2PathDirection();
+        // get Tranform.Lookat() for Enemy2
+        GalagaHelper.Enemy2LookAt();
+        Debug.Log("Enemy2Random: ".Colored(Colors.red) + GalagaHelper.Enemy2Random);
         round1Phase1spawner = GameObject.Find("Round1Phase1EnemyFormation").GetComponent<EnemySpawner>();
         scoreKeeper = GameObject.Find("Score").GetComponent<ScoreKeeper>();
         //Debug.Log("enemies spawned: " + GalagaHelper.EnemiesSpawned);
@@ -153,7 +161,7 @@ public class EnemyController : MonoBehaviour
         }
         myTween.Add("time", movePathTime);
         myTween.Add("delay", GalagaHelper.Wave1Delay);
-        Debug.Log("Wave1delay: " + GalagaHelper.Wave1Delay);
+        //Debug.Log("Wave1delay: " + GalagaHelper.Wave1Delay);
         myTween.Add("easetype", "linear");
         iTween.MoveTo(gameObject, myTween);
         //if (myTween.Contains("path"))
@@ -168,7 +176,7 @@ public class EnemyController : MonoBehaviour
         else if (GalagaHelper.EnemiesSpawned == 24)
         {
             main.thirdWaveFinished = true;
-            Debug.Log("third wave finished.");
+            //Debug.Log("third wave finished.");
         }
         else if (GalagaHelper.EnemiesSpawned == 32)
         {
@@ -204,21 +212,28 @@ public class EnemyController : MonoBehaviour
 
     private void Fire()
     {
-        // If enemy is north of player then fire
-        if (gameObject.transform.position.x > hero.transform.position.x)
+        if (gameObject)
         {
-            Vector3 startPos = transform.position + new Vector3(0, 0, -4);
-            //GameObject enemyBullet = Instantiate(enemyLaser, startPos, Quaternion.identity) as GameObject;
-            GameObject enemyBullet = SimplePool.Spawn(enemyLaser, startPos, Quaternion.identity, true) as GameObject;
-            enemyBullet.transform.position = startPos;
+            // If enemy is north of player then fire
+            if (!hero)
+            {
+                hero = GameObject.FindGameObjectWithTag("Player");
+            }
+            if (gameObject.transform.position.x > hero.transform.position.x)
+            {
+                Vector3 startPos = transform.position + new Vector3(0, 0, -4);
+                //GameObject enemyBullet = Instantiate(enemyLaser, startPos, Quaternion.identity) as GameObject;
+                GameObject enemyBullet = SimplePool.Spawn(enemyLaser, startPos, Quaternion.identity, true) as GameObject;
+                enemyBullet.transform.position = startPos;
 
-            // get player target
-            Vector3 targetPosition = hero.transform.position;
-            Vector3 currentPosition = enemyBullet.transform.position;
+                // get player target
+                Vector3 targetPosition = hero.transform.position;
+                Vector3 currentPosition = enemyBullet.transform.position;
 
-            Vector3 directionOfTravel = targetPosition - currentPosition;
-            Debug.Log("firing".Colored(Colors.red));
-            enemyBullet.GetComponent<Rigidbody>().velocity = directionOfTravel.normalized * projectileSpeed;
+                Vector3 directionOfTravel = targetPosition - currentPosition;
+                Debug.Log("enemy firing ".Colored(Colors.red));
+                enemyBullet.GetComponent<Rigidbody>().velocity = directionOfTravel.normalized * projectileSpeed;
+            }
         }
     }
 
