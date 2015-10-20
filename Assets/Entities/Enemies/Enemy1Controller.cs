@@ -17,6 +17,7 @@ public class Enemy1Controller : EnemyController
     private int choosePath;
     private Quaternion _originalRotation;
     private AudioSource audio;
+    private GameObject form1;
     [SerializeField]
     private float swoopDownSpeed;
 
@@ -31,6 +32,7 @@ public class Enemy1Controller : EnemyController
     private void Start()
     {
         base.Start();
+        form1 = GameObject.FindGameObjectWithTag("phase1").gameObject;
         //Debug.Log("Original Pos in START: " + transform.position.ToString());
         _isOnPath = true;
         //CreatePath();
@@ -40,11 +42,15 @@ public class Enemy1Controller : EnemyController
     {
         base.Update();
 
-        //if (Input.GetKeyDown(KeyCode.RightControl))
-        //{
-        //    // attack player either come right back up or go below screen and come back on top.
-        //    CreatePath();
-        //}
+        if (Input.GetKeyDown(KeyCode.RightControl))
+        {
+            // attack player either come right back up or go below screen and come back on top.
+            //CreatePath();
+            form1.GetComponent<EnemySpawner>().CreateEnemy4Trio(this.transform, this.transform.parent.transform);
+            GetComponent<Renderer>().enabled = false;
+            gameObject.transform.parent = null;
+            GalagaHelper.StartScorpionPaths();
+        }
 
         // if enemy has made it to last point then reappear from top
         // of screen.
@@ -109,6 +115,7 @@ public class Enemy1Controller : EnemyController
             //Debug.Log("Path = " + choosePath);
             // Path0 = circle then swoop back up
             // Path1 = circle then reappear on top
+            Debug.Log("SwoopDownSpeed: " + swoopDownSpeed);
             if (choosePath==0)
 	        {
                 for (int i = 0; i < 8; i++)
@@ -216,7 +223,10 @@ public class Enemy1Controller : EnemyController
                 meshcol.enabled = false;
                 GameObject explosionPrefab = Instantiate(explosion, gameObject.transform.position, gameObject.transform.rotation) as GameObject;
                 Destroy(explosionPrefab, 3.0f);
-                Invoke("DisableEnemy", 3.8f);
+                Debug.Log("Enemy1 killed: " + gameObject.name.Colored(Colors.blue) + " SpawnDisableTime: " + spawnDisableTime);
+                GalagaHelper.DisabledEnemies += 1;
+                SimplePool.Despawn(gameObject);
+                Invoke("DisableEnemy", spawnDisableTime);
                 GalagaHelper.EnemiesKilled += 1;
                 if (base.isRandomPicked == true)
                 {
@@ -229,7 +239,7 @@ public class Enemy1Controller : EnemyController
 
     void DisableEnemy()
     {
-        SimplePool.Despawn(gameObject);
+        Debug.Log("Disabled Enemy1 called".Colored(Colors.navy) + " SpawnDisableTime: " + spawnDisableTime);
         gameObject.transform.parent = null;
     }
 
@@ -239,5 +249,10 @@ public class Enemy1Controller : EnemyController
         {
             iTween.DrawPathGizmos(_waypoints.ToArray());
         }
+    }
+
+    void OnDisable()
+    {
+        Debug.Log("Disabled Enemy: " + gameObject.name.Colored(Colors.red));
     }
 }

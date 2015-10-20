@@ -11,7 +11,7 @@ public class EnemyController : MonoBehaviour
     public Renderer rend;
     public MeshCollider meshcol;
     public MainEnemyFormation main;
-    
+    public float spawnDisableTime = 5.1f;
     public bool isRandomPicked;
 
     [Header("Weapon Settings")]
@@ -50,6 +50,7 @@ public class EnemyController : MonoBehaviour
         rend = GetComponent<Renderer>();
         meshcol = GetComponent<MeshCollider>();
         main = GameObject.FindGameObjectWithTag("MainFormation").GetComponent<MainEnemyFormation>();
+        spawnDisableTime = 19.0f;
         // get end direction random
         GalagaHelper.SetEnemy2Random();
         GalagaHelper.Enemy2PathEnd = GalagaHelper.Enemy2PathDirection();

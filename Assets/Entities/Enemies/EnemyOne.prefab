@@ -27,7 +27,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 122214}
   m_LocalRotation: {x: 0, y: 1, z: 0, w: -1.62920685e-07}
-  m_LocalPosition: {x: 0, y: 0, z: 68.8000031}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -108,7 +108,9 @@ MonoBehaviour:
   explosion: {fileID: 143732, guid: f6a75a75b4cb4e54d9fdd0e4dbcc8470, type: 2}
   isNotInFormation: 0
   rend: {fileID: 0}
+  meshcol: {fileID: 0}
   main: {fileID: 0}
+  spawnDisableTime: 0
   isRandomPicked: 0
   enemyLaser: {fileID: 159908, guid: 6635a52a223ff2f48a4728ecf0781244, type: 2}
   isEnemyFiring: 0
@@ -128,7 +130,7 @@ MonoBehaviour:
   PlayerTransform: {fileID: 0}
   enemy4Prefab: {fileID: 194404, guid: 85aab911e3543fc4fb8d6cb37088c181, type: 2}
   _originalPosition: {x: 0, y: 0, z: 0}
-  swoopDownSpeed: 2.5
+  swoopDownSpeed: 5
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1

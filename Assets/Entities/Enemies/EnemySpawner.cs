@@ -44,7 +44,7 @@ public class EnemySpawner : MonoBehaviour {
 
         if (gameObject.name == "Round1Phase1EnemyFormation")
         {
-            Debug.Log(gameObject.name.Bold() + " Enemies Spawned: " + GalagaHelper.EnemiesSpawned + " Enemies Killed: " + GalagaHelper.EnemiesKilled);
+            Debug.Log(gameObject.name.Bold() + " Enemies Spawned: " + GalagaHelper.EnemiesSpawned + " Enemies Killed: " + GalagaHelper.EnemiesKilled + " Enemies Disabled: "+ GalagaHelper.DisabledEnemies);
             // Check if 8 enemies have spawned then run them
             GalagaHelper.StartRound1();
             if (GalagaHelper.EnemiesKilled == 40)
@@ -239,11 +239,11 @@ public class EnemySpawner : MonoBehaviour {
                     //}
                     break;
                 case GalagaHelper.Formations.Round1Phase3:
-                    //Debug.Log("Free pos == " + freePos.gameObject.name);
+                    Debug.Log("Free pos == " + freePos.gameObject.name);
                     defaultEnemyPrefab = enemy2Prefab;
                     break;
                 case GalagaHelper.Formations.Round1Phase4:
-                    //Debug.Log("Free pos == " + freePos.gameObject.name);
+                    Debug.Log("Free pos == " + freePos.gameObject.name);
                     defaultEnemyPrefab = enemy1Prefab;
                     break;
                 case GalagaHelper.Formations.Round1Phase5:
@@ -329,12 +329,15 @@ public class EnemySpawner : MonoBehaviour {
         PlayerController player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
         float scorpionWaveDelay = 0.6f;
         //tweenPath.Clear();
+        _waypoints = new List<Vector3>();
+
         if (player)
         {
             for (int i = 0; i < scorpionTrio.Length; i++)
             {
                 tweenPath.Clear();
                 _waypoints.Clear();
+                
                 _waypoints.Add(scorpionTrio[i].transform.position);
 
                 player.GetCirclePath();
@@ -350,7 +353,7 @@ public class EnemySpawner : MonoBehaviour {
                 //Debug.Log(_waypoints.Count.ToString().Bold().Italics());
                 for (int y = 0; y < _waypoints.Count; y++)
                 {
-                    newVect3[i] = _waypoints[y];
+                    newVect3[y] = _waypoints[y];
                 }
 
                 tweenPath.Add("path", newVect3);

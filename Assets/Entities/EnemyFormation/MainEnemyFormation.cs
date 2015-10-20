@@ -191,7 +191,7 @@ public class MainEnemyFormation : MonoBehaviour {
         #endregion
         Debug.Log(GalagaHelper.TimeToSpawn.ToString().Italics());
         //Debug.Log(GalagaHelper.CurrentRoundPhase.ToString().Bold());
-        if (GalagaHelper.CurrentRoundPhase == GalagaHelper.Formations.Round1Phase2 && GalagaHelper.TimeToSpawn > 8.0f)
+        if (GalagaHelper.CurrentRoundPhase == GalagaHelper.Formations.Round1Phase2 && GalagaHelper.TimeToSpawn > 11.0f) // && GalagaHelper.TimeToSpawn > 8.0f
         {
             //GameObject pt2 = GameObject.FindGameObjectWithTag("phase2").gameObject;
             Debug.Log("Round2 enabled".Colored(Colors.purple));
@@ -201,35 +201,37 @@ public class MainEnemyFormation : MonoBehaviour {
                 GalagaHelper.CurrentRoundPhase += 1;
             }
         }
-        else if (GalagaHelper.CurrentRoundPhase == GalagaHelper.Formations.Round1Phase3 && GalagaHelper.TimeToSpawn > 11.8 && secondWaveFinished)
+        else if (GalagaHelper.CurrentRoundPhase == GalagaHelper.Formations.Round1Phase3 && secondWaveFinished && GalagaHelper.TimeToSpawn > 15.1f) //&& GalagaHelper.TimeToSpawn > 11.8
         {
-            Debug.Log("Round3 enabled".Colored(Colors.purple));
+            //Debug.Log("Round3 enabled".Colored(Colors.purple));
             form3.GetComponent<EnemySpawner>().enabled = true;
+            Debug.Log("Round3 enabled. form3 isFormationUp: " + form3.GetComponent<EnemySpawner>().isFormationUp);
             if (form3.GetComponent<EnemySpawner>().isFormationUp)
             {
                 GalagaHelper.CurrentRoundPhase += 1;
-                secondWaveFinished = false;
+                //secondWaveFinished = false;
             }
         }
-        else if (GalagaHelper.CurrentRoundPhase == GalagaHelper.Formations.Round1Phase4 && GalagaHelper.TimeToSpawn > 15.1 && thirdWaveFinished)
+        else if (GalagaHelper.CurrentRoundPhase == GalagaHelper.Formations.Round1Phase4 && thirdWaveFinished && GalagaHelper.TimeToSpawn > 20.0f) //&& GalagaHelper.TimeToSpawn > 15.1
         {
             Debug.Log("Round4 enabled".Colored(Colors.purple));
             form4.GetComponent<EnemySpawner>().enabled = true;
             if (form4.GetComponent<EnemySpawner>().isFormationUp)
             {
                 GalagaHelper.CurrentRoundPhase += 1;
-                thirdWaveFinished = false;
+                //thirdWaveFinished = false;
             }
         }
-        else if (GalagaHelper.CurrentRoundPhase == GalagaHelper.Formations.Round1Phase5 && GalagaHelper.TimeToSpawn > 17.4 && fourthWaveFinished)
+        else if (GalagaHelper.CurrentRoundPhase == GalagaHelper.Formations.Round1Phase5 && fourthWaveFinished && GalagaHelper.TimeToSpawn > 25.0f) //&& GalagaHelper.TimeToSpawn > 17.4
         {
             Debug.Log("Round5 enabled".Colored(Colors.purple));
             form5.GetComponent<EnemySpawner>().enabled = true;
-            fourthWaveFinished = false;
+            //
             GalagaHelper.PrintAllGhostObjects();
             Debug.Log("Deleting all ghosts.".Colored(Colors.green));
             Invoke("StartEnemyAttack", 5.0f);
             //moveFormation = true;
+            fourthWaveFinished = false;
         }
 
         // Move formation left and right
@@ -261,6 +263,7 @@ public class MainEnemyFormation : MonoBehaviour {
             {
                 GalagaHelper.SetAttackinMotion();
             }
+
         }
 
         if (enemyAttacks == 0)
@@ -322,6 +325,11 @@ public class MainEnemyFormation : MonoBehaviour {
             }
         }
 	}
+
+    void LateUpdate()
+    {
+        
+    }
 
     public void StartEnemyAttack()
     {

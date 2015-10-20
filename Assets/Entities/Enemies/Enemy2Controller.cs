@@ -182,7 +182,10 @@ public class Enemy2Controller : EnemyController
                 meshcol.enabled = false;
                 GameObject explosionPrefab = Instantiate(explosion, gameObject.transform.position, gameObject.transform.rotation) as GameObject;
                 Destroy(explosionPrefab, 3.0f);
-                Invoke("DisableEnemy", 3.8f);
+                Debug.Log("Enemy2 killed: " + gameObject.name.Colored(Colors.blue) + " SpawnDisableTime: " + spawnDisableTime);
+                GalagaHelper.DisabledEnemies += 1;
+                SimplePool.Despawn(gameObject);
+                Invoke("DisableEnemy", spawnDisableTime);
                 GalagaHelper.EnemiesKilled += 1;
                 if (base.isRandomPicked == true)
                 {
@@ -195,7 +198,12 @@ public class Enemy2Controller : EnemyController
 
     void DisableEnemy()
     {
-        SimplePool.Despawn(gameObject);
+        Debug.Log("Disabled Enemy2 called".Colored(Colors.navy) + " SpawnDisableTime: " + spawnDisableTime);
         gameObject.transform.parent = null;
+    }
+
+    void OnDisable()
+    {
+        Debug.Log("Disabled Enemy: " + gameObject.name.Colored(Colors.red));
     }
 }

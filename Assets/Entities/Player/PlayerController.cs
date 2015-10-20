@@ -35,7 +35,6 @@ public class PlayerController : MonoBehaviour {
     {
         circlePath = new Vector3[9];
         starfield = GameObject.FindGameObjectWithTag("Starfield").GetComponent<ParticleSystem>();
-        //SimplePool.Preload(bullet, 20);
     }
 
 	// Use this for initialization
@@ -50,7 +49,6 @@ public class PlayerController : MonoBehaviour {
         rend.enabled = true;
         playerWidth = mesh.bounds.size.x;
         Debug.Log("PlayerWidth: " + playerWidth);
-        //GalagaHelper.numOfPlayers += 1;
 	}
 
     public void GetCirclePath()
@@ -79,7 +77,6 @@ public class PlayerController : MonoBehaviour {
     {
         allowFire = false;
         Vector3 offset = new Vector3(0, 0, 4);
-        //GameObject laserBeam = Instantiate(bullet, transform.position + offset, Quaternion.identity) as GameObject
         GameObject laserBeam = SimplePool.Spawn(bullet, transform.position + offset, Quaternion.identity, true) as GameObject;
         laserBeam.transform.position = transform.position + offset;
         laserBeam.GetComponent<Rigidbody>().velocity = new Vector3(0, 0, projectileSpeed);
@@ -133,9 +130,7 @@ public class PlayerController : MonoBehaviour {
             }
 
             // restrict the player to the gamespaces
-            // float newX = Mathf.Clamp(transform.position.x, xMin, xMax);
             transform.position = new Vector3(newX, transform.position.y, transform.position.z);
-            
         }
 
         if (rotatePlayer)
@@ -179,13 +174,14 @@ public class PlayerController : MonoBehaviour {
         {
             GameObject explosionPrefab = Instantiate(explosion, gameObject.transform.position, gameObject.transform.rotation) as GameObject;
             Destroy(explosionPrefab, 3.0f);
-            //DestroyImmediate(explosion);
             Debug.Log("Enemy proj hit Player.");
             top = addShotSounds(explosionTop, Random.Range(0.8f, 1.2f));
             bottom = addShotSounds(explosionBottom, Random.Range(0.8f, 1.2f));
             top.Play();
             bottom.Play();
             enemyProjectile.Hit();
+            rend.enabled = false;
+            SimplePool.Despawn(gameObject);
             GalagaHelper.numOfPlayers -= 1;
             GalagaHelper.PlacePlayerIcons();
             GalagaHelper.isPlayerCaptured = true;
