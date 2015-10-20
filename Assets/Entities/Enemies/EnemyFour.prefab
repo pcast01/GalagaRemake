@@ -11,6 +11,7 @@ GameObject:
   - 33: {fileID: 3387304}
   - 23: {fileID: 2363044}
   - 114: {fileID: 11471584}
+  - 64: {fileID: 6483848}
   m_Layer: 10
   m_Name: EnemyFour
   m_TagString: enemy4
@@ -61,6 +62,18 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 194404}
   m_Mesh: {fileID: 4300000, guid: 5ca34f67fe7efec4cb5c973c9c34c698, type: 3}
+--- !u!64 &6483848
+MeshCollider:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 194404}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Convex: 1
+  m_Mesh: {fileID: 4300000, guid: 5ca34f67fe7efec4cb5c973c9c34c698, type: 3}
 --- !u!114 &11471584
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -69,21 +82,35 @@ MonoBehaviour:
   m_GameObject: {fileID: 194404}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a66fcb8dc46164d4bb9212a375a69e41, type: 3}
+  m_Script: {fileID: 11500000, guid: 4df470f4e3bab0c479c60b88ceb61ece, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 30
   health: 150
-  scoreValue: 150
   explosion: {fileID: 143732, guid: f6a75a75b4cb4e54d9fdd0e4dbcc8470, type: 2}
+  isNotInFormation: 0
+  rend: {fileID: 0}
+  main: {fileID: 0}
+  isRandomPicked: 0
   enemyLaser: {fileID: 159908, guid: 6635a52a223ff2f48a4728ecf0781244, type: 2}
   isEnemyFiring: 0
   shotsPerSecond: .5
   projectileSpeed: 16
-  explosionTop: []
-  explosionBottom: {fileID: 0}
-  swooshSound: {fileID: 0}
+  scoreKeeper: {fileID: 0}
+  explosionTop:
+  - {fileID: 8300000, guid: f203d269d2a20104fbf0eaee349cef4e, type: 3}
+  - {fileID: 8300000, guid: 4bf810b82d8994b48acfd2d7209d8c17, type: 3}
+  - {fileID: 8300000, guid: 617c45f62ba3ca440b2c2d5b25472802, type: 3}
+  explosionBottom: {fileID: 8300000, guid: 470dc56cb6092604388b601ebb4c9579, type: 3}
+  swooshSound: {fileID: 8300000, guid: 9f9b8573d3e62fc40a809a7139d4898a, type: 3}
+  top: {fileID: 0}
+  bottom: {fileID: 0}
   movePathTime: 2
+  returnPathSpeed: 10
+  PlayerTransform: {fileID: 0}
+  enemy4Prefab: {fileID: 0}
+  _originalPosition: {x: 0, y: 0, z: 0}
+  swoopDownSpeed: 0
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1
@@ -91,6 +118,10 @@ Prefab:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 0}
+      propertyPath: explosionTop.Array.size
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 0}
       propertyPath: enemyLaser
       value: 
@@ -111,6 +142,34 @@ Prefab:
       propertyPath: m_Layer
       value: 10
       objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: m_Convex
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: m_IsTrigger
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: explosionTop.Array.data[0]
+      value: 
+      objectReference: {fileID: 8300000, guid: f203d269d2a20104fbf0eaee349cef4e, type: 3}
+    - target: {fileID: 0}
+      propertyPath: explosionTop.Array.data[1]
+      value: 
+      objectReference: {fileID: 8300000, guid: 4bf810b82d8994b48acfd2d7209d8c17, type: 3}
+    - target: {fileID: 0}
+      propertyPath: explosionTop.Array.data[2]
+      value: 
+      objectReference: {fileID: 8300000, guid: 617c45f62ba3ca440b2c2d5b25472802, type: 3}
+    - target: {fileID: 0}
+      propertyPath: explosionBottom
+      value: 
+      objectReference: {fileID: 8300000, guid: 470dc56cb6092604388b601ebb4c9579, type: 3}
+    - target: {fileID: 0}
+      propertyPath: swooshSound
+      value: 
+      objectReference: {fileID: 8300000, guid: 9f9b8573d3e62fc40a809a7139d4898a, type: 3}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 194404}

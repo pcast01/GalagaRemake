@@ -45,21 +45,19 @@ public static class GalagaHelper
     public static int numOfPlayers=2;
     public static bool isPlayerCaptured;
     public static bool isWaveOneStarted;
+    public static float Wave1Delay = 0.0f;
     public static int RoundNumber;
     public static int NumEnemyObjects()
     {
         return enemyObjects.Count;
     }
 
-    public static float Wave1Delay = 0.0f;
-
     /// <summary>
     /// Total number of enemies spawned thus far.
     /// </summary>
     public static int EnemiesSpawned;
-
     public static int EnemiesKilled;
-
+    public static int DisabledEnemies;
     /// <summary>
     /// Gets the current wave of enemy.
     /// </summary>
@@ -68,6 +66,12 @@ public static class GalagaHelper
     // Timer testing
     public static float TimeToSpawn; //Time started
     public static float TimeDone;
+    // Player Icons
+    public static GameObject[] PlayerIcons;
+    // Enemy2 Random / Enemy2 Path ends
+    public static int Enemy2Random;
+    public static Vector3 Enemy2PathEnd;
+    public static Transform Enemy2LookAtTransform;
 
     //Function to get random number
     private static readonly System.Random random = new System.Random();
@@ -80,6 +84,53 @@ public static class GalagaHelper
         }
     }
     #endregion
+
+    #region Enemy 2 Path Ends
+    public static void SetEnemy2Random()
+    {
+        if (Enemy2Random == 0)
+        {
+            Enemy2Random = GalagaHelper.RandomNumber(1, 3);
+        }
+    }
+
+    public static Vector3 Enemy2PathDirection()
+    {
+        Vector3 targetPosition;
+        //int endSpawnRandom = GalagaHelper.RandomNumber(0, 3);
+        if (Enemy2Random == 1)
+        {
+            targetPosition = GameObject.FindGameObjectWithTag("EnemyEndLeft").GetComponent<Transform>().position;
+        }
+        else if (Enemy2Random == 2)
+        {
+            targetPosition = GameObject.FindGameObjectWithTag("EnemyEndRight").GetComponent<Transform>().position;
+        }
+        else
+        {
+            targetPosition = GameObject.Find("EnemyProjectileWall").GetComponent<Transform>().position;
+        }
+        return targetPosition;
+    }
+
+    public static void Enemy2LookAt()
+    {
+        if (Enemy2Random == 1)
+        {
+            Enemy2LookAtTransform = GameObject.FindGameObjectWithTag("EnemyEndLeft").transform;
+        }
+        else if (Enemy2Random == 2)
+        {
+            Enemy2LookAtTransform = GameObject.FindGameObjectWithTag("EnemyEndRight").transform;
+        }
+        else
+        {
+            Enemy2LookAtTransform = GameObject.Find("EnemyProjectileWall").GetComponent<Transform>();
+        }
+    }
+    #endregion 
+
+    #region Waves 3 thru Waves 5 Functions
 
     /// <summary>
     /// Disable all formations except 1st formation.
@@ -106,7 +157,6 @@ public static class GalagaHelper
         form.enabled = false;
     }
 
-    #region Waves 3 thru Waves 5 Functions
     /// <summary>
     /// Gets the Beginning Spawn point of entry for enemy entrance flight.
     /// </summary>
@@ -392,7 +442,6 @@ public static class GalagaHelper
     }
     #endregion
 
-
     #region FirstAndSecondWaves
     /// <summary>
     /// Stores the game object and the Path Parameters for the iTween paths.
@@ -459,6 +508,20 @@ public static class GalagaHelper
         }
     }
 
+    public static void StartScorpionPaths()
+    {
+        if (NumEnemyObjects() == 3)
+        {
+            for (int i = 0; i < 3; i++)
+            {
+                //Debug.Log("Last pos:" + GalagaHelper.SecondWavePath[10]);
+                iTween.MoveTo(enemyObjects[i], EnemyPathParams[i]);
+                //Debug.Log("enemy paths: " + EnemyPathParams[i].Values);
+                //isWaveOneStarted = true;
+            }
+        }
+    }
+
     /// <summary>
     /// Clears the static wave paths.
     /// </summary>
@@ -476,30 +539,43 @@ public static class GalagaHelper
     }
     #endregion
 
+    #region Start Enemy Attacks after formed
     public static void SetAttackinMotion()
     {
         MainEnemyFormation mainEnemyForm = GameObject.FindGameObjectWithTag("MainFormation").GetComponent<MainEnemyFormation>();
         if (mainEnemyForm && GalagaHelper.EnemiesKilled < 41)
 	    {
-            Debug.Log("Ran random attacks".Colored(Colors.green));
-            int x = GalagaHelper.RandomNumber(0, 3);
+            int x = GalagaHelper.RandomNumber(0, 6);
             if (x == 1)
 	        {
-		        mainEnemyForm.enemy1Picked = true;
+                mainEnemyForm.enemy1Picked = true;
 	        }
             else if (x == 2)
             {
                 mainEnemyForm.enemy2Picked = true;
             }
+            else if (x == 3)
+            {
+                mainEnemyForm.enemy3Picked = true;
+            }
+            else if (x == 4)
+            {
+                
+            }
+            else if (x == 5)
+            {
+                mainEnemyForm.enemy1Picked = true;
+            }
             else
 	        {
-                mainEnemyForm.enemy3Picked = true;
+		        mainEnemyForm.enemy1Picked = true;
 	        }
-		 
+            Debug.Log("Ran random attacks: ".Colored(Colors.green) + x.ToString().Bold());
 	    }
-
     }
+    #endregion
 
+    #region Player Icon Functions
     public static int NumberOfPlayerIcons()
     {
         GameObject[] icons = GameObject.FindGameObjectsWithTag("PlayerIcon");
@@ -609,13 +685,9 @@ public static class GalagaHelper
         }
         
     }
+    #endregion
 
-
-
-    public static GameObject[] PlayerIcons;
-
-    
-    #region Delete Emtpy GameObjects in Scene
+    #region Delete Empty GameObjects in Scene
     /// <summary>
     /// Finds and deletes all gameobjects named "New Game Object"
     /// </summary>

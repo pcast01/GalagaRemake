@@ -29,11 +29,12 @@ public class PlayerController : MonoBehaviour {
     private AudioSource top;
     private AudioSource bottom;
     public Vector3 myOffset;
+    private ParticleSystem starfield;
 
     void Awake()
     {
         circlePath = new Vector3[9];
-        //SimplePool.Preload(bullet, 20);
+        starfield = GameObject.FindGameObjectWithTag("Starfield").GetComponent<ParticleSystem>();
     }
 
 	// Use this for initialization
@@ -45,9 +46,9 @@ public class PlayerController : MonoBehaviour {
         xMax = rightMost.x - padding;
         Mesh mesh = GetComponent<MeshFilter>().mesh;
         rend = GetComponent<Renderer>();
+        rend.enabled = true;
         playerWidth = mesh.bounds.size.x;
         Debug.Log("PlayerWidth: " + playerWidth);
-        //GalagaHelper.numOfPlayers += 1;
 	}
 
     public void GetCirclePath()
@@ -76,7 +77,6 @@ public class PlayerController : MonoBehaviour {
     {
         allowFire = false;
         Vector3 offset = new Vector3(0, 0, 4);
-        //GameObject laserBeam = Instantiate(bullet, transform.position + offset, Quaternion.identity) as GameObject
         GameObject laserBeam = SimplePool.Spawn(bullet, transform.position + offset, Quaternion.identity, true) as GameObject;
         laserBeam.transform.position = transform.position + offset;
         laserBeam.GetComponent<Rigidbody>().velocity = new Vector3(0, 0, projectileSpeed);
@@ -130,9 +130,7 @@ public class PlayerController : MonoBehaviour {
             }
 
             // restrict the player to the gamespaces
-            // float newX = Mathf.Clamp(transform.position.x, xMin, xMax);
             transform.position = new Vector3(newX, transform.position.y, transform.position.z);
-            
         }
 
         if (rotatePlayer)
@@ -144,9 +142,10 @@ public class PlayerController : MonoBehaviour {
     void OnTriggerEnter(Collider other)
     {
         Projectile enemyProjectile = other.gameObject.GetComponent<Projectile>();
-        Enemy1Controller enemy1 = other.gameObject.GetComponent<Enemy1Controller>();
+        //Enemy1Controller enemy1 = other.gameObject.GetComponent<Enemy1Controller>();
         if (other.gameObject.layer == 10)
         {
+            Debug.Log("GameObject " + other.gameObject.name + " hit player.");
             GameObject explosionPrefab = Instantiate(explosion, gameObject.transform.position, gameObject.transform.rotation) as GameObject;
             Destroy(explosionPrefab, 3.0f);
             top = addShotSounds(explosionTop, Random.Range(0.8f, 1.2f));
@@ -154,8 +153,11 @@ public class PlayerController : MonoBehaviour {
             top.Play();
             bottom.Play();
             rend.enabled = false;
+            SimplePool.Despawn(other.gameObject);
             SimplePool.Despawn(gameObject);
             GalagaHelper.numOfPlayers -= 1;
+            GalagaHelper.PlacePlayerIcons();
+            GalagaHelper.isPlayerCaptured = true;
             if (!CanPlayerStillPlay())
             {
                 Invoke("EndGame", 3.0f);
@@ -163,23 +165,26 @@ public class PlayerController : MonoBehaviour {
             else
             {
                 CreatePlayer();
+                //Debug.Log("Create player invoke".Colored(Colors.red));
             }
-            Debug.Log("Enemy ran into Player".Colored(Colors.cyan));
+            Debug.Log("Enemy ran into Player".Colored(Colors.blue));
         }
 
         if (enemyProjectile)
         {
             GameObject explosionPrefab = Instantiate(explosion, gameObject.transform.position, gameObject.transform.rotation) as GameObject;
             Destroy(explosionPrefab, 3.0f);
-            //DestroyImmediate(explosion);
             Debug.Log("Enemy proj hit Player.");
             top = addShotSounds(explosionTop, Random.Range(0.8f, 1.2f));
             bottom = addShotSounds(explosionBottom, Random.Range(0.8f, 1.2f));
             top.Play();
             bottom.Play();
-            Destroy(gameObject);
+            enemyProjectile.Hit();
+            rend.enabled = false;
+            SimplePool.Despawn(gameObject);
             GalagaHelper.numOfPlayers -= 1;
             GalagaHelper.PlacePlayerIcons();
+            GalagaHelper.isPlayerCaptured = true;
             if (!CanPlayerStillPlay())
             {
                 Invoke("EndGame", 3.0f);
@@ -200,16 +205,30 @@ public class PlayerController : MonoBehaviour {
         GameObject newPlayer = SimplePool.Spawn(gameObject, playerSpawn.transform.position, playerSpawn.transform.rotation,true) as GameObject;
         newPlayer.GetComponent<PlayerController>().enabled = true;
         newPlayer.transform.position = playerSpawn.transform.position;
+        newPlayer.GetComponent<PlayerController>().Invoke("ResumeGame", 4.0f);
+        //Invoke("ResumeGame", 4.0f);
+    }
+
+    public void ResumeGame()
+    {
+        if (starfield.isPaused == true && GalagaHelper.isPlayerCaptured == true)
+        {
+            MainEnemyFormation main = GameObject.FindGameObjectWithTag("MainFormation").GetComponent<MainEnemyFormation>();
+            main.isPlayerReady = true;
+            Debug.Log("ISpLAYERrEADY IS TRUE");
+        }
     }
 
     bool CanPlayerStillPlay()
     {
-        if (GalagaHelper.numOfPlayers == 0)
+        if (GalagaHelper.numOfPlayers <= 0)
         {
+            Debug.Log("False NumOfPlayers: " + GalagaHelper.numOfPlayers.ToString().Bold());
             return false;
         }
         else
         {
+            Debug.Log("True NumOfPlayers: " + GalagaHelper.numOfPlayers.ToString().Bold());
             return true;
         }
     }

@@ -272,7 +272,9 @@ public class Enemy3Controller : EnemyController
             if (playerController.playerCaptured == true)
             {
                 GalagaHelper.isPlayerCaptured = true;
+                main.isReadyDone = false;
                 GalagaHelper.numOfPlayers += 1;
+                GalagaHelper.PlacePlayerIcons();
                 player.position = player.position + new Vector3(0, 0, 11.5f);
                 //playerController.enabled = false;
                 CreateNewPlayer();
@@ -326,6 +328,11 @@ public class Enemy3Controller : EnemyController
             Renderer rend = GetComponent<Renderer>();
             rend.material.SetColor("_Color", Color.red);
 
+            if (base.isRandomPicked == true)
+            {
+                isRandomPicked = false;
+                main.isEnemy3Done = true;
+            }
             if (health <= 0)
             {
                 if (isNotInFormation)
@@ -342,8 +349,14 @@ public class Enemy3Controller : EnemyController
                 top.PlayScheduled(0.3);
                 bottom.Play();
                 rend.enabled = false;
+                meshcol.enabled = false;
                 GameObject explosionPrefab = Instantiate(explosion, gameObject.transform.position, gameObject.transform.rotation) as GameObject;
                 Destroy(explosionPrefab, 3.0f);
+                Debug.Log("Enemy3 killed: " + gameObject.name.Colored(Colors.blue) + " SpawnDisableTime: " + spawnDisableTime);
+                GalagaHelper.DisabledEnemies += 1;
+                SimplePool.Despawn(gameObject);
+                Invoke("DisableEnemy", spawnDisableTime);
+                GalagaHelper.EnemiesKilled += 1;
                 // Check if there is a captured player.
                 if (HaveChild())
                 {
@@ -368,8 +381,6 @@ public class Enemy3Controller : EnemyController
                     Renderer newPlayerRend = capturedPlayer.GetComponent<Renderer>();
                     newPlayerRend.material.SetColor("_Color", matColor);
                 }
-                Invoke("DisableEnemy", top.clip.length);
-                GalagaHelper.EnemiesKilled += 1;
                 if (base.isRandomPicked == true)
                 {
                     isRandomPicked = false;
@@ -381,7 +392,7 @@ public class Enemy3Controller : EnemyController
 
     void DisableEnemy()
     {
-        SimplePool.Despawn(gameObject);
+        Debug.Log("Disabled Enemy3 called".Colored(Colors.navy) + " SpawnDisableTime: " + spawnDisableTime);
         gameObject.transform.parent = null;
     }
 
@@ -413,6 +424,10 @@ public class Enemy3Controller : EnemyController
     public void Attack()
     {
         isNotInFormation = true;
+        if (!player)
+        {
+           player = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>();
+        }
         transform.LookAt(player);
         Vector3 targetPosition = player.transform.position;
         Vector3 currentPosition = this.transform.position;
@@ -446,7 +461,7 @@ public class Enemy3Controller : EnemyController
             {
                 this.isEnemyFiring = false;
                 //Debug.Log("Not close anymore to player".Colored(Colors.red));
-                targetPosition = enemyProjWall.transform.position;
+                targetPosition = GalagaHelper.Enemy2PathEnd;
                 Vector3 directionAfterPlayer = targetPosition - currentPosition;
                 directionAfterPlayer.Normalize();
                 this.transform.Translate(
@@ -454,7 +469,7 @@ public class Enemy3Controller : EnemyController
                     (directionAfterPlayer.y * swoopSpeed * Time.deltaTime),
                     (directionAfterPlayer.z * swoopSpeed * Time.deltaTime),
                     Space.World);
-                transform.LookAt(enemyProjWall);
+                transform.LookAt(GalagaHelper.Enemy2LookAtTransform);
             }
             //Debug.Log(gameObject.transform.position.z.ToString().Bold());
             if (gameObject.transform.position.z < -70f)
@@ -483,6 +498,11 @@ public class Enemy3Controller : EnemyController
                 //transform.rotation = _originalRotation;
             }
         }
+    }
+    void OnDisable()
+    {
+        Debug.Log("Disabled Enemy3 called".Colored(Colors.navy) + " SpawnDisableTime: " + spawnDisableTime);
+        Debug.Log("Disabled Enemy: " + gameObject.name.Colored(Colors.red));
     }
 
     public void OnDrawGizmos()

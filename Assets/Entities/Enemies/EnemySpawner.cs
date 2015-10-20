@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 using System;
 
 public class EnemySpawner : MonoBehaviour {
@@ -9,6 +10,7 @@ public class EnemySpawner : MonoBehaviour {
     public GameObject enemy1Prefab;
     public GameObject enemy2Prefab;
     public GameObject enemy3Prefab;
+    public GameObject enemy4Prefab;
     [Header("Gizmo Settings")]
     public float width = 10f;
     public float height = 5f;
@@ -20,6 +22,7 @@ public class EnemySpawner : MonoBehaviour {
     [Header("Formation")]
     //private EnemySpawner round1Phase2spawner;
     public bool isFormationUp = false;
+    private List<Vector3> _waypoints;
     //private int enemiesInPlace = 0;
 
     void Awake()
@@ -41,7 +44,7 @@ public class EnemySpawner : MonoBehaviour {
 
         if (gameObject.name == "Round1Phase1EnemyFormation")
         {
-            Debug.Log(gameObject.name.Bold() + " Enemies Spawned: " + GalagaHelper.EnemiesSpawned);
+            Debug.Log(gameObject.name.Bold() + " Enemies Spawned: " + GalagaHelper.EnemiesSpawned + " Enemies Killed: " + GalagaHelper.EnemiesKilled + " Enemies Disabled: "+ GalagaHelper.DisabledEnemies);
             // Check if 8 enemies have spawned then run them
             GalagaHelper.StartRound1();
             if (GalagaHelper.EnemiesKilled == 40)
@@ -208,16 +211,16 @@ public class EnemySpawner : MonoBehaviour {
                     if (GalagaHelper.EnemiesSpawned < 4)
                     {
                         defaultEnemyPrefab = enemy1Prefab;
-                        Debug.Log("enemy1 spawned".Colored(Colors.yellow));
+                        //Debug.Log("enemy1 spawned".Colored(Colors.yellow));
                     }
                     else if (GalagaHelper.EnemiesSpawned > 3 && GalagaHelper.EnemiesSpawned < 9)
                     {
                         defaultEnemyPrefab = enemy2Prefab;
-                        Debug.Log("enemy2 spawned".Colored(Colors.red));
+                        //Debug.Log("enemy2 spawned".Colored(Colors.red));
                     }
                     break;
                 case GalagaHelper.Formations.Round1Phase2:
-                    Debug.Log("Free pos == " + freePos.gameObject.name);
+                    //Debug.Log("Free pos == " + freePos.gameObject.name);
                     if (freePos.gameObject.name.Equals("Position") || freePos.gameObject.name.Equals("Position (1)") || freePos.gameObject.name.Equals("Position (6)") || freePos.gameObject.name.Equals("Position (7)"))
                     {
                         defaultEnemyPrefab = enemy3Prefab;
@@ -259,16 +262,16 @@ public class EnemySpawner : MonoBehaviour {
                     if (GalagaHelper.EnemiesSpawned < 4)
                     {
                         defaultEnemyPrefab = enemy1Prefab;
-                        Debug.Log("enemy1 spawned".Colored(Colors.yellow));
+                        //Debug.Log("enemy1 spawned".Colored(Colors.yellow));
                     }
                     else if (GalagaHelper.EnemiesSpawned > 3 && GalagaHelper.EnemiesSpawned < 9)
                     {
                         defaultEnemyPrefab = enemy2Prefab;
-                        Debug.Log("enemy2 spawned".Colored(Colors.red));
+                        //Debug.Log("enemy2 spawned".Colored(Colors.red));
                     }
                     break;
                 case GalagaHelper.Formations.Round1Phase2:
-                    Debug.Log("Free pos == " + freePos.gameObject.name);
+                    //Debug.Log("Free pos == " + freePos.gameObject.name);
                     if (freePos.gameObject.name.Equals("Position") || freePos.gameObject.name.Equals("Position (1)") || freePos.gameObject.name.Equals("Position (6)") || freePos.gameObject.name.Equals("Position (7)"))
                     {
                         defaultEnemyPrefab = enemy3Prefab;
@@ -304,6 +307,68 @@ public class EnemySpawner : MonoBehaviour {
         GameObject enemy = SimplePool.Spawn(defaultEnemyPrefab, spawn.position, defaultEnemyPrefab.transform.rotation, true) as GameObject;
         enemy.transform.position = spawn.position;
         enemy.transform.parent = freePos;
+        GalagaHelper.EnemiesSpawned += 1;
+    }
+
+    public void CreateEnemy4Trio(Transform spawn, Transform freepos)
+    {
+        Hashtable tweenPath = new Hashtable();
+        GameObject[] scorpionTrio = new GameObject[3];
+        scorpionTrio[0] = SimplePool.Spawn(enemy4Prefab, spawn.position, enemy4Prefab.transform.rotation, true) as GameObject;
+        scorpionTrio[0].transform.position = spawn.position;
+        scorpionTrio[0].transform.parent = freepos;
+
+        scorpionTrio[1] = SimplePool.Spawn(enemy4Prefab, spawn.position, enemy4Prefab.transform.rotation, true) as GameObject;
+        scorpionTrio[1].transform.position = spawn.position;
+        scorpionTrio[1].transform.parent = freepos;
+
+        scorpionTrio[2] = SimplePool.Spawn(enemy4Prefab, spawn.position, enemy4Prefab.transform.rotation, true) as GameObject;
+        scorpionTrio[2].transform.position = spawn.position;
+        scorpionTrio[2].transform.parent = freepos;
+
+        PlayerController player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
+        float scorpionWaveDelay = 0.6f;
+        //tweenPath.Clear();
+        _waypoints = new List<Vector3>();
+
+        if (player)
+        {
+            for (int i = 0; i < scorpionTrio.Length; i++)
+            {
+                tweenPath.Clear();
+                _waypoints.Clear();
+                
+                _waypoints.Add(scorpionTrio[i].transform.position);
+
+                player.GetCirclePath();
+                Vector3[] pathToPlayer = new Vector3[9];
+                pathToPlayer = player.circlePath;
+
+                for (int x = 0; x < 9; x++)
+                {
+                    _waypoints.Add(pathToPlayer[x]);
+                }
+                //Debug.Log("Waypoints Count: " + _waypoints.Count);
+                Vector3[] newVect3 = new Vector3[_waypoints.Count];
+                //Debug.Log(_waypoints.Count.ToString().Bold().Italics());
+                for (int y = 0; y < _waypoints.Count; y++)
+                {
+                    newVect3[y] = _waypoints[y];
+                }
+
+                tweenPath.Add("path", newVect3);
+                tweenPath.Add("delay", scorpionWaveDelay);
+                tweenPath.Add("time", 2.0f);
+                tweenPath.Add("easetype", "linear");
+                tweenPath.Add("orienttopath", true);
+                //tweenPath.Add("onComplete", "CircleComplete");
+                //tweenPath.Add("onCompleteTarget", gameObject);
+                //iTween.MoveTo(gameObject, tweenPath);
+
+                GalagaHelper.CollectEnemyPaths(scorpionTrio[i], tweenPath);
+                scorpionWaveDelay += 0.6f;
+            }
+        }
     }
 
     public void OnDrawGizmos()

@@ -40,7 +40,7 @@ public class MainEnemyFormation : MonoBehaviour {
     private GameObject readyText;
     private PlayerController playerController;
     private ParticleSystem starfield;
-    private bool isReadyDone;
+    public bool isReadyDone;
 
 	void Start () {
 
@@ -81,11 +81,24 @@ public class MainEnemyFormation : MonoBehaviour {
     {
         enemy1 = GameObject.FindGameObjectsWithTag("enemy1");
         //Debug.Log(enemy1[pickedAtRandom].transform.parent.name.Bold() + " Num: " + pickedAtRandom);
+        int randScorpion = GalagaHelper.RandomNumber(0, 10);
         Enemy1Controller enemyOne = enemy1[GalagaHelper.RandomNumber(0, enemy1.Length)].GetComponent<Enemy1Controller>();
         if (enemyOne)
         {
-            //Debug.Log("Found EnemyOne");
-            enemyOne.CreatePath();
+            if (randScorpion == 10)
+            {
+                form1.GetComponent<EnemySpawner>().CreateEnemy4Trio(enemyOne.transform, enemyOne.transform.parent.transform);
+                Renderer rend = enemyOne.gameObject.GetComponent<Renderer>();
+                rend.enabled = false;
+                enemyOne.gameObject.transform.parent = null;
+                GalagaHelper.StartScorpionPaths();
+                SimplePool.Despawn(enemyOne.gameObject);
+            }
+            else
+            {
+                //Debug.Log("Found EnemyOne");
+                enemyOne.CreatePath();
+            }
             enemyOne.isRandomPicked = true;
             enemy1Picked = false;
         }
@@ -116,11 +129,11 @@ public class MainEnemyFormation : MonoBehaviour {
             int randomTractorBeam = GalagaHelper.RandomNumber(0, 6);
             if (randomTractorBeam == 6)
             {
-                enemyThree.TractorBeamAttack();
+                enemyThree.isTractorBeamAttack = true;
             }
             else
             {
-                enemyThree.Attack();
+                enemyThree.isAttackPlayer = true;
             }
             enemyThree.isRandomPicked = true;
             enemy3Picked = false;
@@ -176,9 +189,9 @@ public class MainEnemyFormation : MonoBehaviour {
 
         }
         #endregion
-        //Debug.Log(GalagaHelper.TimeToSpawn.ToString().Italics());
+        Debug.Log(GalagaHelper.TimeToSpawn.ToString().Italics());
         //Debug.Log(GalagaHelper.CurrentRoundPhase.ToString().Bold());
-        if (GalagaHelper.CurrentRoundPhase == GalagaHelper.Formations.Round1Phase2 && GalagaHelper.TimeToSpawn > 8.0f)
+        if (GalagaHelper.CurrentRoundPhase == GalagaHelper.Formations.Round1Phase2 && GalagaHelper.TimeToSpawn > 11.0f) // && GalagaHelper.TimeToSpawn > 8.0f
         {
             //GameObject pt2 = GameObject.FindGameObjectWithTag("phase2").gameObject;
             Debug.Log("Round2 enabled".Colored(Colors.purple));
@@ -188,39 +201,43 @@ public class MainEnemyFormation : MonoBehaviour {
                 GalagaHelper.CurrentRoundPhase += 1;
             }
         }
-        else if (GalagaHelper.CurrentRoundPhase == GalagaHelper.Formations.Round1Phase3 && GalagaHelper.TimeToSpawn > 11.8 && secondWaveFinished)
+        else if (GalagaHelper.CurrentRoundPhase == GalagaHelper.Formations.Round1Phase3 && secondWaveFinished && GalagaHelper.TimeToSpawn > 15.1f) //&& GalagaHelper.TimeToSpawn > 11.8
         {
-            Debug.Log("Round3 enabled".Colored(Colors.purple));
+            //Debug.Log("Round3 enabled".Colored(Colors.purple));
             form3.GetComponent<EnemySpawner>().enabled = true;
+            Debug.Log("Round3 enabled. form3 isFormationUp: " + form3.GetComponent<EnemySpawner>().isFormationUp);
             if (form3.GetComponent<EnemySpawner>().isFormationUp)
             {
                 GalagaHelper.CurrentRoundPhase += 1;
-                secondWaveFinished = false;
+                //secondWaveFinished = false;
             }
         }
-        else if (GalagaHelper.CurrentRoundPhase == GalagaHelper.Formations.Round1Phase4 && GalagaHelper.TimeToSpawn > 15.1 && thirdWaveFinished)
+        else if (GalagaHelper.CurrentRoundPhase == GalagaHelper.Formations.Round1Phase4 && thirdWaveFinished && GalagaHelper.TimeToSpawn > 20.0f) //&& GalagaHelper.TimeToSpawn > 15.1
         {
             Debug.Log("Round4 enabled".Colored(Colors.purple));
             form4.GetComponent<EnemySpawner>().enabled = true;
             if (form4.GetComponent<EnemySpawner>().isFormationUp)
             {
                 GalagaHelper.CurrentRoundPhase += 1;
-                thirdWaveFinished = false;
+                //thirdWaveFinished = false;
             }
         }
-        else if (GalagaHelper.CurrentRoundPhase == GalagaHelper.Formations.Round1Phase5 && GalagaHelper.TimeToSpawn > 17.4 && fourthWaveFinished)
+        else if (GalagaHelper.CurrentRoundPhase == GalagaHelper.Formations.Round1Phase5 && fourthWaveFinished && GalagaHelper.TimeToSpawn > 25.0f) //&& GalagaHelper.TimeToSpawn > 17.4
         {
             Debug.Log("Round5 enabled".Colored(Colors.purple));
             form5.GetComponent<EnemySpawner>().enabled = true;
-            fourthWaveFinished = false;
+            //
             GalagaHelper.PrintAllGhostObjects();
             Debug.Log("Deleting all ghosts.".Colored(Colors.green));
-            moveFormation = true;
+            Invoke("StartEnemyAttack", 5.0f);
+            //moveFormation = true;
+            fourthWaveFinished = false;
         }
 
         // Move formation left and right
         if (moveFormation)
         {
+            #region MoveCode
             //if (isMovingRight)
             //{
             //    transform.position += Vector3.right * speed * Time.deltaTime;
@@ -240,19 +257,26 @@ public class MainEnemyFormation : MonoBehaviour {
             //{
             //    isMovingRight = false;
             //}
+            #endregion
 
-            GalagaHelper.SetAttackinMotion();
+            if (!GalagaHelper.isPlayerCaptured)
+            {
+                GalagaHelper.SetAttackinMotion();
+            }
+
         }
 
         if (enemyAttacks == 0)
         {
             enemyAttacks = 1;
             isEnemy1Done = true;
-            isEnemy2Done = true;    
+            isEnemy2Done = true;
+            isEnemy3Done = true;
         }
 
         if (enemy1Picked && isEnemy1Done == true)
         {
+            Debug.Log("Enemy1 called to attack".Bold());
             PickRandomEnemyOne();
             enemy1Picked = false;
             isEnemy1Done = false;
@@ -260,6 +284,7 @@ public class MainEnemyFormation : MonoBehaviour {
 
         if (enemy2Picked && isEnemy2Done == true)
         {
+            Debug.Log("Enemy2 called to attack".Bold());
             PickRandomEnemyTwo();
             enemy2Picked = false;
             isEnemy2Done = false;
@@ -267,10 +292,13 @@ public class MainEnemyFormation : MonoBehaviour {
 
         if (enemy3Picked && isEnemy3Done == true)
         {
+            Debug.Log("Enemy3 called to attack".Bold());
             PickRandomEnemyThreeAttack();
             enemy3Picked = false;
             isEnemy3Done = false;
         }
+
+        Debug.Log("playercapured " + GalagaHelper.isPlayerCaptured + " Starfield paused: " + starfield.isPaused);
 
         // If found a player captured then set ready text.
         if (GalagaHelper.isPlayerCaptured == true)
@@ -292,11 +320,21 @@ public class MainEnemyFormation : MonoBehaviour {
                     starfield.Play();
                     isPlayerReady = false;
                     isReadyDone = true;
-                    //GalagaHelper.isPlayerCaptured = false;  
+                    GalagaHelper.isPlayerCaptured = false;  
                 }
             }
         }
 	}
+
+    void LateUpdate()
+    {
+        
+    }
+
+    public void StartEnemyAttack()
+    {
+        moveFormation = true;
+    }
 
     public void OnDrawGizmos()
     {

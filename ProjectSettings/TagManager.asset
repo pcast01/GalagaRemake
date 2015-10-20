@@ -26,6 +26,8 @@ TagManager:
   - CapturedPlayer
   - Starfield
   - PlayerIcon
+  - EnemyEndLeft
+  - EnemyEndRight
   layers:
   - Default
   - TransparentFX
