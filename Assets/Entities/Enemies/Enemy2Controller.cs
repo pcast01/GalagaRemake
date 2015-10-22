@@ -95,7 +95,7 @@ public class Enemy2Controller : EnemyController
                 //input sound
                 audio = base.addShotSounds(attackSound, 1.0f);
                 audio.Play();
-                Debug.Log("Sound swoop played".Colored(Colors.red));
+                //Debug.Log("Sound swoop played".Colored(Colors.red));
             }
             this.transform.Translate(
                 (directionOfTravel.x * swoopSpeed * Time.deltaTime),

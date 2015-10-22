@@ -44,7 +44,7 @@ public class EnemySpawner : MonoBehaviour {
 
         if (gameObject.name == "Round1Phase1EnemyFormation")
         {
-            Debug.Log(gameObject.name.Bold() + " Enemies Spawned: " + GalagaHelper.EnemiesSpawned + " Enemies Killed: " + GalagaHelper.EnemiesKilled + " Enemies Disabled: "+ GalagaHelper.DisabledEnemies);
+            //Debug.Log(gameObject.name.Bold() + " Enemies Spawned: " + GalagaHelper.EnemiesSpawned + " Enemies Killed: " + GalagaHelper.EnemiesKilled + " Enemies Disabled: "+ GalagaHelper.DisabledEnemies);
             // Check if 8 enemies have spawned then run them
             GalagaHelper.StartRound1();
             if (GalagaHelper.EnemiesKilled == 40)
@@ -313,10 +313,13 @@ public class EnemySpawner : MonoBehaviour {
     public void CreateEnemy4Trio(Transform spawn, Transform freepos)
     {
         Hashtable tweenPath = new Hashtable();
+        Hashtable tweenPath1 = new Hashtable();
+        Hashtable tweenPath2 = new Hashtable();
         GameObject[] scorpionTrio = new GameObject[3];
         scorpionTrio[0] = SimplePool.Spawn(enemy4Prefab, spawn.position, enemy4Prefab.transform.rotation, true) as GameObject;
         scorpionTrio[0].transform.position = spawn.position;
         scorpionTrio[0].transform.parent = freepos;
+        GalagaHelper.enemyFourOrigRotation = scorpionTrio[0].transform.rotation;
 
         scorpionTrio[1] = SimplePool.Spawn(enemy4Prefab, spawn.position, enemy4Prefab.transform.rotation, true) as GameObject;
         scorpionTrio[1].transform.position = spawn.position;
@@ -327,27 +330,28 @@ public class EnemySpawner : MonoBehaviour {
         scorpionTrio[2].transform.parent = freepos;
 
         PlayerController player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
-        float scorpionWaveDelay = 0.6f;
-        //tweenPath.Clear();
         _waypoints = new List<Vector3>();
-
+        tweenPath.Clear();
+        tweenPath1.Clear();
+        tweenPath2.Clear();
         if (player)
         {
             for (int i = 0; i < scorpionTrio.Length; i++)
             {
-                tweenPath.Clear();
                 _waypoints.Clear();
-                
                 _waypoints.Add(scorpionTrio[i].transform.position);
+                _waypoints.Add(GameObject.FindGameObjectWithTag("Point2").GetComponent<Transform>().position);
+                player.GetCirclePathScorpions();
+                Vector3[] pathToPlayer = new Vector3[5];
+                pathToPlayer = player.scorpionCirclePath;
 
-                player.GetCirclePath();
-                Vector3[] pathToPlayer = new Vector3[9];
-                pathToPlayer = player.circlePath;
-
-                for (int x = 0; x < 9; x++)
+                for (int x = 0; x < 5; x++)
                 {
                     _waypoints.Add(pathToPlayer[x]);
                 }
+                _waypoints.Add(GameObject.FindGameObjectWithTag("Point2").GetComponent<Transform>().position);
+                _waypoints.Add(scorpionTrio[i].transform.position);
+                // Copy Vector3 to a new Vector3 array
                 //Debug.Log("Waypoints Count: " + _waypoints.Count);
                 Vector3[] newVect3 = new Vector3[_waypoints.Count];
                 //Debug.Log(_waypoints.Count.ToString().Bold().Italics());
@@ -356,23 +360,62 @@ public class EnemySpawner : MonoBehaviour {
                     newVect3[y] = _waypoints[y];
                 }
 
-                tweenPath.Add("path", newVect3);
-                tweenPath.Add("delay", scorpionWaveDelay);
-                tweenPath.Add("time", 2.0f);
-                tweenPath.Add("easetype", "linear");
-                tweenPath.Add("orienttopath", true);
-                //tweenPath.Add("onComplete", "CircleComplete");
-                //tweenPath.Add("onCompleteTarget", gameObject);
-                //iTween.MoveTo(gameObject, tweenPath);
-
-                GalagaHelper.CollectEnemyPaths(scorpionTrio[i], tweenPath);
-                scorpionWaveDelay += 0.6f;
+                if (i == 0)
+                {
+                    tweenPath.Add("path", newVect3);
+                    tweenPath.Add("delay", 0.05f);
+                    tweenPath.Add("time", 8.0f);
+                    tweenPath.Add("easetype", "linear");
+                    tweenPath.Add("orienttopath", true);
+                    GalagaHelper.CollectScorpionPaths(scorpionTrio[i], tweenPath);
+                }
+                else if (i == 1)
+                {
+                    tweenPath1.Add("path", newVect3);
+                    tweenPath1.Add("delay", 0.6f);
+                    tweenPath1.Add("time", 8.0f);
+                    tweenPath1.Add("easetype", "linear");
+                    tweenPath1.Add("orienttopath", true);
+                    GalagaHelper.CollectScorpionPaths(scorpionTrio[i], tweenPath1);
+                }
+                else if (i == 2)
+                {
+                    tweenPath2.Add("path", newVect3);
+                    tweenPath2.Add("delay", 1.0f);
+                    tweenPath2.Add("time", 8.0f);
+                    tweenPath2.Add("easetype", "linear");
+                    tweenPath2.Add("orienttopath", true);
+                    tweenPath2.Add("onComplete", "EnemyBack");
+                    tweenPath2.Add("onCompleteTarget", gameObject);
+                    GalagaHelper.CollectScorpionPaths(scorpionTrio[i], tweenPath2);
+                }
             }
         }
     }
 
+    public void EnemyBack()
+    {
+        GameObject[] enemyFours = new GameObject[3];
+        enemyFours = GameObject.FindGameObjectsWithTag("enemy4");
+        for (int i = 0; i < enemyFours.Length; i++)
+        {
+            enemyFours[i].GetComponent<Transform>().rotation = GalagaHelper.enemyFourOrigRotation;
+            if (i > 0)
+            {
+                SimplePool.Despawn(enemyFours[i]);
+                enemyFours[i].transform.parent = null;
+            }
+        }
+        GalagaHelper.RemoveScorpionPaths();
+        //Debug.Log("Enemy 4 orig rotation".Colored(Colors.red));
+    }
+
     public void OnDrawGizmos()
     {
+        if (_waypoints != null)
+        {
+            iTween.DrawPathGizmos(_waypoints.ToArray());
+        }
         Gizmos.DrawWireCube(transform.position, new Vector3(width, 2, height));
     }
 }

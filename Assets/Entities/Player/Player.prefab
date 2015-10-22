@@ -238,7 +238,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 159164}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: .200000003, y: 0, z: 15.3000002}
+  m_LocalPosition: {x: .200000003, y: -0, z: 13.0500002}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 487008}
@@ -401,9 +401,11 @@ MonoBehaviour:
   rotatePlayer: 0
   bullet: {fileID: 154174, guid: 4da1fc0655bc79c40a8567411cc8b11f, type: 2}
   explosion: {fileID: 143732, guid: f6a75a75b4cb4e54d9fdd0e4dbcc8470, type: 2}
-  projectileSpeed: 30
+  projectileSpeed: 36
   speed: 40
-  firingRate: .699999988
+  firingRate: .300000012
+  playerLives: 3
+  isPlayerLive: 1
   shotTop:
   - {fileID: 8300000, guid: aaef8abf1895c614692b8baed744b08b, type: 3}
   - {fileID: 8300000, guid: a3d9ca2a87b46b946a0106db94e474fa, type: 3}
@@ -413,6 +415,7 @@ MonoBehaviour:
   - {fileID: 8300000, guid: cedb4bee0e421a64c8e45dedc3ab22c2, type: 3}
   - {fileID: 8300000, guid: 45559aaf48a199b4580e4297852f7e23, type: 3}
   circlePath: []
+  scorpionCirclePath: []
   explosionTop: {fileID: 8300000, guid: 4bf810b82d8994b48acfd2d7209d8c17, type: 3}
   explosionBottom: {fileID: 8300000, guid: 470dc56cb6092604388b601ebb4c9579, type: 3}
   myOffset: {x: 0, y: 0, z: 0}
