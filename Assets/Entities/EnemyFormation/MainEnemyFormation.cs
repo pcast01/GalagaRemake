@@ -21,6 +21,7 @@ public class MainEnemyFormation : MonoBehaviour {
     public bool isEnemy2Done = false;
     public bool isEnemy3Done = false;
     public bool isPlayerReady = false;
+    public GameObject player;
     public GameObject[] enemy1;
     public GameObject[] enemy2;
     public GameObject[] enemy3;
@@ -41,6 +42,14 @@ public class MainEnemyFormation : MonoBehaviour {
     private PlayerController playerController;
     private ParticleSystem starfield;
     public bool isReadyDone;
+
+    void Awake()
+    {
+        //GameObject playerSpawn = GameObject.Find("PlayerSpawn");
+        //GameObject newPlayer = SimplePool.Spawn(player, playerSpawn.transform.position, playerSpawn.transform.rotation, true) as GameObject;
+        //newPlayer.GetComponent<PlayerController>().enabled = true;
+        //newPlayer.transform.position = playerSpawn.transform.position;
+    }
 
 	void Start () {
 
@@ -80,63 +89,69 @@ public class MainEnemyFormation : MonoBehaviour {
     void PickRandomEnemyOne()
     {
         enemy1 = GameObject.FindGameObjectsWithTag("enemy1");
-        //Debug.Log(enemy1[pickedAtRandom].transform.parent.name.Bold() + " Num: " + pickedAtRandom);
-        int randScorpion = GalagaHelper.RandomNumber(0, 10);
-        Enemy1Controller enemyOne = enemy1[GalagaHelper.RandomNumber(0, enemy1.Length)].GetComponent<Enemy1Controller>();
-        if (enemyOne)
+        if (enemy1.Length > 0 && GalagaHelper.isPlayerCaptured == false)
         {
-            if (randScorpion == 10)
+            int randScorpion = GalagaHelper.RandomNumber(0, 5);
+            Debug.Log("Enemy1 RandNumber: ".Colored(Colors.red) + randScorpion.ToString().Colored(Colors.red));
+            Enemy1Controller enemyOne = enemy1[GalagaHelper.RandomNumber(0, enemy1.Length)].GetComponent<Enemy1Controller>();
+            if (enemyOne)
             {
-                form1.GetComponent<EnemySpawner>().CreateEnemy4Trio(enemyOne.transform, enemyOne.transform.parent.transform);
-                Renderer rend = enemyOne.gameObject.GetComponent<Renderer>();
-                rend.enabled = false;
-                enemyOne.gameObject.transform.parent = null;
-                GalagaHelper.StartScorpionPaths();
-                SimplePool.Despawn(enemyOne.gameObject);
+                if (randScorpion == 5 || randScorpion == 3)
+                {
+                    enemyOne.startScorpionAttack = true;
+                }
+                else
+                {
+                    //Debug.Log("Found EnemyOne");
+                    enemyOne.CreatePath();
+                    enemyOne.isEnemyFiring = true;
+                }
+                enemyOne.isRandomPicked = true;
+                enemy1Picked = false;
             }
-            else
-            {
-                //Debug.Log("Found EnemyOne");
-                enemyOne.CreatePath();
-            }
-            enemyOne.isRandomPicked = true;
-            enemy1Picked = false;
+            
         }
     }
 
     void PickRandomEnemyTwo()
     {
         enemy2 = GameObject.FindGameObjectsWithTag("enemy2");
-        //Debug.Log(enemy2[pickedAtRandom].transform.parent.name.Bold() + " Num: " + pickedAtRandom);
-        Enemy2Controller enemyTwo = enemy2[GalagaHelper.RandomNumber(0, enemy2.Length)].GetComponent<Enemy2Controller>();
-        if (enemyTwo)
+        if (enemy2.Length > 0 && GalagaHelper.isPlayerCaptured == false)
         {
-            Debug.Log("Found EnemyTwo");
-            //enemy1[pickedAtRandom]
-            enemyTwo.AttackPlayer = true;
-            enemyTwo.isRandomPicked = true;
-            enemy2Picked = false;
+            //Debug.Log(enemy2[pickedAtRandom].transform.parent.name.Bold() + " Num: " + pickedAtRandom);
+            Enemy2Controller enemyTwo = enemy2[GalagaHelper.RandomNumber(0, enemy2.Length)].GetComponent<Enemy2Controller>();
+            if (enemyTwo)
+            {
+                Debug.Log("Found EnemyTwo");
+                //enemy1[pickedAtRandom]
+                enemyTwo.AttackPlayer = true;
+                enemyTwo.isRandomPicked = true;
+                enemy2Picked = false;
+            }
         }
     }
 
     void PickRandomEnemyThreeAttack()
     {
-        enemy3 = GameObject.FindGameObjectsWithTag("enemy3");;
-        Enemy3Controller enemyThree = enemy3[GalagaHelper.RandomNumber(0, enemy3.Length)].GetComponent<Enemy3Controller>();
-        if (enemyThree)
+        enemy3 = GameObject.FindGameObjectsWithTag("enemy3");
+        if (enemy3.Length > 0 && GalagaHelper.isPlayerCaptured == false)
         {
-            Debug.Log("Found Enemy Three");
-            int randomTractorBeam = GalagaHelper.RandomNumber(0, 6);
-            if (randomTractorBeam == 6)
+            Enemy3Controller enemyThree = enemy3[GalagaHelper.RandomNumber(0, enemy3.Length)].GetComponent<Enemy3Controller>();
+            if (enemyThree)
             {
-                enemyThree.isTractorBeamAttack = true;
+                Debug.Log("Found Enemy Three");
+                int randomTractorBeam = GalagaHelper.RandomNumber(0, 3);
+                if (randomTractorBeam == 3)
+                {
+                    enemyThree.isTractorBeamAttack = true;
+                }
+                else
+                {
+                    enemyThree.isAttackPlayer = true;
+                }
+                enemyThree.isRandomPicked = true;
+                enemy3Picked = false;
             }
-            else
-            {
-                enemyThree.isAttackPlayer = true;
-            }
-            enemyThree.isRandomPicked = true;
-            enemy3Picked = false;
         }
     }
 
@@ -150,7 +165,6 @@ public class MainEnemyFormation : MonoBehaviour {
     }
 
 	void Update () {
-        //GameObject pt2 = GameObject.FindGameObjectWithTag("phase1").gameObject;
 
         #region SetBeginningText
         // Set the player text to show like Galaga
@@ -189,8 +203,9 @@ public class MainEnemyFormation : MonoBehaviour {
 
         }
         #endregion
-        Debug.Log(GalagaHelper.TimeToSpawn.ToString().Italics());
+        //Debug.Log(GalagaHelper.TimeToSpawn.ToString().Italics());
         //Debug.Log(GalagaHelper.CurrentRoundPhase.ToString().Bold());
+        //Debug.Log("Player lives: ".Bold() + GalagaHelper.numOfPlayers.ToString().Bold());
         if (GalagaHelper.CurrentRoundPhase == GalagaHelper.Formations.Round1Phase2 && GalagaHelper.TimeToSpawn > 11.0f) // && GalagaHelper.TimeToSpawn > 8.0f
         {
             //GameObject pt2 = GameObject.FindGameObjectWithTag("phase2").gameObject;
@@ -263,7 +278,6 @@ public class MainEnemyFormation : MonoBehaviour {
             {
                 GalagaHelper.SetAttackinMotion();
             }
-
         }
 
         if (enemyAttacks == 0)
@@ -298,7 +312,7 @@ public class MainEnemyFormation : MonoBehaviour {
             isEnemy3Done = false;
         }
 
-        Debug.Log("playercapured " + GalagaHelper.isPlayerCaptured + " Starfield paused: " + starfield.isPaused);
+        Debug.Log("player captured " + GalagaHelper.isPlayerCaptured + " Starfield paused: " + starfield.isPaused);
 
         // If found a player captured then set ready text.
         if (GalagaHelper.isPlayerCaptured == true)
@@ -313,14 +327,17 @@ public class MainEnemyFormation : MonoBehaviour {
                     starfield.Pause();
                     Debug.Log("Paused starfield");
                 }
-                else if (isPlayerReady)
+                else if (isPlayerReady) // player is ready now get rid of readyText
                 {
                     readyText.SetActive(false);
                     Debug.Log("Starfield Unpaused".Colored(Colors.green));
                     starfield.Play();
                     isPlayerReady = false;
                     isReadyDone = true;
-                    GalagaHelper.isPlayerCaptured = false;  
+                    GalagaHelper.isPlayerCaptured = false;
+                    isEnemy1Done = true;
+                    isEnemy2Done = true;
+                    isEnemy3Done = true;
                 }
             }
         }

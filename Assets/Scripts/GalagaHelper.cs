@@ -41,8 +41,11 @@ public static class GalagaHelper
 
     // 1st Wave collect and set on 2 waves together
     public static List<GameObject> enemyObjects = new List<GameObject>();
+    public static List<GameObject> scorpionObjects = new List<GameObject>();
     public static List<Hashtable> EnemyPathParams = new List<Hashtable>();
-    public static int numOfPlayers=2;
+    public static List<Hashtable> ScorpionPathParams = new List<Hashtable>();
+    public static Quaternion enemyFourOrigRotation;
+    public static int numOfPlayers=3;
     public static bool isPlayerCaptured;
     public static bool isWaveOneStarted;
     public static float Wave1Delay = 0.0f;
@@ -50,6 +53,10 @@ public static class GalagaHelper
     public static int NumEnemyObjects()
     {
         return enemyObjects.Count;
+    }
+    public static int NumScorpionObjects()
+    {
+        return scorpionObjects.Count;
     }
 
     /// <summary>
@@ -456,6 +463,18 @@ public static class GalagaHelper
         //Debug.Log("<color=green>Current Spawn POS - CollectEnemyPaths</color>" + gmParams);
     }
 
+    public static void CollectScorpionPaths(GameObject gm, Hashtable gmParams)
+    {
+        scorpionObjects.Add(gm);
+        ScorpionPathParams.Add(gmParams);
+    }
+
+    public static void RemoveScorpionPaths()
+    {
+        scorpionObjects.Clear();
+        ScorpionPathParams.Clear();
+    }
+
     /// <summary>
     /// Sets the first 2 waves in motion to start the game.
     /// </summary>
@@ -510,12 +529,12 @@ public static class GalagaHelper
 
     public static void StartScorpionPaths()
     {
-        if (NumEnemyObjects() == 3)
+        if (NumScorpionObjects() == 3)
         {
             for (int i = 0; i < 3; i++)
             {
                 //Debug.Log("Last pos:" + GalagaHelper.SecondWavePath[10]);
-                iTween.MoveTo(enemyObjects[i], EnemyPathParams[i]);
+                iTween.MoveTo(scorpionObjects[i], ScorpionPathParams[i]);
                 //Debug.Log("enemy paths: " + EnemyPathParams[i].Values);
                 //isWaveOneStarted = true;
             }
@@ -560,7 +579,7 @@ public static class GalagaHelper
             }
             else if (x == 4)
             {
-                
+                PrintAllGhostObjects();
             }
             else if (x == 5)
             {
@@ -570,7 +589,7 @@ public static class GalagaHelper
 	        {
 		        mainEnemyForm.enemy1Picked = true;
 	        }
-            Debug.Log("Ran random attacks: ".Colored(Colors.green) + x.ToString().Bold());
+            //Debug.Log("Ran random attacks: ".Colored(Colors.green) + x.ToString().Bold());
 	    }
     }
     #endregion
@@ -610,7 +629,7 @@ public static class GalagaHelper
             case 2:
                 for (int i = 0; i < PlayerIcons.Length; i++)
                 {
-                    if (PlayerIcons[i].name.Equals("PlayerIcon") || PlayerIcons[i].name.Equals("PlayerIcon (1)"))
+                    if (PlayerIcons[i].name.Equals("PlayerIcon"))
                     {
                         Renderer rend = PlayerIcons[i].GetComponent<Renderer>();
                         rend.enabled = true;
@@ -625,7 +644,7 @@ public static class GalagaHelper
             case 3:
                 for (int i = 0; i < PlayerIcons.Length; i++)
                 {
-                    if (PlayerIcons[i].name.Equals("PlayerIcon") || PlayerIcons[i].name.Equals("PlayerIcon (1)") || PlayerIcons[i].name.Equals("PlayerIcon (2)"))
+                    if (PlayerIcons[i].name.Equals("PlayerIcon") || PlayerIcons[i].name.Equals("PlayerIcon (1)"))
                     {
                         Renderer rend = PlayerIcons[i].GetComponent<Renderer>();
                         rend.enabled = true;
@@ -703,6 +722,10 @@ public static class GalagaHelper
                 Object.Destroy(obj.gameObject);
             }
             if (obj.name == "EnemyExplosion")
+            {
+                Object.Destroy(obj.gameObject);
+            }
+            if (obj.name.StartsWith("Enemy") && obj.gameObject.activeSelf == true && obj.gameObject.transform.parent == null)
             {
                 Object.Destroy(obj.gameObject);
             }

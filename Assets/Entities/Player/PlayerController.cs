@@ -9,10 +9,12 @@ public class PlayerController : MonoBehaviour {
     [Header("Weapon Settings")]
     public GameObject bullet;
     public GameObject explosion;
+    public GameObject player;
     public float projectileSpeed;
     public float speed = 15f;
     public float firingRate;
     public int playerLives = 3;
+    public bool isPlayerLive = true;
     private float padding = 2f;
     private float xMin;
     private float xMax;
@@ -24,6 +26,7 @@ public class PlayerController : MonoBehaviour {
     public AudioClip[] shotTop;
     public AudioClip[] shotBottom;
     public Vector3[] circlePath;
+    public Vector3[] scorpionCirclePath;
     public AudioClip explosionTop;
     public AudioClip explosionBottom;
     private AudioSource top;
@@ -34,6 +37,7 @@ public class PlayerController : MonoBehaviour {
     void Awake()
     {
         circlePath = new Vector3[9];
+        scorpionCirclePath = new Vector3[5];
         starfield = GameObject.FindGameObjectWithTag("Starfield").GetComponent<ParticleSystem>();
     }
 
@@ -63,6 +67,33 @@ public class PlayerController : MonoBehaviour {
                 circlePath[i] = transform.GetChild(0).GetChild(i).position;
             }
 		}
+    }
+
+    public void GetCirclePathScorpions()
+    {
+        for (int i = 0; i < 9; i++)
+        {
+            if (transform.GetChild(0).GetChild(i).name.Equals("Begin"))
+            {
+                scorpionCirclePath[0] = transform.GetChild(0).GetChild(i).position;
+            }
+            if (transform.GetChild(0).GetChild(i).name.Equals("Begin (2)"))
+	        {
+		        scorpionCirclePath[1] = transform.GetChild(0).GetChild(i).position;
+	        }
+            if (transform.GetChild(0).GetChild(i).name.Equals("Begin (4)"))
+            {
+                scorpionCirclePath[2] = transform.GetChild(0).GetChild(i).position;
+            }
+            if (transform.GetChild(0).GetChild(i).name.Equals("Begin (6)"))
+            {
+                scorpionCirclePath[3] = transform.GetChild(0).GetChild(i).position;
+            }
+            if (transform.GetChild(0).GetChild(i).name.Equals("End"))
+            {
+                scorpionCirclePath[4] = transform.GetChild(0).GetChild(i).position;
+            }
+        }
     }
 
     public AudioSource addShotSounds(AudioClip clip, float pitch)
@@ -145,53 +176,65 @@ public class PlayerController : MonoBehaviour {
         //Enemy1Controller enemy1 = other.gameObject.GetComponent<Enemy1Controller>();
         if (other.gameObject.layer == 10)
         {
-            Debug.Log("GameObject " + other.gameObject.name + " hit player.");
-            GameObject explosionPrefab = Instantiate(explosion, gameObject.transform.position, gameObject.transform.rotation) as GameObject;
-            Destroy(explosionPrefab, 3.0f);
-            top = addShotSounds(explosionTop, Random.Range(0.8f, 1.2f));
-            bottom = addShotSounds(explosionBottom, Random.Range(0.8f, 1.2f));
-            top.Play();
-            bottom.Play();
-            rend.enabled = false;
-            SimplePool.Despawn(other.gameObject);
-            SimplePool.Despawn(gameObject);
-            GalagaHelper.numOfPlayers -= 1;
-            GalagaHelper.PlacePlayerIcons();
-            GalagaHelper.isPlayerCaptured = true;
-            if (!CanPlayerStillPlay())
+            if (isPlayerLive)
             {
-                Invoke("EndGame", 3.0f);
+                Debug.Log("GameObject " + other.gameObject.name + " hit player.");
+                GameObject explosionPrefab = Instantiate(explosion, gameObject.transform.position, gameObject.transform.rotation) as GameObject;
+                Destroy(explosionPrefab, 3.0f);
+                top = addShotSounds(explosionTop, Random.Range(0.8f, 1.2f));
+                bottom = addShotSounds(explosionBottom, Random.Range(0.8f, 1.2f));
+                top.Play();
+                bottom.Play();
+                rend.enabled = false;
+                isPlayerLive = false;
+                SimplePool.Despawn(other.gameObject);
+                //SimplePool.Despawn(this.gameObject);
+                GalagaHelper.numOfPlayers -= 1;
+                GalagaHelper.PlacePlayerIcons();
+                GalagaHelper.isPlayerCaptured = true;
+                GameObject.FindGameObjectWithTag("MainFormation").GetComponent<MainEnemyFormation>().isReadyDone = false;
+                Destroy(gameObject);
+                if (!CanPlayerStillPlay())
+                {
+                    Invoke("EndGame", 3.0f);
+                }
+                else
+                {
+                    CreatePlayer();
+                    //Debug.Log("Create player invoke".Colored(Colors.red));
+                }
+                Debug.Log("Enemy ran into Player".Colored(Colors.blue));
             }
-            else
-            {
-                CreatePlayer();
-                //Debug.Log("Create player invoke".Colored(Colors.red));
-            }
-            Debug.Log("Enemy ran into Player".Colored(Colors.blue));
         }
 
         if (enemyProjectile)
         {
-            GameObject explosionPrefab = Instantiate(explosion, gameObject.transform.position, gameObject.transform.rotation) as GameObject;
-            Destroy(explosionPrefab, 3.0f);
-            Debug.Log("Enemy proj hit Player.");
-            top = addShotSounds(explosionTop, Random.Range(0.8f, 1.2f));
-            bottom = addShotSounds(explosionBottom, Random.Range(0.8f, 1.2f));
-            top.Play();
-            bottom.Play();
-            enemyProjectile.Hit();
-            rend.enabled = false;
-            SimplePool.Despawn(gameObject);
-            GalagaHelper.numOfPlayers -= 1;
-            GalagaHelper.PlacePlayerIcons();
-            GalagaHelper.isPlayerCaptured = true;
-            if (!CanPlayerStillPlay())
+            if (isPlayerLive)
             {
-                Invoke("EndGame", 3.0f);
-            }
-            else
-            {
-                CreatePlayer();
+                GameObject explosionPrefab = Instantiate(explosion, gameObject.transform.position, gameObject.transform.rotation) as GameObject;
+                Destroy(explosionPrefab, 3.0f);
+                Debug.Log("Enemy proj hit Player.");
+                top = addShotSounds(explosionTop, Random.Range(0.8f, 1.2f));
+                bottom = addShotSounds(explosionBottom, Random.Range(0.8f, 1.2f));
+                top.Play();
+                bottom.Play();
+                enemyProjectile.Hit();
+                rend.enabled = false;
+                isPlayerLive = false;
+                //SimplePool.Despawn(gameObject);
+                GalagaHelper.numOfPlayers -= 1;
+                GalagaHelper.PlacePlayerIcons();
+                GalagaHelper.isPlayerCaptured = true;
+                GameObject.FindGameObjectWithTag("MainFormation").GetComponent<MainEnemyFormation>().isReadyDone = false;
+                Destroy(gameObject);
+                if (!CanPlayerStillPlay())
+                {
+                    Invoke("EndGame", 3.0f);
+                }
+                else
+                {
+                    CreatePlayer();
+                }
             }
         }
 
@@ -202,8 +245,12 @@ public class PlayerController : MonoBehaviour {
     {
         Debug.Log("Created new player".Colored(Colors.black));
         GameObject playerSpawn = GameObject.Find("PlayerSpawn");
-        GameObject newPlayer = SimplePool.Spawn(gameObject, playerSpawn.transform.position, playerSpawn.transform.rotation,true) as GameObject;
-        newPlayer.GetComponent<PlayerController>().enabled = true;
+        GameObject newPlayer = Instantiate(player, playerSpawn.transform.position, playerSpawn.transform.rotation) as GameObject;
+        //GameObject newPlayer = SimplePool.Spawn(player, playerSpawn.transform.position, playerSpawn.transform.rotation,true) as GameObject;
+        if (newPlayer.GetComponent<PlayerController>().enabled == false)
+        {
+            newPlayer.GetComponent<PlayerController>().enabled = true;
+        }
         newPlayer.transform.position = playerSpawn.transform.position;
         newPlayer.GetComponent<PlayerController>().Invoke("ResumeGame", 4.0f);
         //Invoke("ResumeGame", 4.0f);
@@ -215,6 +262,7 @@ public class PlayerController : MonoBehaviour {
         {
             MainEnemyFormation main = GameObject.FindGameObjectWithTag("MainFormation").GetComponent<MainEnemyFormation>();
             main.isPlayerReady = true;
+            isPlayerLive = true;    
             Debug.Log("ISpLAYERrEADY IS TRUE");
         }
     }

@@ -9,6 +9,7 @@ public class Enemy1Controller : EnemyController
     public Transform PlayerTransform;
     public GameObject enemy4Prefab;
     public Vector3 _originalPosition;
+    public bool startScorpionAttack;
     private List<Vector3> _waypoints;
     private float _pathPercentage = 0f;
     private bool _isOnPath = false;
@@ -42,14 +43,14 @@ public class Enemy1Controller : EnemyController
     {
         base.Update();
 
-        if (Input.GetKeyDown(KeyCode.RightControl))
+        if (startScorpionAttack)
         {
-            // attack player either come right back up or go below screen and come back on top.
-            //CreatePath();
             form1.GetComponent<EnemySpawner>().CreateEnemy4Trio(this.transform, this.transform.parent.transform);
             GetComponent<Renderer>().enabled = false;
             gameObject.transform.parent = null;
+            SimplePool.Despawn(gameObject);
             GalagaHelper.StartScorpionPaths();
+            startScorpionAttack = false;
         }
 
         // if enemy has made it to last point then reappear from top
@@ -106,23 +107,26 @@ public class Enemy1Controller : EnemyController
             _waypoints.Add(transform.position);
             _originalPosition = transform.position;
             //Debug.Log(_waypoints[0].ToString().Bold());
-            player.GetCirclePath();
-            Vector3[] pathToPlayer = new Vector3[9];
-            pathToPlayer = player.circlePath;
+            player.GetCirclePathScorpions();
+            Vector3[] pathToPlayer = new Vector3[5];
+            pathToPlayer = player.scorpionCirclePath;
 
             // chose random swoops
             choosePath = Random.Range(0, 2);
-            //Debug.Log("Path = " + choosePath);
+            Debug.Log("Path = " + choosePath);
             // Path0 = circle then swoop back up
             // Path1 = circle then reappear on top
             Debug.Log("SwoopDownSpeed: " + swoopDownSpeed);
             if (choosePath==0)
 	        {
-                for (int i = 0; i < 8; i++)
+                //_waypoints.Add(GameObject.FindGameObjectWithTag("Point2").GetComponent<Transform>().position);
+                //for (int i = 0; i < 8; i++)
+                for (int i = 0; i < 5; i++)
                 {
                     _waypoints.Add(pathToPlayer[i]);
                 }
                 _waypoints.Add(pathToPlayer[0]);
+                //_waypoints.Add(GameObject.FindGameObjectWithTag("Point2").GetComponent<Transform>().position);
                 Vector3[] newVect30 = new Vector3[_waypoints.Count];
                 for (int i = 0; i < _waypoints.Count; i++)
                 {
@@ -143,10 +147,13 @@ public class Enemy1Controller : EnemyController
 	        }
             else
             {
-                for (int i = 0; i < 9; i++)
+                _waypoints.Add(GameObject.FindGameObjectWithTag("Point2").GetComponent<Transform>().position);
+                //for (int i = 0; i < 9; i++)
+                for (int i = 0; i < 5; i++)
                 {
                     _waypoints.Add(pathToPlayer[i]);
                 }
+                _waypoints.Add(GameObject.FindGameObjectWithTag("Point2").GetComponent<Transform>().position);
                 //Debug.Log("Waypoints Count: " + _waypoints.Count);
                 Vector3[] newVect3 = new Vector3[_waypoints.Count];
                 //Debug.Log(_waypoints.Count.ToString().Bold().Italics());
@@ -202,7 +209,6 @@ public class Enemy1Controller : EnemyController
             health -= playerBullet.GetDamage();
             playerBullet.Hit();
             Debug.Log("Enemy hit!".Bold().Colored(Colors.red));
-
             // BEE: if formation = 50 points, diving == 100
             if (isNotInFormation)
             {
@@ -226,6 +232,7 @@ public class Enemy1Controller : EnemyController
                 Debug.Log("Enemy1 killed: " + gameObject.name.Colored(Colors.blue) + " SpawnDisableTime: " + spawnDisableTime);
                 GalagaHelper.DisabledEnemies += 1;
                 SimplePool.Despawn(gameObject);
+                //DisableEnemy();
                 Invoke("DisableEnemy", spawnDisableTime);
                 GalagaHelper.EnemiesKilled += 1;
                 if (base.isRandomPicked == true)
@@ -239,7 +246,7 @@ public class Enemy1Controller : EnemyController
 
     void DisableEnemy()
     {
-        Debug.Log("Disabled Enemy1 called".Colored(Colors.navy) + " SpawnDisableTime: " + spawnDisableTime);
+        Debug.Log("Runaway from parent Enemy1 called".Colored(Colors.navy) + " SpawnDisableTime: " + spawnDisableTime);
         gameObject.transform.parent = null;
     }
 
@@ -254,5 +261,9 @@ public class Enemy1Controller : EnemyController
     void OnDisable()
     {
         Debug.Log("Disabled Enemy: " + gameObject.name.Colored(Colors.red));
+        //if (gameObject.transform.parent != null)
+        //{
+        //    gameObject.transform.parent = null;
+        //}
     }
 }

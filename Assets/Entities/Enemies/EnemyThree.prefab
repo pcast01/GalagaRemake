@@ -87,18 +87,26 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 30
   health: 300
-  scoreValue: 150
   explosion: {fileID: 143732, guid: f6a75a75b4cb4e54d9fdd0e4dbcc8470, type: 2}
+  isNotInFormation: 0
+  rend: {fileID: 0}
+  meshcol: {fileID: 0}
+  main: {fileID: 0}
+  spawnDisableTime: 5.0999999
+  isRandomPicked: 0
   enemyLaser: {fileID: 159908, guid: 6635a52a223ff2f48a4728ecf0781244, type: 2}
   isEnemyFiring: 0
   shotsPerSecond: .5
-  projectileSpeed: 30
+  projectileSpeed: 46
+  scoreKeeper: {fileID: 0}
   explosionTop:
   - {fileID: 8300000, guid: f203d269d2a20104fbf0eaee349cef4e, type: 3}
   - {fileID: 8300000, guid: 4bf810b82d8994b48acfd2d7209d8c17, type: 3}
   - {fileID: 8300000, guid: 617c45f62ba3ca440b2c2d5b25472802, type: 3}
   explosionBottom: {fileID: 8300000, guid: 470dc56cb6092604388b601ebb4c9579, type: 3}
   swooshSound: {fileID: 8300000, guid: 0b7f61156ff7451429d298a66a877515, type: 3}
+  top: {fileID: 0}
+  bottom: {fileID: 0}
   movePathTime: 2.20000005
   swoopSpeed: 25
   isTractorBeamAttack: 0
@@ -172,7 +180,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 0}
       propertyPath: projectileSpeed
-      value: 30
+      value: 46
       objectReference: {fileID: 0}
     - target: {fileID: 0}
       propertyPath: health
