@@ -50,7 +50,7 @@ public class EnemyController : MonoBehaviour
         rend = GetComponent<Renderer>();
         meshcol = GetComponent<MeshCollider>();
         main = GameObject.FindGameObjectWithTag("MainFormation").GetComponent<MainEnemyFormation>();
-        spawnDisableTime = 19.0f;
+        spawnDisableTime = 15.0f;
         // get end direction random
         GalagaHelper.SetEnemy2Random();
         GalagaHelper.Enemy2PathEnd = GalagaHelper.Enemy2PathDirection();
@@ -105,6 +105,7 @@ public class EnemyController : MonoBehaviour
         else if (GalagaHelper.CurrentRoundPhase == GalagaHelper.Formations.Round1Phase5)
         {
             CreatePathAndMove(GalagaHelper.Formations.Round1Phase5, GalagaHelper.RoundNumber);
+            spawnDisableTime = 2.0f;
         }
 
         //else if (GalagaHelper.EnemiesSpawned > 8 && GalagaHelper.EnemiesSpawned < 17)

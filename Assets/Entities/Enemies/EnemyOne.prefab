@@ -115,7 +115,7 @@ MonoBehaviour:
   enemyLaser: {fileID: 159908, guid: 6635a52a223ff2f48a4728ecf0781244, type: 2}
   isEnemyFiring: 0
   shotsPerSecond: .5
-  projectileSpeed: 30
+  projectileSpeed: 46
   scoreKeeper: {fileID: 0}
   explosionTop:
   - {fileID: 8300000, guid: f203d269d2a20104fbf0eaee349cef4e, type: 3}
@@ -130,6 +130,7 @@ MonoBehaviour:
   PlayerTransform: {fileID: 0}
   enemy4Prefab: {fileID: 194404, guid: 85aab911e3543fc4fb8d6cb37088c181, type: 2}
   _originalPosition: {x: 0, y: 0, z: 0}
+  startScorpionAttack: 0
   swoopDownSpeed: 5
 --- !u!1001 &100100000
 Prefab:
@@ -224,7 +225,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 0}
       propertyPath: projectileSpeed
-      value: 30
+      value: 46
       objectReference: {fileID: 0}
     - target: {fileID: 0}
       propertyPath: m_Enabled
@@ -234,6 +235,10 @@ Prefab:
       propertyPath: enemy4Prefab
       value: 
       objectReference: {fileID: 194404, guid: 85aab911e3543fc4fb8d6cb37088c181, type: 2}
+    - target: {fileID: 0}
+      propertyPath: isEnemyFiring
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 122214}

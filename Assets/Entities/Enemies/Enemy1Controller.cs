@@ -209,7 +209,6 @@ public class Enemy1Controller : EnemyController
             health -= playerBullet.GetDamage();
             playerBullet.Hit();
             Debug.Log("Enemy hit!".Bold().Colored(Colors.red));
-
             // BEE: if formation = 50 points, diving == 100
             if (isNotInFormation)
             {
@@ -233,6 +232,7 @@ public class Enemy1Controller : EnemyController
                 Debug.Log("Enemy1 killed: " + gameObject.name.Colored(Colors.blue) + " SpawnDisableTime: " + spawnDisableTime);
                 GalagaHelper.DisabledEnemies += 1;
                 SimplePool.Despawn(gameObject);
+                //DisableEnemy();
                 Invoke("DisableEnemy", spawnDisableTime);
                 GalagaHelper.EnemiesKilled += 1;
                 if (base.isRandomPicked == true)
@@ -246,7 +246,7 @@ public class Enemy1Controller : EnemyController
 
     void DisableEnemy()
     {
-        Debug.Log("Disabled Enemy1 called".Colored(Colors.navy) + " SpawnDisableTime: " + spawnDisableTime);
+        Debug.Log("Runaway from parent Enemy1 called".Colored(Colors.navy) + " SpawnDisableTime: " + spawnDisableTime);
         gameObject.transform.parent = null;
     }
 
@@ -261,5 +261,9 @@ public class Enemy1Controller : EnemyController
     void OnDisable()
     {
         Debug.Log("Disabled Enemy: " + gameObject.name.Colored(Colors.red));
+        //if (gameObject.transform.parent != null)
+        //{
+        //    gameObject.transform.parent = null;
+        //}
     }
 }

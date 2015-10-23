@@ -44,14 +44,16 @@ public class EnemySpawner : MonoBehaviour {
 
         if (gameObject.name == "Round1Phase1EnemyFormation")
         {
-            //Debug.Log(gameObject.name.Bold() + " Enemies Spawned: " + GalagaHelper.EnemiesSpawned + " Enemies Killed: " + GalagaHelper.EnemiesKilled + " Enemies Disabled: "+ GalagaHelper.DisabledEnemies);
+            Debug.Log(gameObject.name.Bold() + " Enemies Spawned: " + GalagaHelper.EnemiesSpawned + " Enemies Killed: " + GalagaHelper.EnemiesKilled + " Enemies Disabled: "+ GalagaHelper.DisabledEnemies);
             // Check if 8 enemies have spawned then run them
             GalagaHelper.StartRound1();
-            if (GalagaHelper.EnemiesKilled == 40)
+            if (GalagaHelper.EnemiesKilled >= GalagaHelper.EnemiesSpawned)
             {
                 Debug.Log("Round2 started".Bold().Sized(11));
                 // Reset Variables
                 GalagaHelper.ResetFormations();
+                GalagaHelper.CurrentRoundPhase = GalagaHelper.Formations.Round1Phase1;
+                GalagaHelper.RoundNumber = 1;
                 GalagaHelper.EnemiesKilled = 0;
                 GalagaHelper.EnemiesSpawned = 0;
                 SpawnUntilFull();
@@ -305,6 +307,8 @@ public class EnemySpawner : MonoBehaviour {
         }
 
         GameObject enemy = SimplePool.Spawn(defaultEnemyPrefab, spawn.position, defaultEnemyPrefab.transform.rotation, true) as GameObject;
+        enemy.GetComponent<MeshCollider>().enabled = true;
+        enemy.GetComponent<Renderer>().enabled = true;
         enemy.transform.position = spawn.position;
         enemy.transform.parent = freePos;
         GalagaHelper.EnemiesSpawned += 1;
@@ -319,15 +323,18 @@ public class EnemySpawner : MonoBehaviour {
         scorpionTrio[0] = SimplePool.Spawn(enemy4Prefab, spawn.position, enemy4Prefab.transform.rotation, true) as GameObject;
         scorpionTrio[0].transform.position = spawn.position;
         scorpionTrio[0].transform.parent = freepos;
+        scorpionTrio[0].GetComponent<MeshCollider>().enabled = true;
         GalagaHelper.enemyFourOrigRotation = scorpionTrio[0].transform.rotation;
 
         scorpionTrio[1] = SimplePool.Spawn(enemy4Prefab, spawn.position, enemy4Prefab.transform.rotation, true) as GameObject;
         scorpionTrio[1].transform.position = spawn.position;
         scorpionTrio[1].transform.parent = freepos;
+        scorpionTrio[1].GetComponent<MeshCollider>().enabled = true;
 
         scorpionTrio[2] = SimplePool.Spawn(enemy4Prefab, spawn.position, enemy4Prefab.transform.rotation, true) as GameObject;
         scorpionTrio[2].transform.position = spawn.position;
         scorpionTrio[2].transform.parent = freepos;
+        scorpionTrio[2].GetComponent<MeshCollider>().enabled = true;
 
         PlayerController player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
         _waypoints = new List<Vector3>();
@@ -407,6 +414,8 @@ public class EnemySpawner : MonoBehaviour {
             }
         }
         GalagaHelper.RemoveScorpionPaths();
+        GameObject.FindGameObjectWithTag("MainFormation").GetComponent<MainEnemyFormation>().isEnemy1Done = true;
+        //main.isEnemy1Done = true;
         //Debug.Log("Enemy 4 orig rotation".Colored(Colors.red));
     }
 

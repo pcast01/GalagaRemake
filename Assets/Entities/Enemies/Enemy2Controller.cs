@@ -130,7 +130,7 @@ public class Enemy2Controller : EnemyController
             {
                 //Debug.Log("Enemy made it to wall".Bold());
                 CreateIncomingPath();
-                main.isEnemy2Done = true;
+                //main.isEnemy2Done = true;
             }
         }
 
@@ -148,6 +148,7 @@ public class Enemy2Controller : EnemyController
                 gotOriginalPosition = false;
                 AttackPlayer = false;
                 isNotInFormation = false;
+                main.isEnemy2Done = true;
             }
         }
     }
@@ -184,8 +185,8 @@ public class Enemy2Controller : EnemyController
                 Destroy(explosionPrefab, 3.0f);
                 Debug.Log("Enemy2 killed: " + gameObject.name.Colored(Colors.blue) + " SpawnDisableTime: " + spawnDisableTime);
                 GalagaHelper.DisabledEnemies += 1;
-                SimplePool.Despawn(gameObject);
                 Invoke("DisableEnemy", spawnDisableTime);
+                SimplePool.Despawn(gameObject);
                 GalagaHelper.EnemiesKilled += 1;
                 if (base.isRandomPicked == true)
                 {
@@ -198,12 +199,12 @@ public class Enemy2Controller : EnemyController
 
     void DisableEnemy()
     {
-        Debug.Log("Disabled Enemy2 called".Colored(Colors.navy) + " SpawnDisableTime: " + spawnDisableTime);
+        Debug.Log("Runaway from parent Enemy2 called".Colored(Colors.navy) + " SpawnDisableTime: " + spawnDisableTime);
         gameObject.transform.parent = null;
     }
 
     void OnDisable()
     {
-        Debug.Log("Disabled Enemy: " + gameObject.name.Colored(Colors.red));
+        Debug.Log("Disabled Enemy2: " + gameObject.name.Colored(Colors.red));
     }
 }

@@ -45,10 +45,10 @@ public class MainEnemyFormation : MonoBehaviour {
 
     void Awake()
     {
-        GameObject playerSpawn = GameObject.Find("PlayerSpawn");
-        GameObject newPlayer = SimplePool.Spawn(player, playerSpawn.transform.position, playerSpawn.transform.rotation, true) as GameObject;
-        newPlayer.GetComponent<PlayerController>().enabled = true;
-        newPlayer.transform.position = playerSpawn.transform.position;
+        //GameObject playerSpawn = GameObject.Find("PlayerSpawn");
+        //GameObject newPlayer = SimplePool.Spawn(player, playerSpawn.transform.position, playerSpawn.transform.rotation, true) as GameObject;
+        //newPlayer.GetComponent<PlayerController>().enabled = true;
+        //newPlayer.transform.position = playerSpawn.transform.position;
     }
 
 	void Start () {
@@ -89,7 +89,7 @@ public class MainEnemyFormation : MonoBehaviour {
     void PickRandomEnemyOne()
     {
         enemy1 = GameObject.FindGameObjectsWithTag("enemy1");
-        if (enemy1 != null && GalagaHelper.isPlayerCaptured == false)
+        if (enemy1.Length > 0 && GalagaHelper.isPlayerCaptured == false)
         {
             int randScorpion = GalagaHelper.RandomNumber(0, 5);
             Debug.Log("Enemy1 RandNumber: ".Colored(Colors.red) + randScorpion.ToString().Colored(Colors.red));
@@ -104,6 +104,7 @@ public class MainEnemyFormation : MonoBehaviour {
                 {
                     //Debug.Log("Found EnemyOne");
                     enemyOne.CreatePath();
+                    enemyOne.isEnemyFiring = true;
                 }
                 enemyOne.isRandomPicked = true;
                 enemy1Picked = false;
@@ -115,7 +116,7 @@ public class MainEnemyFormation : MonoBehaviour {
     void PickRandomEnemyTwo()
     {
         enemy2 = GameObject.FindGameObjectsWithTag("enemy2");
-        if (enemy2 != null && GalagaHelper.isPlayerCaptured == false)
+        if (enemy2.Length > 0 && GalagaHelper.isPlayerCaptured == false)
         {
             //Debug.Log(enemy2[pickedAtRandom].transform.parent.name.Bold() + " Num: " + pickedAtRandom);
             Enemy2Controller enemyTwo = enemy2[GalagaHelper.RandomNumber(0, enemy2.Length)].GetComponent<Enemy2Controller>();
@@ -133,7 +134,7 @@ public class MainEnemyFormation : MonoBehaviour {
     void PickRandomEnemyThreeAttack()
     {
         enemy3 = GameObject.FindGameObjectsWithTag("enemy3");
-        if (enemy3 != null && GalagaHelper.isPlayerCaptured == false)
+        if (enemy3.Length > 0 && GalagaHelper.isPlayerCaptured == false)
         {
             Enemy3Controller enemyThree = enemy3[GalagaHelper.RandomNumber(0, enemy3.Length)].GetComponent<Enemy3Controller>();
             if (enemyThree)
@@ -202,8 +203,9 @@ public class MainEnemyFormation : MonoBehaviour {
 
         }
         #endregion
-        Debug.Log(GalagaHelper.TimeToSpawn.ToString().Italics());
+        //Debug.Log(GalagaHelper.TimeToSpawn.ToString().Italics());
         //Debug.Log(GalagaHelper.CurrentRoundPhase.ToString().Bold());
+        //Debug.Log("Player lives: ".Bold() + GalagaHelper.numOfPlayers.ToString().Bold());
         if (GalagaHelper.CurrentRoundPhase == GalagaHelper.Formations.Round1Phase2 && GalagaHelper.TimeToSpawn > 11.0f) // && GalagaHelper.TimeToSpawn > 8.0f
         {
             //GameObject pt2 = GameObject.FindGameObjectWithTag("phase2").gameObject;
@@ -276,7 +278,6 @@ public class MainEnemyFormation : MonoBehaviour {
             {
                 GalagaHelper.SetAttackinMotion();
             }
-
         }
 
         if (enemyAttacks == 0)
@@ -311,7 +312,7 @@ public class MainEnemyFormation : MonoBehaviour {
             isEnemy3Done = false;
         }
 
-        Debug.Log("playercapured " + GalagaHelper.isPlayerCaptured + " Starfield paused: " + starfield.isPaused);
+        Debug.Log("player captured " + GalagaHelper.isPlayerCaptured + " Starfield paused: " + starfield.isPaused);
 
         // If found a player captured then set ready text.
         if (GalagaHelper.isPlayerCaptured == true)
@@ -326,14 +327,17 @@ public class MainEnemyFormation : MonoBehaviour {
                     starfield.Pause();
                     Debug.Log("Paused starfield");
                 }
-                else if (isPlayerReady)
+                else if (isPlayerReady) // player is ready now get rid of readyText
                 {
                     readyText.SetActive(false);
                     Debug.Log("Starfield Unpaused".Colored(Colors.green));
                     starfield.Play();
                     isPlayerReady = false;
                     isReadyDone = true;
-                    GalagaHelper.isPlayerCaptured = false;  
+                    GalagaHelper.isPlayerCaptured = false;
+                    isEnemy1Done = true;
+                    isEnemy2Done = true;
+                    isEnemy3Done = true;
                 }
             }
         }

@@ -401,7 +401,8 @@ MonoBehaviour:
   rotatePlayer: 0
   bullet: {fileID: 154174, guid: 4da1fc0655bc79c40a8567411cc8b11f, type: 2}
   explosion: {fileID: 143732, guid: f6a75a75b4cb4e54d9fdd0e4dbcc8470, type: 2}
-  projectileSpeed: 36
+  player: {fileID: 139312}
+  projectileSpeed: 56
   speed: 40
   firingRate: .300000012
   playerLives: 3
@@ -430,6 +431,14 @@ Prefab:
       propertyPath: bullet
       value: 
       objectReference: {fileID: 154174, guid: 4da1fc0655bc79c40a8567411cc8b11f, type: 2}
+    - target: {fileID: 0}
+      propertyPath: player
+      value: 
+      objectReference: {fileID: 139312}
+    - target: {fileID: 0}
+      propertyPath: projectileSpeed
+      value: 56
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 139312}

@@ -9,6 +9,7 @@ public class PlayerController : MonoBehaviour {
     [Header("Weapon Settings")]
     public GameObject bullet;
     public GameObject explosion;
+    public GameObject player;
     public float projectileSpeed;
     public float speed = 15f;
     public float firingRate;
@@ -187,10 +188,12 @@ public class PlayerController : MonoBehaviour {
                 rend.enabled = false;
                 isPlayerLive = false;
                 SimplePool.Despawn(other.gameObject);
-                SimplePool.Despawn(gameObject);
+                //SimplePool.Despawn(this.gameObject);
                 GalagaHelper.numOfPlayers -= 1;
                 GalagaHelper.PlacePlayerIcons();
                 GalagaHelper.isPlayerCaptured = true;
+                GameObject.FindGameObjectWithTag("MainFormation").GetComponent<MainEnemyFormation>().isReadyDone = false;
+                Destroy(gameObject);
                 if (!CanPlayerStillPlay())
                 {
                     Invoke("EndGame", 3.0f);
@@ -201,7 +204,6 @@ public class PlayerController : MonoBehaviour {
                     //Debug.Log("Create player invoke".Colored(Colors.red));
                 }
                 Debug.Log("Enemy ran into Player".Colored(Colors.blue));
-                
             }
         }
 
@@ -219,10 +221,12 @@ public class PlayerController : MonoBehaviour {
                 enemyProjectile.Hit();
                 rend.enabled = false;
                 isPlayerLive = false;
-                SimplePool.Despawn(gameObject);
+                //SimplePool.Despawn(gameObject);
                 GalagaHelper.numOfPlayers -= 1;
                 GalagaHelper.PlacePlayerIcons();
                 GalagaHelper.isPlayerCaptured = true;
+                GameObject.FindGameObjectWithTag("MainFormation").GetComponent<MainEnemyFormation>().isReadyDone = false;
+                Destroy(gameObject);
                 if (!CanPlayerStillPlay())
                 {
                     Invoke("EndGame", 3.0f);
@@ -241,8 +245,12 @@ public class PlayerController : MonoBehaviour {
     {
         Debug.Log("Created new player".Colored(Colors.black));
         GameObject playerSpawn = GameObject.Find("PlayerSpawn");
-        GameObject newPlayer = SimplePool.Spawn(gameObject, playerSpawn.transform.position, playerSpawn.transform.rotation,true) as GameObject;
-        newPlayer.GetComponent<PlayerController>().enabled = true;
+        GameObject newPlayer = Instantiate(player, playerSpawn.transform.position, playerSpawn.transform.rotation) as GameObject;
+        //GameObject newPlayer = SimplePool.Spawn(player, playerSpawn.transform.position, playerSpawn.transform.rotation,true) as GameObject;
+        if (newPlayer.GetComponent<PlayerController>().enabled == false)
+        {
+            newPlayer.GetComponent<PlayerController>().enabled = true;
+        }
         newPlayer.transform.position = playerSpawn.transform.position;
         newPlayer.GetComponent<PlayerController>().Invoke("ResumeGame", 4.0f);
         //Invoke("ResumeGame", 4.0f);

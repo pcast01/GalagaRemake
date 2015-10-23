@@ -19,6 +19,7 @@
 
 using UnityEngine;
 using System.Collections.Generic;
+using System;
 
 public static class SimplePool 
 {
@@ -204,7 +205,14 @@ public static class SimplePool
 		}
 		else 
 		{
-			pm.myPool.Despawn(obj);
+            try
+            {
+			    pm.myPool.Despawn(obj);
+            }
+            catch (Exception ex)
+            {
+                Debug.Log(ex.Message + " " + ex.InnerException);
+            }
 		}
 	}
 	

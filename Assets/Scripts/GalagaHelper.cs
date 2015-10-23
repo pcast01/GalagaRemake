@@ -45,7 +45,7 @@ public static class GalagaHelper
     public static List<Hashtable> EnemyPathParams = new List<Hashtable>();
     public static List<Hashtable> ScorpionPathParams = new List<Hashtable>();
     public static Quaternion enemyFourOrigRotation;
-    public static int numOfPlayers=2;
+    public static int numOfPlayers=3;
     public static bool isPlayerCaptured;
     public static bool isWaveOneStarted;
     public static float Wave1Delay = 0.0f;
@@ -579,7 +579,7 @@ public static class GalagaHelper
             }
             else if (x == 4)
             {
-                
+                PrintAllGhostObjects();
             }
             else if (x == 5)
             {
@@ -629,7 +629,7 @@ public static class GalagaHelper
             case 2:
                 for (int i = 0; i < PlayerIcons.Length; i++)
                 {
-                    if (PlayerIcons[i].name.Equals("PlayerIcon") || PlayerIcons[i].name.Equals("PlayerIcon (1)"))
+                    if (PlayerIcons[i].name.Equals("PlayerIcon"))
                     {
                         Renderer rend = PlayerIcons[i].GetComponent<Renderer>();
                         rend.enabled = true;
@@ -644,7 +644,7 @@ public static class GalagaHelper
             case 3:
                 for (int i = 0; i < PlayerIcons.Length; i++)
                 {
-                    if (PlayerIcons[i].name.Equals("PlayerIcon") || PlayerIcons[i].name.Equals("PlayerIcon (1)") || PlayerIcons[i].name.Equals("PlayerIcon (2)"))
+                    if (PlayerIcons[i].name.Equals("PlayerIcon") || PlayerIcons[i].name.Equals("PlayerIcon (1)"))
                     {
                         Renderer rend = PlayerIcons[i].GetComponent<Renderer>();
                         rend.enabled = true;
@@ -722,6 +722,10 @@ public static class GalagaHelper
                 Object.Destroy(obj.gameObject);
             }
             if (obj.name == "EnemyExplosion")
+            {
+                Object.Destroy(obj.gameObject);
+            }
+            if (obj.name.StartsWith("Enemy") && obj.gameObject.activeSelf == true && obj.gameObject.transform.parent == null)
             {
                 Object.Destroy(obj.gameObject);
             }
