@@ -50,7 +50,7 @@ public class PlayerController : MonoBehaviour {
         xMax = rightMost.x - padding;
         Mesh mesh = GetComponent<MeshFilter>().mesh;
         rend = GetComponent<Renderer>();
-        rend.enabled = true;
+        //rend.enabled = true;
         playerWidth = mesh.bounds.size.x;
         Debug.Log("PlayerWidth: " + playerWidth);
 	}
@@ -252,7 +252,9 @@ public class PlayerController : MonoBehaviour {
             newPlayer.GetComponent<PlayerController>().enabled = true;
         }
         newPlayer.transform.position = playerSpawn.transform.position;
-        newPlayer.GetComponent<PlayerController>().Invoke("ResumeGame", 4.0f);
+        newPlayer.GetComponent<Renderer>().enabled = false;
+        newPlayer.GetComponent<MeshCollider>().enabled = false;
+        newPlayer.GetComponent<PlayerController>().Invoke("ResumeGame", 10.0f);
         //Invoke("ResumeGame", 4.0f);
     }
 
@@ -261,6 +263,7 @@ public class PlayerController : MonoBehaviour {
         if (starfield.isPaused == true && GalagaHelper.isPlayerCaptured == true)
         {
             MainEnemyFormation main = GameObject.FindGameObjectWithTag("MainFormation").GetComponent<MainEnemyFormation>();
+            
             main.isPlayerReady = true;
             isPlayerLive = true;    
             Debug.Log("ISpLAYERrEADY IS TRUE");

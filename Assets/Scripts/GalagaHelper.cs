@@ -725,9 +725,10 @@ public static class GalagaHelper
             {
                 Object.Destroy(obj.gameObject);
             }
-            if (obj.name.StartsWith("Enemy") && obj.gameObject.activeSelf == true && obj.gameObject.transform.parent == null)
+            if (obj.name.StartsWith("Enemy") && obj.gameObject.name.Contains("projectile") == false && obj.gameObject.name.Contains("Wall") == false && obj.gameObject.activeSelf == true && obj.gameObject.transform.parent == null)
             {
                 Object.Destroy(obj.gameObject);
+                Debug.Log(obj.name.Bold() + " is destoyed.");
             }
         }
         //Debug.Log("<bold>Count of objects:</bold> " + x);

@@ -83,7 +83,7 @@ public class Enemy2Controller : EnemyController
         Vector3 currentPosition = this.transform.position;
         this.isEnemyFiring = true;
         //first, check to see if we're close enough to the target
-        if (Vector3.Distance(currentPosition, targetPosition) > 24.0f && outOfPlayerRange == false)
+        if (Vector3.Distance(currentPosition, targetPosition) > 15.0f && outOfPlayerRange == false)
         {
             Vector3 directionOfTravel = targetPosition - currentPosition;
             //now normalize the direction, since we only want the direction information

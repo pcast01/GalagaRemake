@@ -431,7 +431,7 @@ public class Enemy3Controller : EnemyController
         transform.LookAt(player);
         Vector3 targetPosition = player.transform.position;
         Vector3 currentPosition = this.transform.position;
-        //this.isEnemyFiring = true;
+        this.isEnemyFiring = true;
         //first, check to see if we're close enough to the target
         if (Vector3.Distance(currentPosition, targetPosition) > 24.0f && outOfPlayerRange == false)
         {

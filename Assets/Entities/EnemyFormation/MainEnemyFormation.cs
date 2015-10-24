@@ -104,7 +104,7 @@ public class MainEnemyFormation : MonoBehaviour {
                 {
                     //Debug.Log("Found EnemyOne");
                     enemyOne.CreatePath();
-                    enemyOne.isEnemyFiring = true;
+                    //enemyOne.isEnemyFiring = true;
                 }
                 enemyOne.isRandomPicked = true;
                 enemy1Picked = false;
@@ -335,6 +335,9 @@ public class MainEnemyFormation : MonoBehaviour {
                     isPlayerReady = false;
                     isReadyDone = true;
                     GalagaHelper.isPlayerCaptured = false;
+                    GameObject player = GameObject.FindGameObjectWithTag("Player").gameObject;
+                    player.GetComponent<Renderer>().enabled = true;
+                    player.GetComponent<MeshCollider>().enabled = true;
                     isEnemy1Done = true;
                     isEnemy2Done = true;
                     isEnemy3Done = true;

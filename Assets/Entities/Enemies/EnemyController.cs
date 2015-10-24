@@ -206,7 +206,7 @@ public class EnemyController : MonoBehaviour
             float probability = Time.deltaTime * shotsPerSecond;
             if (Random.value < probability)
             {
-                Debug.Log("Enemy firing.");
+                //Debug.Log("Enemy firing.");
                 Fire();
             }  
         }
@@ -214,28 +214,25 @@ public class EnemyController : MonoBehaviour
 
     private void Fire()
     {
-        if (gameObject)
+        // If enemy is north of player then fire
+        if (!hero)
         {
-            // If enemy is north of player then fire
-            if (!hero)
-            {
-                hero = GameObject.FindGameObjectWithTag("Player");
-            }
-            if (gameObject.transform.position.x > hero.transform.position.x)
-            {
-                Vector3 startPos = transform.position + new Vector3(0, 0, -4);
-                //GameObject enemyBullet = Instantiate(enemyLaser, startPos, Quaternion.identity) as GameObject;
-                GameObject enemyBullet = SimplePool.Spawn(enemyLaser, startPos, Quaternion.identity, true) as GameObject;
-                enemyBullet.transform.position = startPos;
+            hero = GameObject.FindGameObjectWithTag("Player");
+        }
+        if (gameObject.transform.position.x < hero.transform.position.x)
+        {
+            Vector3 startPos = transform.position + new Vector3(0, 0, -4);
+            //GameObject enemyBullet = Instantiate(enemyLaser, startPos, Quaternion.identity) as GameObject;
+            GameObject enemyBullet = SimplePool.Spawn(enemyLaser, startPos, Quaternion.identity, true) as GameObject;
+            enemyBullet.transform.position = startPos;
 
-                // get player target
-                Vector3 targetPosition = hero.transform.position;
-                Vector3 currentPosition = enemyBullet.transform.position;
+            // get player target
+            Vector3 targetPosition = hero.transform.position;
+            Vector3 currentPosition = enemyBullet.transform.position;
 
-                Vector3 directionOfTravel = targetPosition - currentPosition;
-                Debug.Log("enemy firing ".Colored(Colors.red));
-                enemyBullet.GetComponent<Rigidbody>().velocity = directionOfTravel.normalized * projectileSpeed;
-            }
+            Vector3 directionOfTravel = targetPosition - currentPosition;
+            Debug.Log("enemy firing ".Colored(Colors.red));
+            enemyBullet.GetComponent<Rigidbody>().velocity = directionOfTravel.normalized * projectileSpeed;
         }
     }
 

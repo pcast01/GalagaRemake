@@ -57,7 +57,7 @@ public class Enemy1Controller : EnemyController
         // of screen.
         if (_finishedPath)
         {
-            this.isEnemyFiring = false;
+            //this.isEnemyFiring = false;
             CreateIncomingPath();
 
             if (_isOnPath)
@@ -147,6 +147,7 @@ public class Enemy1Controller : EnemyController
 	        }
             else
             {
+                this.isEnemyFiring = true;
                 _waypoints.Add(GameObject.FindGameObjectWithTag("Point2").GetComponent<Transform>().position);
                 //for (int i = 0; i < 9; i++)
                 for (int i = 0; i < 5; i++)
@@ -195,6 +196,7 @@ public class Enemy1Controller : EnemyController
 
     public void CircleComplete()
     {
+        this.isEnemyFiring = false;
         _finishedPath = true;
         transform.rotation = _originalRotation;
         //Debug.Log("Enemy completed circle".Bold().Italics());
