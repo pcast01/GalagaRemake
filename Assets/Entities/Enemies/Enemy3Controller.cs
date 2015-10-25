@@ -352,8 +352,8 @@ public class Enemy3Controller : EnemyController
                 meshcol.enabled = false;
                 GameObject explosionPrefab = Instantiate(explosion, gameObject.transform.position, gameObject.transform.rotation) as GameObject;
                 Destroy(explosionPrefab, 3.0f);
-                Debug.Log("Enemy3 killed: " + gameObject.name.Colored(Colors.blue) + " SpawnDisableTime: " + spawnDisableTime);
-                GalagaHelper.DisabledEnemies += 1;
+                Debug.Log("Enemy3 killed: " + gameObject.name.Colored(Colors.blue) + " Parent: " + gameObject.transform.parent.parent.name.Colored(Colors.blue)+ " Position: " + gameObject.transform.parent.name.Colored(Colors.blue));
+                //GalagaHelper.DisabledEnemies += 1;
                 SimplePool.Despawn(gameObject);
                 Invoke("DisableEnemy", spawnDisableTime);
                 GalagaHelper.EnemiesKilled += 1;
@@ -445,7 +445,7 @@ public class Enemy3Controller : EnemyController
                 //input sound
                 audio = base.addShotSounds(swooshSound, 1.0f);
                 audio.Play();
-                Debug.Log("Sound swoop played".Colored(Colors.red));
+                //Debug.Log("Sound swoop played".Colored(Colors.red));
             }
             this.transform.Translate(
                 (directionOfTravel.x * swoopSpeed * Time.deltaTime),
@@ -501,8 +501,8 @@ public class Enemy3Controller : EnemyController
     }
     void OnDisable()
     {
-        Debug.Log("Disabled Enemy3 called".Colored(Colors.navy) + " SpawnDisableTime: " + spawnDisableTime);
-        Debug.Log("Disabled Enemy: " + gameObject.name.Colored(Colors.red));
+        Debug.Log(gameObject.name.Colored(Colors.red) +"Disabled Enemy3 called".Colored(Colors.navy) + " SpawnDisableTime: " + spawnDisableTime);
+        GalagaHelper.DisabledEnemies += 1;
     }
 
     public void OnDrawGizmos()

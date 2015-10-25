@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using UnityEngine.UI;
 
 public class MainEnemyFormation : MonoBehaviour {
 
@@ -84,6 +85,26 @@ public class MainEnemyFormation : MonoBehaviour {
         readyText.SetActive(false);
         //roundTextPos = playerText.transform.position;
 	}
+
+    public void EndGame()
+    {
+        Debug.Log("End Game Called".Colored(Colors.red).Bold());
+        Application.LoadLevel("Lose Screen");
+    }
+
+    public void RestartRound()
+    {
+        secondWaveFinished = false;
+        thirdWaveFinished = false;
+        fourthWaveFinished = false;
+        playerText.SetActive(true);
+        roundText.GetComponent<Text>().text = "Stage " + GalagaHelper.RoundNumber.ToString();
+        roundText.SetActive(false);
+        playerTextHigh.SetActive(false);
+        readyText.SetActive(false);
+        Invoke("StartRound", 3.0f);
+
+    }
 
     #region RandomEnemyAttacks
     void PickRandomEnemyOne()
@@ -203,6 +224,35 @@ public class MainEnemyFormation : MonoBehaviour {
 
         }
         #endregion
+
+        if (GalagaHelper.EnemiesSpawned == 8)
+        {
+            form1.GetComponent<EnemySpawner>().isFull = true;
+            Debug.Log("Form 1 Full".Colored(Colors.green).Bold());
+        }
+        else if (GalagaHelper.EnemiesSpawned == 16)
+        {
+            form2.GetComponent<EnemySpawner>().isFull = true;
+            this.secondWaveFinished = true;
+            Debug.Log("Form 2 Full".Colored(Colors.green).Bold());
+        }
+        else if (GalagaHelper.EnemiesSpawned == 24)
+        {
+            form3.GetComponent<EnemySpawner>().isFull = true;
+            this.thirdWaveFinished = true;
+            Debug.Log("Form 3 Full".Colored(Colors.green).Bold());
+        }
+        else if (GalagaHelper.EnemiesSpawned == 32)
+        {
+            form4.GetComponent<EnemySpawner>().isFull = true;
+            this.fourthWaveFinished = true;
+            Debug.Log("Form 4 Full".Colored(Colors.green).Bold());
+        }
+        else if (GalagaHelper.EnemiesSpawned == 40)
+        {
+            form5.GetComponent<EnemySpawner>().isFull = true;
+            Debug.Log("Form 5 Full".Colored(Colors.green).Bold());
+        }
         //Debug.Log(GalagaHelper.TimeToSpawn.ToString().Italics());
         //Debug.Log(GalagaHelper.CurrentRoundPhase.ToString().Bold());
         //Debug.Log("Player lives: ".Bold() + GalagaHelper.numOfPlayers.ToString().Bold());
@@ -312,7 +362,7 @@ public class MainEnemyFormation : MonoBehaviour {
             isEnemy3Done = false;
         }
 
-        Debug.Log("player captured " + GalagaHelper.isPlayerCaptured + " Starfield paused: " + starfield.isPaused);
+        //Debug.Log("player captured " + GalagaHelper.isPlayerCaptured + " Starfield paused: " + starfield.isPaused);
 
         // If found a player captured then set ready text.
         if (GalagaHelper.isPlayerCaptured == true)
@@ -325,19 +375,19 @@ public class MainEnemyFormation : MonoBehaviour {
                 {
                     readyText.SetActive(true);
                     starfield.Pause();
-                    Debug.Log("Paused starfield");
+                    //Debug.Log("Paused starfield");
                 }
                 else if (isPlayerReady) // player is ready now get rid of readyText
                 {
                     readyText.SetActive(false);
-                    Debug.Log("Starfield Unpaused".Colored(Colors.green));
+                    //Debug.Log("Starfield Unpaused".Colored(Colors.green));
                     starfield.Play();
                     isPlayerReady = false;
                     isReadyDone = true;
                     GalagaHelper.isPlayerCaptured = false;
-                    GameObject player = GameObject.FindGameObjectWithTag("Player").gameObject;
-                    player.GetComponent<Renderer>().enabled = true;
-                    player.GetComponent<MeshCollider>().enabled = true;
+                    //GameObject player = GameObject.FindGameObjectWithTag("Player").gameObject;
+                    //player.GetComponent<Renderer>().enabled = true;
+                    //player.GetComponent<MeshCollider>().enabled = true;
                     isEnemy1Done = true;
                     isEnemy2Done = true;
                     isEnemy3Done = true;
@@ -345,11 +395,6 @@ public class MainEnemyFormation : MonoBehaviour {
             }
         }
 	}
-
-    void LateUpdate()
-    {
-        
-    }
 
     public void StartEnemyAttack()
     {

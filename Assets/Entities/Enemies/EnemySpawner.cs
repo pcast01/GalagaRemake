@@ -22,6 +22,7 @@ public class EnemySpawner : MonoBehaviour {
     [Header("Formation")]
     //private EnemySpawner round1Phase2spawner;
     public bool isFormationUp = false;
+    public bool isFull = false;
     private List<Vector3> _waypoints;
     //private int enemiesInPlace = 0;
 
@@ -44,7 +45,7 @@ public class EnemySpawner : MonoBehaviour {
 
         if (gameObject.name == "Round1Phase1EnemyFormation")
         {
-            Debug.Log(gameObject.name.Bold() + " Enemies Spawned: " + GalagaHelper.EnemiesSpawned + " Enemies Killed: " + GalagaHelper.EnemiesKilled + " Enemies Disabled: "+ GalagaHelper.DisabledEnemies);
+            Debug.Log(gameObject.name.Bold() + " Enemies Spawned: " + GalagaHelper.EnemiesSpawned + " Enemies Killed: " + GalagaHelper.EnemiesKilled + " Enemies Disabled: "+ GalagaHelper.DisabledEnemies + " PlayerLifes: " + GalagaHelper.numOfPlayers);
             // Check if 8 enemies have spawned then run them
             GalagaHelper.StartRound1();
             if (GalagaHelper.EnemiesKilled >= GalagaHelper.EnemiesSpawned)
@@ -54,6 +55,8 @@ public class EnemySpawner : MonoBehaviour {
                 GalagaHelper.ResetFormations();
                 GalagaHelper.CurrentRoundPhase = GalagaHelper.Formations.Round1Phase1;
                 GalagaHelper.RoundNumber = 1;
+                MainEnemyFormation main = GameObject.FindGameObjectWithTag("MainFormation").GetComponent<MainEnemyFormation>();
+                main.RestartRound();
                 GalagaHelper.EnemiesKilled = 0;
                 GalagaHelper.EnemiesSpawned = 0;
                 SpawnUntilFull();
@@ -188,7 +191,7 @@ public class EnemySpawner : MonoBehaviour {
             SpawnEnemy(spawnPoint, freePosition);
         }
 
-        if (NextFreePosition())
+        if (NextFreePosition() && this.isFull == false)
         {
             Debug.Log(gameObject.name.Bold() + " Free position");
             Invoke("SpawnUntilFull", spawnDelay);
@@ -311,6 +314,7 @@ public class EnemySpawner : MonoBehaviour {
         enemy.GetComponent<Renderer>().enabled = true;
         enemy.transform.position = spawn.position;
         enemy.transform.parent = freePos;
+        Debug.Log("Enemy Name: " + enemy.name + " Parent: " + enemy.transform.parent.parent.name.Colored(Colors.blue) + " Position: " + enemy.transform.parent.name.Colored(Colors.blue));
         GalagaHelper.EnemiesSpawned += 1;
     }
 

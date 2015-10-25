@@ -33,6 +33,10 @@ public class Enemy1Controller : EnemyController
     private void Start()
     {
         base.Start();
+        if (meshcol.enabled == false)
+        {
+            meshcol.enabled = true;
+        }
         form1 = GameObject.FindGameObjectWithTag("phase1").gameObject;
         //Debug.Log("Original Pos in START: " + transform.position.ToString());
         _isOnPath = true;
@@ -231,8 +235,8 @@ public class Enemy1Controller : EnemyController
                 meshcol.enabled = false;
                 GameObject explosionPrefab = Instantiate(explosion, gameObject.transform.position, gameObject.transform.rotation) as GameObject;
                 Destroy(explosionPrefab, 3.0f);
-                Debug.Log("Enemy1 killed: " + gameObject.name.Colored(Colors.blue) + " SpawnDisableTime: " + spawnDisableTime);
-                GalagaHelper.DisabledEnemies += 1;
+                Debug.Log("Enemy1 killed: " + gameObject.name.Colored(Colors.blue) + " Parent: " + gameObject.transform.parent.parent.name.Colored(Colors.blue) + " Position: " + gameObject.transform.parent.name.Colored(Colors.blue));
+                //GalagaHelper.DisabledEnemies += 1;
                 SimplePool.Despawn(gameObject);
                 //DisableEnemy();
                 Invoke("DisableEnemy", spawnDisableTime);
@@ -263,6 +267,7 @@ public class Enemy1Controller : EnemyController
     void OnDisable()
     {
         Debug.Log("Disabled Enemy: " + gameObject.name.Colored(Colors.red));
+        GalagaHelper.DisabledEnemies += 1;
         //if (gameObject.transform.parent != null)
         //{
         //    gameObject.transform.parent = null;

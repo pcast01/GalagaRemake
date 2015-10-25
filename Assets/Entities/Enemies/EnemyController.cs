@@ -107,33 +107,6 @@ public class EnemyController : MonoBehaviour
             CreatePathAndMove(GalagaHelper.Formations.Round1Phase5, GalagaHelper.RoundNumber);
             spawnDisableTime = 2.0f;
         }
-
-        //else if (GalagaHelper.EnemiesSpawned > 8 && GalagaHelper.EnemiesSpawned < 17)
-        //{
-        //    CreatePathAndMove(GalagaHelper.Formations.Round1Phase2, GalagaHelper.RoundNumber);
-        //}
-        //else if (GalagaHelper.EnemiesSpawned > 16 && GalagaHelper.EnemiesSpawned < 25)
-        //{
-        //    Debug.Log(GalagaHelper.CurrentRoundPhase.ToString().Colored(Colors.lightblue));
-        //    CreatePathAndMove(GalagaHelper.Formations.Round1Phase3, GalagaHelper.RoundNumber);
-        //}
-        //else if (GalagaHelper.EnemiesSpawned > 24 && GalagaHelper.EnemiesSpawned < 33)
-        //{
-        //    Debug.Log(GalagaHelper.CurrentRoundPhase.ToString().Colored(Colors.lightblue));
-        //    CreatePathAndMove(GalagaHelper.Formations.Round1Phase4, GalagaHelper.RoundNumber);
-        //}
-        //else if (GalagaHelper.EnemiesSpawned > 32 && GalagaHelper.EnemiesSpawned < 41)
-        //{
-        //    Debug.Log(GalagaHelper.CurrentRoundPhase.ToString().Colored(Colors.lightblue));
-        //    CreatePathAndMove(GalagaHelper.Formations.Round1Phase5, GalagaHelper.RoundNumber);
-        //}
-        //else
-        //{
-        //    //Debug.Log("Else fired".Bold());
-        //    //myTween.Add("time", movePathTime);
-        //    //myTween.Add("easetype", "linear");
-        //    //iTween.MoveTo(gameObject, myTween);
-        //}
     }
 
     /// <summary>
@@ -166,24 +139,6 @@ public class EnemyController : MonoBehaviour
         //Debug.Log("Wave1delay: " + GalagaHelper.Wave1Delay);
         myTween.Add("easetype", "linear");
         iTween.MoveTo(gameObject, myTween);
-        //if (myTween.Contains("path"))
-        //{
-        //    Debug.Log(myTween["path"])
-        //}
-        if (GalagaHelper.EnemiesSpawned == 16)
-        {
-            // Last enemy done for 2nd wave
-            main.secondWaveFinished = true;
-        }
-        else if (GalagaHelper.EnemiesSpawned == 24)
-        {
-            main.thirdWaveFinished = true;
-            //Debug.Log("third wave finished.");
-        }
-        else if (GalagaHelper.EnemiesSpawned == 32)
-        {
-            main.fourthWaveFinished = true;
-        }
     }
 
     public void OnDrawGizmos()
@@ -204,9 +159,10 @@ public class EnemyController : MonoBehaviour
         if (isEnemyFiring)
         {
             float probability = Time.deltaTime * shotsPerSecond;
-            if (Random.value < probability)
+            float x = Random.value;
+            //Debug.Log(gameObject.name + " (if x < probability )- Random: "+ x.ToString() + " Probability: " + probability.ToString());
+            if (x < probability)
             {
-                //Debug.Log("Enemy firing.");
                 Fire();
             }  
         }
@@ -219,7 +175,7 @@ public class EnemyController : MonoBehaviour
         {
             hero = GameObject.FindGameObjectWithTag("Player");
         }
-        if (gameObject.transform.position.x < hero.transform.position.x)
+        if (gameObject.transform.position.z > 10f)
         {
             Vector3 startPos = transform.position + new Vector3(0, 0, -4);
             //GameObject enemyBullet = Instantiate(enemyLaser, startPos, Quaternion.identity) as GameObject;
@@ -231,8 +187,12 @@ public class EnemyController : MonoBehaviour
             Vector3 currentPosition = enemyBullet.transform.position;
 
             Vector3 directionOfTravel = targetPosition - currentPosition;
-            Debug.Log("enemy firing ".Colored(Colors.red));
+            //Debug.Log("enemy firing ".Colored(Colors.red));
             enemyBullet.GetComponent<Rigidbody>().velocity = directionOfTravel.normalized * projectileSpeed;
+        }
+        else
+        {
+            //Debug.Log("Out of firing range.".Bold().Colored(Colors.red) + " Z position of Enemy: " + gameObject.transform.position.z);
         }
     }
 

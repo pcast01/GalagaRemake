@@ -162,6 +162,7 @@ public static class GalagaHelper
         form = GetFormationScript(GalagaHelper.Formations.Round1Phase5);
         form.DisownChildren();
         form.enabled = false;
+        GalagaHelper.TimeToSpawn = 0;
     }
 
     /// <summary>
@@ -203,9 +204,6 @@ public static class GalagaHelper
     public static Transform[] EntrancePatterns(EntranceFlightPatterns pattern)
     {
         EnemySpawner spawner = GameObject.Find("Round1Phase1EnemyFormation").GetComponent<EnemySpawner>();
-        //GameObject form2 = GameObject.FindGameObjectWithTag("phase2").gameObject;
-        //GameObject form31 = GameObject.FindGameObjectWithTag("phase31").gameObject;
-        //GameObject spawnPt = GameObject.FindGameObjectWithTag("Respawn");
         GameObject middlePt = GameObject.FindGameObjectWithTag("Point2");
         GameObject rightEntrancePt = GameObject.FindGameObjectWithTag("begin_Right");
         GameObject leftEntrancePt = GameObject.FindGameObjectWithTag("begin_Left");
@@ -614,16 +612,8 @@ public static class GalagaHelper
             case 1:
                 for (int i = 0; i < PlayerIcons.Length; i++)
                 {
-                    if (PlayerIcons[i].name.Equals("PlayerIcon"))
-                    {
-                        Renderer rend = PlayerIcons[i].GetComponent<Renderer>();
-                        rend.enabled = true;
-                    }
-                    else
-                    {
-                        Renderer rend = PlayerIcons[i].GetComponent<Renderer>();
-                        rend.enabled = false;
-                    }
+                    Renderer rend = PlayerIcons[i].GetComponent<Renderer>();
+                    rend.enabled = false;
                 }
                 break;
             case 2:

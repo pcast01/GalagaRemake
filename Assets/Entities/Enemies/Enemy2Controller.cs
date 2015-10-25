@@ -76,7 +76,15 @@ public class Enemy2Controller : EnemyController
 
         if (!player)
         {
-            player = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>(); ;
+            try
+            {
+                player = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>(); ;
+
+            }
+            catch (System.Exception)
+            {
+                Debug.Log("Player not present");
+            }
         }
         transform.LookAt(player);
         Vector3 targetPosition = player.transform.position;
@@ -183,8 +191,8 @@ public class Enemy2Controller : EnemyController
                 meshcol.enabled = false;
                 GameObject explosionPrefab = Instantiate(explosion, gameObject.transform.position, gameObject.transform.rotation) as GameObject;
                 Destroy(explosionPrefab, 3.0f);
-                Debug.Log("Enemy2 killed: " + gameObject.name.Colored(Colors.blue) + " SpawnDisableTime: " + spawnDisableTime);
-                GalagaHelper.DisabledEnemies += 1;
+                Debug.Log("Enemy2 killed: " + gameObject.name.Colored(Colors.blue) + " Parent: " + gameObject.transform.parent.parent.name.Colored(Colors.blue)+ " Position: " + gameObject.transform.parent.name.Colored(Colors.blue));
+                //GalagaHelper.DisabledEnemies += 1;
                 Invoke("DisableEnemy", spawnDisableTime);
                 SimplePool.Despawn(gameObject);
                 GalagaHelper.EnemiesKilled += 1;
@@ -206,5 +214,6 @@ public class Enemy2Controller : EnemyController
     void OnDisable()
     {
         Debug.Log("Disabled Enemy2: " + gameObject.name.Colored(Colors.red));
+        GalagaHelper.DisabledEnemies += 1;
     }
 }

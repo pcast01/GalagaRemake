@@ -52,7 +52,7 @@ public class PlayerController : MonoBehaviour {
         rend = GetComponent<Renderer>();
         //rend.enabled = true;
         playerWidth = mesh.bounds.size.x;
-        Debug.Log("PlayerWidth: " + playerWidth);
+        //Debug.Log("PlayerWidth: " + playerWidth);
 	}
 
     public void GetCirclePath()
@@ -128,7 +128,7 @@ public class PlayerController : MonoBehaviour {
         // If there is no captured player then proceed.
         if (!this.playerCaptured)
         {
-            if (Input.GetButtonDown("Fire1") && allowFire)
+            if (Input.GetButtonDown("Fire1") && allowFire && isPlayerLive)
             {
                 StartCoroutine("Fire");
                 //Debug.Log("Firing");
@@ -196,7 +196,9 @@ public class PlayerController : MonoBehaviour {
                 Destroy(gameObject);
                 if (!CanPlayerStillPlay())
                 {
-                    Invoke("EndGame", 3.0f);
+                    MainEnemyFormation main = GameObject.FindGameObjectWithTag("MainFormation").GetComponent<MainEnemyFormation>();
+                    main.Invoke("EndGame", 3.0f);
+                    //Invoke("EndGame", 3.0f);
                 }
                 else
                 {
@@ -229,7 +231,9 @@ public class PlayerController : MonoBehaviour {
                 Destroy(gameObject);
                 if (!CanPlayerStillPlay())
                 {
-                    Invoke("EndGame", 3.0f);
+                    MainEnemyFormation main = GameObject.FindGameObjectWithTag("MainFormation").GetComponent<MainEnemyFormation>();
+                    main.Invoke("EndGame", 3.0f);
+                    //Invoke("EndGame", 3.0f);
                 }
                 else
                 {
@@ -254,8 +258,8 @@ public class PlayerController : MonoBehaviour {
         newPlayer.transform.position = playerSpawn.transform.position;
         newPlayer.GetComponent<Renderer>().enabled = false;
         newPlayer.GetComponent<MeshCollider>().enabled = false;
-        newPlayer.GetComponent<PlayerController>().Invoke("ResumeGame", 10.0f);
-        //Invoke("ResumeGame", 4.0f);
+        newPlayer.GetComponent<PlayerController>().Invoke("ResumeGame", 8.0f);
+        newPlayer.GetComponent<PlayerController>().Invoke("ShowPlayer", 4.0f);
     }
 
     public void ResumeGame()
@@ -263,11 +267,16 @@ public class PlayerController : MonoBehaviour {
         if (starfield.isPaused == true && GalagaHelper.isPlayerCaptured == true)
         {
             MainEnemyFormation main = GameObject.FindGameObjectWithTag("MainFormation").GetComponent<MainEnemyFormation>();
-            
             main.isPlayerReady = true;
             isPlayerLive = true;    
             Debug.Log("ISpLAYERrEADY IS TRUE");
         }
+    }
+    
+    public void ShowPlayer()
+    {
+        GetComponent<Renderer>().enabled = true;
+        GetComponent<MeshCollider>().enabled = true;
     }
 
     bool CanPlayerStillPlay()
@@ -284,10 +293,7 @@ public class PlayerController : MonoBehaviour {
         }
     }
     
-    void EndGame()
-    {
-        Application.LoadLevel("Lose Screen");
-    }
+    
 
     void OnCollisionEnter(Collision other)
     {
