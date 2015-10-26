@@ -29,6 +29,14 @@ public class Enemy2Controller : EnemyController
     {
         base.Start();
         //mainForm = GameObject.FindGameObjectWithTag("MainFormation").GetComponent<MainEnemyFormation>();
+        if (meshcol.enabled == false)
+        {
+            meshcol.enabled = true;
+        }
+        if (rend.enabled == false)
+        {
+            rend.enabled = true;
+        }
         leftSwoop = GameObject.FindGameObjectWithTag("enemy2Left");
         rightSwoop = GameObject.FindGameObjectWithTag("enemy2Right");
         player = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>();
@@ -191,21 +199,22 @@ public class Enemy2Controller : EnemyController
                 meshcol.enabled = false;
                 GameObject explosionPrefab = Instantiate(explosion, gameObject.transform.position, gameObject.transform.rotation) as GameObject;
                 Destroy(explosionPrefab, 3.0f);
-                Debug.Log("Enemy2 killed: " + gameObject.name.Colored(Colors.blue) + " Parent: " + gameObject.transform.parent.parent.name.Colored(Colors.blue)+ " Position: " + gameObject.transform.parent.name.Colored(Colors.blue));
+                //Debug.Log("Enemy2 killed: " + gameObject.name.Colored(Colors.blue) + " Parent: " + gameObject.transform.parent.parent.name.Colored(Colors.blue)+ " Position: " + gameObject.transform.parent.name.Colored(Colors.blue));
                 //GalagaHelper.DisabledEnemies += 1;
-                Invoke("DisableEnemy", spawnDisableTime);
-                SimplePool.Despawn(gameObject);
+                this.isEnemyFiring = false;
+                Invoke("RunawayFromParent", spawnDisableTime);
                 GalagaHelper.EnemiesKilled += 1;
                 if (base.isRandomPicked == true)
                 {
                     isRandomPicked = false;
                     main.isEnemy2Done = true;
                 }
+                SimplePool.Despawn(gameObject);
             }
         }
     }
 
-    void DisableEnemy()
+    void RunawayFromParent()
     {
         Debug.Log("Runaway from parent Enemy2 called".Colored(Colors.navy) + " SpawnDisableTime: " + spawnDisableTime);
         gameObject.transform.parent = null;

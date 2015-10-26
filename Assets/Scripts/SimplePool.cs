@@ -211,7 +211,7 @@ public static class SimplePool
             }
             catch (Exception ex)
             {
-                Debug.Log(ex.Message + " " + ex.InnerException);
+                Debug.Log("SimplePool Error: " + ex.Message + " " + ex.InnerException);
             }
 		}
 	}

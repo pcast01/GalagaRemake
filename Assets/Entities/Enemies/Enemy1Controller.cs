@@ -37,6 +37,10 @@ public class Enemy1Controller : EnemyController
         {
             meshcol.enabled = true;
         }
+        if (rend.enabled == false)
+        {
+            rend.enabled = true;
+        }
         form1 = GameObject.FindGameObjectWithTag("phase1").gameObject;
         //Debug.Log("Original Pos in START: " + transform.position.ToString());
         _isOnPath = true;
@@ -186,6 +190,7 @@ public class Enemy1Controller : EnemyController
         Vector3 lastPoint = _waypoints[_waypoints.Count - 1];
         _waypoints.Clear();
 
+
         Vector3 topSide = Camera.main.ViewportToWorldPoint(new Vector3(0, 1, 0));
         _waypoints.Add(new Vector3(lastPoint.x, 0, topSide.z));
         _waypoints.Add(_originalPosition);
@@ -235,10 +240,8 @@ public class Enemy1Controller : EnemyController
                 meshcol.enabled = false;
                 GameObject explosionPrefab = Instantiate(explosion, gameObject.transform.position, gameObject.transform.rotation) as GameObject;
                 Destroy(explosionPrefab, 3.0f);
-                Debug.Log("Enemy1 killed: " + gameObject.name.Colored(Colors.blue) + " Parent: " + gameObject.transform.parent.parent.name.Colored(Colors.blue) + " Position: " + gameObject.transform.parent.name.Colored(Colors.blue));
-                //GalagaHelper.DisabledEnemies += 1;
-                SimplePool.Despawn(gameObject);
-                //DisableEnemy();
+                //Debug.Log("Enemy1 killed: " + gameObject.name.Colored(Colors.blue) + " Parent: " + gameObject.transform.parent.parent.name.Colored(Colors.blue) + " Position: " + gameObject.transform.parent.name.Colored(Colors.blue));
+                this.isEnemyFiring = false;
                 Invoke("DisableEnemy", spawnDisableTime);
                 GalagaHelper.EnemiesKilled += 1;
                 if (base.isRandomPicked == true)
@@ -246,6 +249,7 @@ public class Enemy1Controller : EnemyController
                     isRandomPicked = false;
                     main.isEnemy1Done = true;
                 }
+                SimplePool.Despawn(gameObject);
             }
         }
     }
@@ -266,7 +270,7 @@ public class Enemy1Controller : EnemyController
 
     void OnDisable()
     {
-        Debug.Log("Disabled Enemy: " + gameObject.name.Colored(Colors.red));
+        Debug.Log("Disabled Enemy1: " + gameObject.name.Colored(Colors.red));
         GalagaHelper.DisabledEnemies += 1;
         //if (gameObject.transform.parent != null)
         //{

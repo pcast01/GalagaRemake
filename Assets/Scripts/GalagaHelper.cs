@@ -146,23 +146,41 @@ public static class GalagaHelper
     {
         EnemySpawner form = GetFormationScript(GalagaHelper.Formations.Round1Phase1);
         form.DisownChildren();
+        form.isFormationUp = false;
+        form.isFull = false;
 
         form = GetFormationScript(GalagaHelper.Formations.Round1Phase2);
         form.DisownChildren();
         form.enabled = false;
+        form.isFormationUp = false;
+        form.isFull = false;
 
         form = GetFormationScript(GalagaHelper.Formations.Round1Phase3);
         form.DisownChildren();
         form.enabled = false;
+        form.isFormationUp = false;
+        form.isFull = false;
 
         form = GetFormationScript(GalagaHelper.Formations.Round1Phase4);
         form.DisownChildren();
         form.enabled = false;
+        form.isFormationUp = false;
+        form.isFull = false;
 
         form = GetFormationScript(GalagaHelper.Formations.Round1Phase5);
         form.DisownChildren();
         form.enabled = false;
+        form.isFormationUp = false;
+        form.isFull = false;
         GalagaHelper.TimeToSpawn = 0;
+
+        foreach (GameObject obj in Object.FindObjectsOfType(typeof(GameObject)))
+        {
+            if (obj.GetComponent<Position>())
+            {
+                obj.GetComponent<Position>().isOccupied = false;
+            }
+        }
     }
 
     /// <summary>
@@ -562,7 +580,7 @@ public static class GalagaHelper
         MainEnemyFormation mainEnemyForm = GameObject.FindGameObjectWithTag("MainFormation").GetComponent<MainEnemyFormation>();
         if (mainEnemyForm && GalagaHelper.EnemiesKilled < 41)
 	    {
-            int x = GalagaHelper.RandomNumber(0, 6);
+            int x = GalagaHelper.RandomNumber(0, 7);
             if (x == 1)
 	        {
                 mainEnemyForm.enemy1Picked = true;
@@ -715,13 +733,21 @@ public static class GalagaHelper
             {
                 Object.Destroy(obj.gameObject);
             }
+
+            if (obj.activeSelf == false && obj.transform.parent != null)
+            {
+                obj.transform.parent = null;
+            }
+
             if (obj.name.StartsWith("Enemy") && obj.gameObject.name.Contains("projectile") == false && obj.gameObject.name.Contains("Wall") == false && obj.gameObject.activeSelf == true && obj.gameObject.transform.parent == null)
             {
-                Object.Destroy(obj.gameObject);
-                Debug.Log(obj.name.Bold() + " is destoyed.");
+                //Object.Destroy(obj.gameObject);
+                x += 1;
+                //GalagaHelper.EnemiesKilled += 1;
+                //Debug.Log(obj.name.Bold() + " is destoyed.");
             }
         }
-        //Debug.Log("<bold>Count of objects:</bold> " + x);
+        Debug.Log("*** Count of enemies found: ".Bold().Colored(Colors.red) + x.ToString().Bold().Colored(Colors.red));
     }
     #endregion
 }

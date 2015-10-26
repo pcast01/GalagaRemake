@@ -97,13 +97,12 @@ public class MainEnemyFormation : MonoBehaviour {
         secondWaveFinished = false;
         thirdWaveFinished = false;
         fourthWaveFinished = false;
-        playerText.SetActive(true);
+        //playerText.SetActive(true);
         roundText.GetComponent<Text>().text = "Stage " + GalagaHelper.RoundNumber.ToString();
         roundText.SetActive(false);
         playerTextHigh.SetActive(false);
         readyText.SetActive(false);
         Invoke("StartRound", 3.0f);
-
     }
 
     #region RandomEnemyAttacks
@@ -117,7 +116,7 @@ public class MainEnemyFormation : MonoBehaviour {
             Enemy1Controller enemyOne = enemy1[GalagaHelper.RandomNumber(0, enemy1.Length)].GetComponent<Enemy1Controller>();
             if (enemyOne)
             {
-                if (randScorpion == 5 || randScorpion == 3)
+                if (randScorpion == 3)
                 {
                     enemyOne.startScorpionAttack = true;
                 }
@@ -161,7 +160,7 @@ public class MainEnemyFormation : MonoBehaviour {
             if (enemyThree)
             {
                 Debug.Log("Found Enemy Three");
-                int randomTractorBeam = GalagaHelper.RandomNumber(0, 3);
+                int randomTractorBeam = GalagaHelper.RandomNumber(0, 6);
                 if (randomTractorBeam == 3)
                 {
                     enemyThree.isTractorBeamAttack = true;

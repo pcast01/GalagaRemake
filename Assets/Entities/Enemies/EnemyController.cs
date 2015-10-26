@@ -50,7 +50,7 @@ public class EnemyController : MonoBehaviour
         rend = GetComponent<Renderer>();
         meshcol = GetComponent<MeshCollider>();
         main = GameObject.FindGameObjectWithTag("MainFormation").GetComponent<MainEnemyFormation>();
-        spawnDisableTime = 15.0f;
+        spawnDisableTime = 10.0f;
         // get end direction random
         GalagaHelper.SetEnemy2Random();
         GalagaHelper.Enemy2PathEnd = GalagaHelper.Enemy2PathDirection();
@@ -59,6 +59,7 @@ public class EnemyController : MonoBehaviour
         Debug.Log("Enemy2Random: ".Colored(Colors.red) + GalagaHelper.Enemy2Random);
         round1Phase1spawner = GameObject.Find("Round1Phase1EnemyFormation").GetComponent<EnemySpawner>();
         scoreKeeper = GameObject.Find("Score").GetComponent<ScoreKeeper>();
+        isEnemyFiring = false;
         //Debug.Log("enemies spawned: " + GalagaHelper.EnemiesSpawned);
 
         // Wave 1 path creation.
