@@ -63,7 +63,7 @@ public class EnemyController : MonoBehaviour
         //Debug.Log("enemies spawned: " + GalagaHelper.EnemiesSpawned);
 
         // Wave 1 path creation.
-        if (GalagaHelper.EnemiesSpawned <= 8)
+        if (GalagaHelper.JustSpawned <= 8)
         {
             // Spawn 1 of 5 phases
             if (round1Phase1spawner.spawnEntranceRight)
@@ -83,10 +83,12 @@ public class EnemyController : MonoBehaviour
         }
 
         // Collect all 1st wave enemies and move them all at once with a delay
-        if (GalagaHelper.EnemiesSpawned < 9)
+        if (GalagaHelper.JustSpawned < 9)
         {
             myTween.Add("time", movePathTime);
             myTween.Add("easetype", "linear");
+            myTween.Add("onComplete", "EnemyCompletePath");
+            myTween.Add("onCompleteTarget", gameObject);
             GalagaHelper.CollectEnemyPaths(gameObject, myTween);
             //GalagaHelper.CurrentRoundPhase += 1;
         }
@@ -108,6 +110,11 @@ public class EnemyController : MonoBehaviour
             CreatePathAndMove(GalagaHelper.Formations.Round1Phase5, GalagaHelper.RoundNumber);
             spawnDisableTime = 2.0f;
         }
+    }
+
+    public void EnemyCompletePath()
+    {
+        GalagaHelper.EnemiesSpawned += 1;
     }
 
     /// <summary>
@@ -137,8 +144,9 @@ public class EnemyController : MonoBehaviour
         }
         myTween.Add("time", movePathTime);
         myTween.Add("delay", GalagaHelper.Wave1Delay);
-        //Debug.Log("Wave1delay: " + GalagaHelper.Wave1Delay);
         myTween.Add("easetype", "linear");
+        myTween.Add("onComplete", "EnemyCompletePath");
+        myTween.Add("onCompleteTarget", gameObject);
         iTween.MoveTo(gameObject, myTween);
     }
 

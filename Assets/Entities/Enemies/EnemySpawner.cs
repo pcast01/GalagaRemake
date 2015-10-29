@@ -36,6 +36,7 @@ public class EnemySpawner : MonoBehaviour {
         //pos = Game
         // Execute Spawn function
         SpawnUntilFull();
+        GalagaHelper.StartTime = Time.time;
         GalagaHelper.TimeToSpawn = Time.time;
 	}
 
@@ -47,16 +48,16 @@ public class EnemySpawner : MonoBehaviour {
 
         if (gameObject.name == "Round1Phase1EnemyFormation")
         {
-            Debug.Log(gameObject.name.Bold() + " Enemies Spawned: " + GalagaHelper.EnemiesSpawned + " Enemies Killed: " + GalagaHelper.EnemiesKilled + " Enemies Disabled: "+ GalagaHelper.DisabledEnemies + " PlayerLifes: " + GalagaHelper.numOfPlayers);
+            Debug.Log(gameObject.name.Bold() + "Just Spawned: " + GalagaHelper.JustSpawned + " Enemies Spawned: " + GalagaHelper.EnemiesSpawned + " Enemies Killed: " + GalagaHelper.EnemiesKilled + " Enemies Disabled: "+ GalagaHelper.DisabledEnemies + " PlayerLifes: " + GalagaHelper.numOfPlayers);
             // Check if 8 enemies have spawned then run them
             GalagaHelper.StartRound1();
-            if (GalagaHelper.EnemiesKilled >= GalagaHelper.EnemiesSpawned)
+            if (GalagaHelper.EnemiesKilled >= GalagaHelper.JustSpawned && GalagaHelper.JustSpawned != 0)
             {
                 Debug.Log("Round2 started".Bold().Sized(11));
                 // Reset Variables
                 GalagaHelper.ResetFormations();
                 GalagaHelper.CurrentRoundPhase = GalagaHelper.Formations.Round1Phase1;
-                GalagaHelper.RoundNumber = 1;
+                GalagaHelper.RoundNumber += 1;
                 MainEnemyFormation main = GameObject.FindGameObjectWithTag("MainFormation").GetComponent<MainEnemyFormation>();
                 main.RestartRound();
                 GalagaHelper.EnemiesKilled = 0;
@@ -192,12 +193,12 @@ public class EnemySpawner : MonoBehaviour {
             switch (GalagaHelper.CurrentRoundPhase)
             {
                 case GalagaHelper.Formations.Round1Phase1:
-                    if (GalagaHelper.EnemiesSpawned < 4)
+                    if (GalagaHelper.JustSpawned < 4)
                     {
                         defaultEnemyPrefab = enemy1Prefab;
                         //Debug.Log("enemy1 spawned".Colored(Colors.yellow));
                     }
-                    else if (GalagaHelper.EnemiesSpawned > 3 && GalagaHelper.EnemiesSpawned < 9)
+                    else if (GalagaHelper.JustSpawned > 3 && GalagaHelper.JustSpawned < 9)
                     {
                         defaultEnemyPrefab = enemy2Prefab;
                         //Debug.Log("enemy2 spawned".Colored(Colors.red));
@@ -243,12 +244,12 @@ public class EnemySpawner : MonoBehaviour {
             switch (GalagaHelper.CurrentRoundPhase)
             {
                 case GalagaHelper.Formations.Round1Phase1:
-                    if (GalagaHelper.EnemiesSpawned < 4)
+                    if (GalagaHelper.JustSpawned < 4)
                     {
                         defaultEnemyPrefab = enemy1Prefab;
                         //Debug.Log("enemy1 spawned".Colored(Colors.yellow));
                     }
-                    else if (GalagaHelper.EnemiesSpawned > 3 && GalagaHelper.EnemiesSpawned < 9)
+                    else if (GalagaHelper.JustSpawned > 3 && GalagaHelper.JustSpawned < 9)
                     {
                         defaultEnemyPrefab = enemy2Prefab;
                         //Debug.Log("enemy2 spawned".Colored(Colors.red));
@@ -294,7 +295,8 @@ public class EnemySpawner : MonoBehaviour {
         enemy.transform.position = spawn.position;
         enemy.transform.parent = freePos;
         Debug.Log("Enemy Name: " + enemy.name + " Parent: " + enemy.transform.parent.parent.name.Colored(Colors.blue) + " Position: " + enemy.transform.parent.name.Colored(Colors.blue));
-        GalagaHelper.EnemiesSpawned += 1;
+        //GalagaHelper.EnemiesSpawned += 1;
+        GalagaHelper.JustSpawned += 1;
     }
 
     public void CreateEnemy4Trio(Transform spawn, Transform freepos)

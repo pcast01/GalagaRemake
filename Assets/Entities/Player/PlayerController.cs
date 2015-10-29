@@ -174,7 +174,7 @@ public class PlayerController : MonoBehaviour {
     {
         Projectile enemyProjectile = other.gameObject.GetComponent<Projectile>();
         //Enemy1Controller enemy1 = other.gameObject.GetComponent<Enemy1Controller>();
-        if (other.gameObject.layer == 10)
+        if (other.gameObject.layer == 10 || enemyProjectile)
         {
             if (isPlayerLive)
             {
@@ -187,7 +187,16 @@ public class PlayerController : MonoBehaviour {
                 bottom.Play();
                 rend.enabled = false;
                 isPlayerLive = false;
-                SimplePool.Despawn(other.gameObject);
+                if (enemyProjectile)
+                {
+                    enemyProjectile.Hit();
+                    Debug.Log("Enemy proj hit Player.");
+                }
+                else
+                {
+                    SimplePool.Despawn(other.gameObject);
+                    Debug.Log("Enemy ran into Player".Colored(Colors.blue));
+                }
                 //SimplePool.Despawn(this.gameObject);
                 GalagaHelper.numOfPlayers -= 1;
                 GalagaHelper.PlacePlayerIcons();
@@ -198,49 +207,46 @@ public class PlayerController : MonoBehaviour {
                 {
                     MainEnemyFormation main = GameObject.FindGameObjectWithTag("MainFormation").GetComponent<MainEnemyFormation>();
                     main.Invoke("EndGame", 3.0f);
-                    //Invoke("EndGame", 3.0f);
                 }
                 else
                 {
                     CreatePlayer();
-                    //Debug.Log("Create player invoke".Colored(Colors.red));
                 }
-                Debug.Log("Enemy ran into Player".Colored(Colors.blue));
             }
         }
 
-        if (enemyProjectile)
-        {
-            if (isPlayerLive)
-            {
-                GameObject explosionPrefab = Instantiate(explosion, gameObject.transform.position, gameObject.transform.rotation) as GameObject;
-                Destroy(explosionPrefab, 3.0f);
-                Debug.Log("Enemy proj hit Player.");
-                top = addShotSounds(explosionTop, Random.Range(0.8f, 1.2f));
-                bottom = addShotSounds(explosionBottom, Random.Range(0.8f, 1.2f));
-                top.Play();
-                bottom.Play();
-                enemyProjectile.Hit();
-                rend.enabled = false;
-                isPlayerLive = false;
-                //SimplePool.Despawn(gameObject);
-                GalagaHelper.numOfPlayers -= 1;
-                GalagaHelper.PlacePlayerIcons();
-                GalagaHelper.isPlayerCaptured = true;
-                GameObject.FindGameObjectWithTag("MainFormation").GetComponent<MainEnemyFormation>().isReadyDone = false;
-                Destroy(gameObject);
-                if (!CanPlayerStillPlay())
-                {
-                    MainEnemyFormation main = GameObject.FindGameObjectWithTag("MainFormation").GetComponent<MainEnemyFormation>();
-                    main.Invoke("EndGame", 3.0f);
-                    //Invoke("EndGame", 3.0f);
-                }
-                else
-                {
-                    CreatePlayer();
-                }
-            }
-        }
+        //if (enemyProjectile)
+        //{
+        //    if (isPlayerLive)
+        //    {
+        //        GameObject explosionPrefab = Instantiate(explosion, gameObject.transform.position, gameObject.transform.rotation) as GameObject;
+        //        Destroy(explosionPrefab, 3.0f);
+        //        Debug.Log("Enemy proj hit Player.");
+        //        top = addShotSounds(explosionTop, Random.Range(0.8f, 1.2f));
+        //        bottom = addShotSounds(explosionBottom, Random.Range(0.8f, 1.2f));
+        //        top.Play();
+        //        bottom.Play();
+        //        enemyProjectile.Hit();
+        //        rend.enabled = false;
+        //        isPlayerLive = false;
+        //        //SimplePool.Despawn(gameObject);
+        //        GalagaHelper.numOfPlayers -= 1;
+        //        GalagaHelper.PlacePlayerIcons();
+        //        GalagaHelper.isPlayerCaptured = true;
+        //        GameObject.FindGameObjectWithTag("MainFormation").GetComponent<MainEnemyFormation>().isReadyDone = false;
+        //        Destroy(gameObject);
+        //        if (!CanPlayerStillPlay())
+        //        {
+        //            MainEnemyFormation main = GameObject.FindGameObjectWithTag("MainFormation").GetComponent<MainEnemyFormation>();
+        //            main.Invoke("EndGame", 3.0f);
+        //            //Invoke("EndGame", 3.0f);
+        //        }
+        //        else
+        //        {
+        //            CreatePlayer();
+        //        }
+        //    }
+        //}
 
         Debug.Log("Something hit the player.".Colored(Colors.darkblue));
     }
@@ -293,8 +299,6 @@ public class PlayerController : MonoBehaviour {
         }
     }
     
-    
-
     void OnCollisionEnter(Collision other)
     {
         Debug.Log("Something hit the player.".Colored(Colors.red));

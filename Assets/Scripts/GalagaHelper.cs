@@ -45,8 +45,10 @@ public static class GalagaHelper
     public static List<Hashtable> EnemyPathParams = new List<Hashtable>();
     public static List<Hashtable> ScorpionPathParams = new List<Hashtable>();
     public static Quaternion enemyFourOrigRotation;
+    public static bool isTractorBeamOn = false;
     public static int numOfPlayers=3;
     public static bool isPlayerCaptured;
+    public static int numOfPlayersCaptured;
     public static bool isWaveOneStarted;
     public static float Wave1Delay = 0.0f;
     public static int RoundNumber;
@@ -65,6 +67,7 @@ public static class GalagaHelper
     public static int EnemiesSpawned;
     public static int EnemiesKilled;
     public static int DisabledEnemies;
+    public static int JustSpawned;
     /// <summary>
     /// Gets the current wave of enemy.
     /// </summary>
@@ -72,6 +75,7 @@ public static class GalagaHelper
 
     // Timer testing
     public static float TimeToSpawn; //Time started
+    public static float StartTime;
     public static float TimeDone;
     // Player Icons
     public static GameObject[] PlayerIcons;
@@ -174,6 +178,7 @@ public static class GalagaHelper
         form.isFull = false;
         GalagaHelper.TimeToSpawn = 0;
 
+        // Reset all Occupied bools in Positions
         foreach (GameObject obj in Object.FindObjectsOfType(typeof(GameObject)))
         {
             if (obj.GetComponent<Position>())
@@ -525,7 +530,7 @@ public static class GalagaHelper
     /// </summary>
     public static void StartRound1()
     {
-        if (EnemiesSpawned > 7 && enemyObjects.Count == 8 && isWaveOneStarted == false)
+        if (enemyObjects.Count == 8 && isWaveOneStarted == false)
         {
             try
             {

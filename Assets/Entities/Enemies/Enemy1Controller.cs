@@ -189,8 +189,6 @@ public class Enemy1Controller : EnemyController
     {
         Vector3 lastPoint = _waypoints[_waypoints.Count - 1];
         _waypoints.Clear();
-
-
         Vector3 topSide = Camera.main.ViewportToWorldPoint(new Vector3(0, 1, 0));
         _waypoints.Add(new Vector3(lastPoint.x, 0, topSide.z));
         _waypoints.Add(_originalPosition);

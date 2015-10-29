@@ -111,6 +111,7 @@ public class Enemy3Controller : EnemyController
     /// </summary>
     public void TractorBeamAttack()
     {
+        GalagaHelper.isTractorBeamOn = true;
         isNotInFormation = true;
         Transform enemyProjWall = GameObject.Find("EnemyProjectileWall").GetComponent<Transform>();
         if (enemyProjWall)
@@ -224,6 +225,7 @@ public class Enemy3Controller : EnemyController
         {
             sweepTractorBeam = false;
             tractorFoundPlayer = false;
+            playerController.isPlayerLive = false;
             playerController.playerCaptured = true;
             player.gameObject.tag = "CapturedPlayer";
 
@@ -284,6 +286,7 @@ public class Enemy3Controller : EnemyController
             gotOriginalPosition = false; // first position of enemy3
             isTractorBeamAttack = false; // Tractor beam attack setup
             isNotInFormation = false; // set for getting scorevalues and for ??
+            GalagaHelper.isTractorBeamOn = false;
         }
     }
 
@@ -360,6 +363,11 @@ public class Enemy3Controller : EnemyController
                 // Check if there is a captured player.
                 if (HaveChild())
                 {
+                    if (this.GetComponent<ParticleSystem>().isPlaying == true)
+                    {
+                        this.GetComponent<ParticleSystem>().enableEmission = false;
+                        //this.GetComponent<ParticleSystem>().Play(false);
+                    }
                     // Set in motion extra player
                     // Rotate in place then move to center along with currentplayer and then combine both.
                     Transform child = this.transform.GetChild(0);
