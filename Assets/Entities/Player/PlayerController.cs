@@ -166,7 +166,7 @@ public class PlayerController : MonoBehaviour {
 
         if (rotatePlayer)
         {
-              transform.Rotate(0, 360 * Time.deltaTime, 0, Space.World);
+            transform.Rotate(0, 360 * Time.deltaTime, 0, Space.World);
         }
 	}
 
@@ -301,6 +301,6 @@ public class PlayerController : MonoBehaviour {
     
     void OnCollisionEnter(Collision other)
     {
-        Debug.Log("Something hit the player.".Colored(Colors.red));
+        Debug.Log("Something Collided the player.".Colored(Colors.red));
     }
 }

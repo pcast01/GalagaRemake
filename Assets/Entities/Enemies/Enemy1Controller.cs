@@ -53,6 +53,7 @@ public class Enemy1Controller : EnemyController
 
         if (startScorpionAttack)
         {
+            GalagaHelper.isScorpionAttackOn = true;
             form1.GetComponent<EnemySpawner>().CreateEnemy4Trio(this.transform, this.transform.parent.transform);
             GetComponent<Renderer>().enabled = false;
             gameObject.transform.parent = null;
@@ -217,7 +218,7 @@ public class Enemy1Controller : EnemyController
         {
             health -= playerBullet.GetDamage();
             playerBullet.Hit();
-            Debug.Log("Enemy hit!".Bold().Colored(Colors.red));
+            Debug.Log(gameObject.name.Colored(Colors.red).Bold() + " Enemy hit!".Bold().Colored(Colors.red));
             // BEE: if formation = 50 points, diving == 100
             if (isNotInFormation)
             {
@@ -230,7 +231,8 @@ public class Enemy1Controller : EnemyController
 
             if (health <= 0)
             {
-                top = base.addShotSounds(explosionTop[Random.Range(0, explosionTop.Length)], Random.Range(0.8f, 1.2f));
+                 
+                top = base.addShotSounds(explosionTop[GalagaHelper.RandomNumber(0, explosionTop.Length)], Random.Range(0.8f, 1.2f));
                 bottom = base.addShotSounds(explosionBottom, Random.Range(0.8f, 1.2f));
                 top.PlayScheduled(0.3);
                 bottom.Play();
@@ -240,12 +242,27 @@ public class Enemy1Controller : EnemyController
                 Destroy(explosionPrefab, 3.0f);
                 //Debug.Log("Enemy1 killed: " + gameObject.name.Colored(Colors.blue) + " Parent: " + gameObject.transform.parent.parent.name.Colored(Colors.blue) + " Position: " + gameObject.transform.parent.name.Colored(Colors.blue));
                 this.isEnemyFiring = false;
-                Invoke("DisableEnemy", spawnDisableTime);
+                DisableEnemy();
+                //Invoke("DisableEnemy", spawnDisableTime);
                 GalagaHelper.EnemiesKilled += 1;
                 if (base.isRandomPicked == true)
                 {
                     isRandomPicked = false;
                     main.isEnemy1Done = true;
+                }
+                iTween onTween = gameObject.GetComponent<iTween>();
+                if (onTween)
+                {
+                    if (onTween.isRunning)
+                    {
+                        Debug.Log("Enemy1 Killed during Itween".Colored(Colors.red).Bold());
+                        //onTween.isRunning = false;
+                        GalagaHelper.EnemiesSpawned += 1;
+                    }
+                }
+                if (startScorpionAttack)
+                {
+                    startScorpionAttack = false;
                 }
                 SimplePool.Despawn(gameObject);
             }

@@ -94,6 +94,13 @@ public class MainEnemyFormation : MonoBehaviour {
 
     public void RestartRound()
     {
+        enemy1Picked = false;
+        enemy2Picked = false;
+        enemy3Picked = false;
+        isEnemy1Done = false;
+        isEnemy2Done = false;
+        isEnemy3Done = false;
+        enemyAttacks = 0;
         secondWaveFinished = false;
         thirdWaveFinished = false;
         fourthWaveFinished = false;
@@ -116,7 +123,7 @@ public class MainEnemyFormation : MonoBehaviour {
             Enemy1Controller enemyOne = enemy1[GalagaHelper.RandomNumber(0, enemy1.Length)].GetComponent<Enemy1Controller>();
             if (enemyOne)
             {
-                if (randScorpion == 3)
+                if (randScorpion == 3 && GalagaHelper.isTractorBeamOn == false)
                 {
                     enemyOne.startScorpionAttack = true;
                 }
@@ -129,7 +136,6 @@ public class MainEnemyFormation : MonoBehaviour {
                 enemyOne.isRandomPicked = true;
                 enemy1Picked = false;
             }
-            
         }
     }
 
@@ -160,14 +166,17 @@ public class MainEnemyFormation : MonoBehaviour {
             if (enemyThree)
             {
                 Debug.Log("Found Enemy Three");
-                int randomTractorBeam = GalagaHelper.RandomNumber(0, 6);
+                int randomTractorBeam = GalagaHelper.RandomNumber(0, 10); //6
                 if (randomTractorBeam == 3 && GalagaHelper.isTractorBeamOn == false && GalagaHelper.isPlayerCaptured == false)
                 {
                     enemyThree.isTractorBeamAttack = true;
                 }
                 else
                 {
-                    enemyThree.isAttackPlayer = true;
+                    if (!GalagaHelper.isTractorBeamOn)
+                    {
+                        enemyThree.isAttackPlayer = true;
+                    }
                 }
                 enemyThree.isRandomPicked = true;
                 enemy3Picked = false;
@@ -270,6 +279,7 @@ public class MainEnemyFormation : MonoBehaviour {
             form2.GetComponent<EnemySpawner>().enabled = true;
             if (form2.GetComponent<EnemySpawner>().isFormationUp)
             {
+                Debug.Log("form2 isFormationUp == True; Enemies Just: ".Bold() + GalagaHelper.JustSpawned + " Enemies Spawned: ".Bold() + GalagaHelper.EnemiesSpawned);
                 GalagaHelper.CurrentRoundPhase += 1;
             }
         }

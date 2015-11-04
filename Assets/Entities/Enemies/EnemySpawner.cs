@@ -48,7 +48,7 @@ public class EnemySpawner : MonoBehaviour {
 
         if (gameObject.name == "Round1Phase1EnemyFormation")
         {
-            Debug.Log(gameObject.name.Bold() + "Just Spawned: " + GalagaHelper.JustSpawned + " Enemies Spawned: " + GalagaHelper.EnemiesSpawned + " Enemies Killed: " + GalagaHelper.EnemiesKilled + " Enemies Disabled: "+ GalagaHelper.DisabledEnemies + " PlayerLifes: " + GalagaHelper.numOfPlayers);
+            Debug.Log(gameObject.name.Bold() + " Just Spawned: " + GalagaHelper.JustSpawned + " Enemies Spawned: " + GalagaHelper.EnemiesSpawned + " Enemies Killed: " + GalagaHelper.EnemiesKilled + " Enemies Disabled: "+ GalagaHelper.DisabledEnemies + " PlayerLifes: " + GalagaHelper.numOfPlayers);
             // Check if 8 enemies have spawned then run them
             GalagaHelper.StartRound1();
             if (GalagaHelper.EnemiesKilled >= GalagaHelper.JustSpawned && GalagaHelper.JustSpawned != 0)
@@ -61,6 +61,7 @@ public class EnemySpawner : MonoBehaviour {
                 MainEnemyFormation main = GameObject.FindGameObjectWithTag("MainFormation").GetComponent<MainEnemyFormation>();
                 main.RestartRound();
                 GalagaHelper.EnemiesKilled = 0;
+                GalagaHelper.JustSpawned = 0;
                 GalagaHelper.EnemiesSpawned = 0;
                 GalagaHelper.DisabledEnemies = 0;
                 GalagaHelper.isWaveOneStarted = false;
@@ -294,6 +295,31 @@ public class EnemySpawner : MonoBehaviour {
         enemy.GetComponent<Renderer>().enabled = true;
         enemy.transform.position = spawn.position;
         enemy.transform.parent = freePos;
+        if (GalagaHelper.RoundNumber>1)
+        {
+            Enemy1Controller EC1 = enemy.GetComponent<Enemy1Controller>();
+            if (EC1)
+            {
+                EC1.ResetVars();
+                EC1.isEnemyFiring = false;
+                EC1.Start();
+            }
+            Enemy2Controller ec2 = enemy.GetComponent<Enemy2Controller>();
+            if (ec2)
+            {
+                ec2.ResetVars();
+                ec2.isEnemyFiring = false;
+                ec2.AttackPlayer = false;
+                ec2.Start();
+            }
+            Enemy3Controller ec3 = enemy.GetComponent<Enemy3Controller>();
+            if (ec3)
+            {
+                ec3.ResetVars();
+                ec3.isEnemyFiring = false;
+                ec3.Start();
+            }
+        }
         Debug.Log("Enemy Name: " + enemy.name + " Parent: " + enemy.transform.parent.parent.name.Colored(Colors.blue) + " Position: " + enemy.transform.parent.name.Colored(Colors.blue));
         //GalagaHelper.EnemiesSpawned += 1;
         GalagaHelper.JustSpawned += 1;
@@ -400,6 +426,7 @@ public class EnemySpawner : MonoBehaviour {
         }
         GalagaHelper.RemoveScorpionPaths();
         GameObject.FindGameObjectWithTag("MainFormation").GetComponent<MainEnemyFormation>().isEnemy1Done = true;
+        GalagaHelper.isScorpionAttackOn = false;
         //Debug.Log("Enemy 4 orig rotation".Colored(Colors.red));
     }
 

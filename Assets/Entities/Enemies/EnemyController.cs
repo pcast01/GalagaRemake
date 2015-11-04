@@ -13,7 +13,7 @@ public class EnemyController : MonoBehaviour
     public MainEnemyFormation main;
     public float spawnDisableTime = 5.1f;
     public bool isRandomPicked;
-
+    public string posName;
     [Header("Weapon Settings")]
     public GameObject enemyLaser;
     public bool isEnemyFiring;
@@ -44,6 +44,11 @@ public class EnemyController : MonoBehaviour
         return audio;
     }
 
+    public void ResetVars()
+    {
+        myTween.Clear();
+    }
+
     public void Start()
     {
         hero = GameObject.FindGameObjectWithTag("Player");
@@ -56,7 +61,7 @@ public class EnemyController : MonoBehaviour
         GalagaHelper.Enemy2PathEnd = GalagaHelper.Enemy2PathDirection();
         // get Tranform.Lookat() for Enemy2
         GalagaHelper.Enemy2LookAt();
-        Debug.Log("Enemy2Random: ".Colored(Colors.red) + GalagaHelper.Enemy2Random);
+        //Debug.Log("Enemy2Random: ".Colored(Colors.red) + GalagaHelper.Enemy2Random);
         round1Phase1spawner = GameObject.Find("Round1Phase1EnemyFormation").GetComponent<EnemySpawner>();
         scoreKeeper = GameObject.Find("Score").GetComponent<ScoreKeeper>();
         isEnemyFiring = false;
@@ -93,19 +98,19 @@ public class EnemyController : MonoBehaviour
             //GalagaHelper.CurrentRoundPhase += 1;
         }
 
-        if (GalagaHelper.CurrentRoundPhase == GalagaHelper.Formations.Round1Phase2)
+        if (GalagaHelper.CurrentRoundPhase == GalagaHelper.Formations.Round1Phase2 && GalagaHelper.JustSpawned <= 16)
         {
             CreatePathAndMove(GalagaHelper.Formations.Round1Phase2, GalagaHelper.RoundNumber);
         }
-        else if (GalagaHelper.CurrentRoundPhase == GalagaHelper.Formations.Round1Phase3)
+        else if (GalagaHelper.CurrentRoundPhase == GalagaHelper.Formations.Round1Phase3 && GalagaHelper.JustSpawned <= 24)
         {
             CreatePathAndMove(GalagaHelper.Formations.Round1Phase3, GalagaHelper.RoundNumber);
         }
-        else if (GalagaHelper.CurrentRoundPhase == GalagaHelper.Formations.Round1Phase4)
+        else if (GalagaHelper.CurrentRoundPhase == GalagaHelper.Formations.Round1Phase4 && GalagaHelper.JustSpawned <= 32)
         {
             CreatePathAndMove(GalagaHelper.Formations.Round1Phase4, GalagaHelper.RoundNumber);
         }
-        else if (GalagaHelper.CurrentRoundPhase == GalagaHelper.Formations.Round1Phase5)
+        else if (GalagaHelper.CurrentRoundPhase == GalagaHelper.Formations.Round1Phase5 && GalagaHelper.JustSpawned <= 40)
         {
             CreatePathAndMove(GalagaHelper.Formations.Round1Phase5, GalagaHelper.RoundNumber);
             spawnDisableTime = 2.0f;
@@ -115,6 +120,7 @@ public class EnemyController : MonoBehaviour
     public void EnemyCompletePath()
     {
         GalagaHelper.EnemiesSpawned += 1;
+        Debug.Log("Enemy: ".Bold().Colored(Colors.red) + gameObject.name.Bold().Colored(Colors.red) + " has made it!".Bold().Colored(Colors.red));
     }
 
     /// <summary>
@@ -148,6 +154,7 @@ public class EnemyController : MonoBehaviour
         myTween.Add("onComplete", "EnemyCompletePath");
         myTween.Add("onCompleteTarget", gameObject);
         iTween.MoveTo(gameObject, myTween);
+        Debug.Log(gameObject.name.Italics().Bold().Colored(Colors.red) + " has added Itween path.".Colored(Colors.red));
     }
 
     public void OnDrawGizmos()

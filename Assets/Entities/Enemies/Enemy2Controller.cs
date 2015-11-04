@@ -177,7 +177,7 @@ public class Enemy2Controller : EnemyController
         {
             health -= playerBullet.GetDamage();
             playerBullet.Hit();
-            Debug.Log("Enemy hit!".Bold().Colored(Colors.red));
+            Debug.Log(gameObject.name.Colored(Colors.red).Bold() + " Enemy hit!".Bold().Colored(Colors.red));
 
             // Butterfly: if formation = 80 points, diving == 160
             if (isNotInFormation)
@@ -202,12 +202,22 @@ public class Enemy2Controller : EnemyController
                 //Debug.Log("Enemy2 killed: " + gameObject.name.Colored(Colors.blue) + " Parent: " + gameObject.transform.parent.parent.name.Colored(Colors.blue)+ " Position: " + gameObject.transform.parent.name.Colored(Colors.blue));
                 //GalagaHelper.DisabledEnemies += 1;
                 this.isEnemyFiring = false;
-                Invoke("RunawayFromParent", spawnDisableTime);
+                RunawayFromParent();
                 GalagaHelper.EnemiesKilled += 1;
                 if (base.isRandomPicked == true)
                 {
                     isRandomPicked = false;
                     main.isEnemy2Done = true;
+                }
+                iTween onTween = gameObject.GetComponent<iTween>();
+                if (onTween)
+                {
+                    if (onTween.isRunning)
+                    {
+                        Debug.Log("Enemy2 Killed during Itween".Colored(Colors.red).Bold());
+                        //onTween.isRunning = false;
+                        GalagaHelper.EnemiesSpawned += 1;
+                    }
                 }
                 SimplePool.Despawn(gameObject);
             }

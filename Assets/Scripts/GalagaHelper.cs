@@ -45,6 +45,7 @@ public static class GalagaHelper
     public static List<Hashtable> EnemyPathParams = new List<Hashtable>();
     public static List<Hashtable> ScorpionPathParams = new List<Hashtable>();
     public static Quaternion enemyFourOrigRotation;
+    public static bool isScorpionAttackOn = false;
     public static bool isTractorBeamOn = false;
     public static int numOfPlayers=3;
     public static bool isPlayerCaptured;

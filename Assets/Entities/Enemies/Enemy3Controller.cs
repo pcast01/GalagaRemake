@@ -167,7 +167,6 @@ public class Enemy3Controller : EnemyController
             }
             isTractorBeamAttack = false;
         }
-
     }
 
     /// <summary>
@@ -322,11 +321,11 @@ public class Enemy3Controller : EnemyController
 
     public void OnTriggerEnter(Collider other)
     {
-        Debug.Log("Bullet hit enemy3.");
         Projectile playerBullet = other.gameObject.GetComponent<Projectile>();
         if (playerBullet)
         {
             health -= playerBullet.GetDamage();
+            Debug.Log(gameObject.name.Colored(Colors.red).Bold() + " Bullet hit enemy3.");
             playerBullet.Hit();
             Renderer rend = GetComponent<Renderer>();
             rend.material.SetColor("_Color", Color.red);
@@ -357,8 +356,18 @@ public class Enemy3Controller : EnemyController
                 Destroy(explosionPrefab, 3.0f);
                 Debug.Log("Enemy3 killed: " + gameObject.name.Colored(Colors.blue) + " Parent: " + gameObject.transform.parent.parent.name.Colored(Colors.blue)+ " Position: " + gameObject.transform.parent.name.Colored(Colors.blue));
                 //GalagaHelper.DisabledEnemies += 1;
+                iTween onTween = gameObject.GetComponent<iTween>();
+                if (onTween)
+                {
+                    if (onTween.isRunning)
+                    {
+                        Debug.Log("Enemy3 Killed during Itween".Colored(Colors.red).Bold());
+                        GalagaHelper.EnemiesSpawned += 1;
+                    }
+                }
                 SimplePool.Despawn(gameObject);
-                Invoke("DisableEnemy", spawnDisableTime);
+                DisableEnemy();
+                //Invoke("DisableEnemy", spawnDisableTime);
                 GalagaHelper.EnemiesKilled += 1;
                 // Check if there is a captured player.
                 if (HaveChild())
