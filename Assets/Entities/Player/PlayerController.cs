@@ -50,9 +50,9 @@ public class PlayerController : MonoBehaviour {
         xMax = rightMost.x - padding;
         Mesh mesh = GetComponent<MeshFilter>().mesh;
         rend = GetComponent<Renderer>();
-        rend.enabled = true;
+        //rend.enabled = true;
         playerWidth = mesh.bounds.size.x;
-        Debug.Log("PlayerWidth: " + playerWidth);
+        //Debug.Log("PlayerWidth: " + playerWidth);
 	}
 
     public void GetCirclePath()
@@ -128,7 +128,7 @@ public class PlayerController : MonoBehaviour {
         // If there is no captured player then proceed.
         if (!this.playerCaptured)
         {
-            if (Input.GetButtonDown("Fire1") && allowFire)
+            if (Input.GetButtonDown("Fire1") && allowFire && isPlayerLive)
             {
                 StartCoroutine("Fire");
                 //Debug.Log("Firing");
@@ -166,7 +166,7 @@ public class PlayerController : MonoBehaviour {
 
         if (rotatePlayer)
         {
-              transform.Rotate(0, 360 * Time.deltaTime, 0, Space.World);
+            transform.Rotate(0, 360 * Time.deltaTime, 0, Space.World);
         }
 	}
 
@@ -174,7 +174,7 @@ public class PlayerController : MonoBehaviour {
     {
         Projectile enemyProjectile = other.gameObject.GetComponent<Projectile>();
         //Enemy1Controller enemy1 = other.gameObject.GetComponent<Enemy1Controller>();
-        if (other.gameObject.layer == 10)
+        if (other.gameObject.layer == 10 || enemyProjectile)
         {
             if (isPlayerLive)
             {
@@ -187,7 +187,16 @@ public class PlayerController : MonoBehaviour {
                 bottom.Play();
                 rend.enabled = false;
                 isPlayerLive = false;
-                SimplePool.Despawn(other.gameObject);
+                if (enemyProjectile)
+                {
+                    enemyProjectile.Hit();
+                    Debug.Log("Enemy proj hit Player.");
+                }
+                else
+                {
+                    SimplePool.Despawn(other.gameObject);
+                    Debug.Log("Enemy ran into Player".Colored(Colors.blue));
+                }
                 //SimplePool.Despawn(this.gameObject);
                 GalagaHelper.numOfPlayers -= 1;
                 GalagaHelper.PlacePlayerIcons();
@@ -196,47 +205,48 @@ public class PlayerController : MonoBehaviour {
                 Destroy(gameObject);
                 if (!CanPlayerStillPlay())
                 {
-                    Invoke("EndGame", 3.0f);
+                    MainEnemyFormation main = GameObject.FindGameObjectWithTag("MainFormation").GetComponent<MainEnemyFormation>();
+                    main.Invoke("EndGame", 3.0f);
                 }
                 else
                 {
                     CreatePlayer();
-                    //Debug.Log("Create player invoke".Colored(Colors.red));
                 }
-                Debug.Log("Enemy ran into Player".Colored(Colors.blue));
             }
         }
 
-        if (enemyProjectile)
-        {
-            if (isPlayerLive)
-            {
-                GameObject explosionPrefab = Instantiate(explosion, gameObject.transform.position, gameObject.transform.rotation) as GameObject;
-                Destroy(explosionPrefab, 3.0f);
-                Debug.Log("Enemy proj hit Player.");
-                top = addShotSounds(explosionTop, Random.Range(0.8f, 1.2f));
-                bottom = addShotSounds(explosionBottom, Random.Range(0.8f, 1.2f));
-                top.Play();
-                bottom.Play();
-                enemyProjectile.Hit();
-                rend.enabled = false;
-                isPlayerLive = false;
-                //SimplePool.Despawn(gameObject);
-                GalagaHelper.numOfPlayers -= 1;
-                GalagaHelper.PlacePlayerIcons();
-                GalagaHelper.isPlayerCaptured = true;
-                GameObject.FindGameObjectWithTag("MainFormation").GetComponent<MainEnemyFormation>().isReadyDone = false;
-                Destroy(gameObject);
-                if (!CanPlayerStillPlay())
-                {
-                    Invoke("EndGame", 3.0f);
-                }
-                else
-                {
-                    CreatePlayer();
-                }
-            }
-        }
+        //if (enemyProjectile)
+        //{
+        //    if (isPlayerLive)
+        //    {
+        //        GameObject explosionPrefab = Instantiate(explosion, gameObject.transform.position, gameObject.transform.rotation) as GameObject;
+        //        Destroy(explosionPrefab, 3.0f);
+        //        Debug.Log("Enemy proj hit Player.");
+        //        top = addShotSounds(explosionTop, Random.Range(0.8f, 1.2f));
+        //        bottom = addShotSounds(explosionBottom, Random.Range(0.8f, 1.2f));
+        //        top.Play();
+        //        bottom.Play();
+        //        enemyProjectile.Hit();
+        //        rend.enabled = false;
+        //        isPlayerLive = false;
+        //        //SimplePool.Despawn(gameObject);
+        //        GalagaHelper.numOfPlayers -= 1;
+        //        GalagaHelper.PlacePlayerIcons();
+        //        GalagaHelper.isPlayerCaptured = true;
+        //        GameObject.FindGameObjectWithTag("MainFormation").GetComponent<MainEnemyFormation>().isReadyDone = false;
+        //        Destroy(gameObject);
+        //        if (!CanPlayerStillPlay())
+        //        {
+        //            MainEnemyFormation main = GameObject.FindGameObjectWithTag("MainFormation").GetComponent<MainEnemyFormation>();
+        //            main.Invoke("EndGame", 3.0f);
+        //            //Invoke("EndGame", 3.0f);
+        //        }
+        //        else
+        //        {
+        //            CreatePlayer();
+        //        }
+        //    }
+        //}
 
         Debug.Log("Something hit the player.".Colored(Colors.darkblue));
     }
@@ -252,8 +262,10 @@ public class PlayerController : MonoBehaviour {
             newPlayer.GetComponent<PlayerController>().enabled = true;
         }
         newPlayer.transform.position = playerSpawn.transform.position;
-        newPlayer.GetComponent<PlayerController>().Invoke("ResumeGame", 4.0f);
-        //Invoke("ResumeGame", 4.0f);
+        newPlayer.GetComponent<Renderer>().enabled = false;
+        newPlayer.GetComponent<MeshCollider>().enabled = false;
+        newPlayer.GetComponent<PlayerController>().Invoke("ResumeGame", 8.0f);
+        newPlayer.GetComponent<PlayerController>().Invoke("ShowPlayer", 4.0f);
     }
 
     public void ResumeGame()
@@ -265,6 +277,12 @@ public class PlayerController : MonoBehaviour {
             isPlayerLive = true;    
             Debug.Log("ISpLAYERrEADY IS TRUE");
         }
+    }
+    
+    public void ShowPlayer()
+    {
+        GetComponent<Renderer>().enabled = true;
+        GetComponent<MeshCollider>().enabled = true;
     }
 
     bool CanPlayerStillPlay()
@@ -281,13 +299,8 @@ public class PlayerController : MonoBehaviour {
         }
     }
     
-    void EndGame()
-    {
-        Application.LoadLevel("Lose Screen");
-    }
-
     void OnCollisionEnter(Collision other)
     {
-        Debug.Log("Something hit the player.".Colored(Colors.red));
+        Debug.Log("Something Collided the player.".Colored(Colors.red));
     }
 }

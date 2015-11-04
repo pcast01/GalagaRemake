@@ -13,7 +13,7 @@ public class EnemyController : MonoBehaviour
     public MainEnemyFormation main;
     public float spawnDisableTime = 5.1f;
     public bool isRandomPicked;
-
+    public string posName;
     [Header("Weapon Settings")]
     public GameObject enemyLaser;
     public bool isEnemyFiring;
@@ -44,25 +44,31 @@ public class EnemyController : MonoBehaviour
         return audio;
     }
 
+    public void ResetVars()
+    {
+        myTween.Clear();
+    }
+
     public void Start()
     {
         hero = GameObject.FindGameObjectWithTag("Player");
         rend = GetComponent<Renderer>();
         meshcol = GetComponent<MeshCollider>();
         main = GameObject.FindGameObjectWithTag("MainFormation").GetComponent<MainEnemyFormation>();
-        spawnDisableTime = 15.0f;
+        spawnDisableTime = 10.0f;
         // get end direction random
         GalagaHelper.SetEnemy2Random();
         GalagaHelper.Enemy2PathEnd = GalagaHelper.Enemy2PathDirection();
         // get Tranform.Lookat() for Enemy2
         GalagaHelper.Enemy2LookAt();
-        Debug.Log("Enemy2Random: ".Colored(Colors.red) + GalagaHelper.Enemy2Random);
+        //Debug.Log("Enemy2Random: ".Colored(Colors.red) + GalagaHelper.Enemy2Random);
         round1Phase1spawner = GameObject.Find("Round1Phase1EnemyFormation").GetComponent<EnemySpawner>();
         scoreKeeper = GameObject.Find("Score").GetComponent<ScoreKeeper>();
+        isEnemyFiring = false;
         //Debug.Log("enemies spawned: " + GalagaHelper.EnemiesSpawned);
 
         // Wave 1 path creation.
-        if (GalagaHelper.EnemiesSpawned <= 8)
+        if (GalagaHelper.JustSpawned <= 8)
         {
             // Spawn 1 of 5 phases
             if (round1Phase1spawner.spawnEntranceRight)
@@ -82,58 +88,39 @@ public class EnemyController : MonoBehaviour
         }
 
         // Collect all 1st wave enemies and move them all at once with a delay
-        if (GalagaHelper.EnemiesSpawned < 9)
+        if (GalagaHelper.JustSpawned < 9)
         {
             myTween.Add("time", movePathTime);
             myTween.Add("easetype", "linear");
+            myTween.Add("onComplete", "EnemyCompletePath");
+            myTween.Add("onCompleteTarget", gameObject);
             GalagaHelper.CollectEnemyPaths(gameObject, myTween);
             //GalagaHelper.CurrentRoundPhase += 1;
         }
 
-        if (GalagaHelper.CurrentRoundPhase == GalagaHelper.Formations.Round1Phase2)
+        if (GalagaHelper.CurrentRoundPhase == GalagaHelper.Formations.Round1Phase2 && GalagaHelper.JustSpawned <= 16)
         {
             CreatePathAndMove(GalagaHelper.Formations.Round1Phase2, GalagaHelper.RoundNumber);
         }
-        else if (GalagaHelper.CurrentRoundPhase == GalagaHelper.Formations.Round1Phase3)
+        else if (GalagaHelper.CurrentRoundPhase == GalagaHelper.Formations.Round1Phase3 && GalagaHelper.JustSpawned <= 24)
         {
             CreatePathAndMove(GalagaHelper.Formations.Round1Phase3, GalagaHelper.RoundNumber);
         }
-        else if (GalagaHelper.CurrentRoundPhase == GalagaHelper.Formations.Round1Phase4)
+        else if (GalagaHelper.CurrentRoundPhase == GalagaHelper.Formations.Round1Phase4 && GalagaHelper.JustSpawned <= 32)
         {
             CreatePathAndMove(GalagaHelper.Formations.Round1Phase4, GalagaHelper.RoundNumber);
         }
-        else if (GalagaHelper.CurrentRoundPhase == GalagaHelper.Formations.Round1Phase5)
+        else if (GalagaHelper.CurrentRoundPhase == GalagaHelper.Formations.Round1Phase5 && GalagaHelper.JustSpawned <= 40)
         {
             CreatePathAndMove(GalagaHelper.Formations.Round1Phase5, GalagaHelper.RoundNumber);
             spawnDisableTime = 2.0f;
         }
+    }
 
-        //else if (GalagaHelper.EnemiesSpawned > 8 && GalagaHelper.EnemiesSpawned < 17)
-        //{
-        //    CreatePathAndMove(GalagaHelper.Formations.Round1Phase2, GalagaHelper.RoundNumber);
-        //}
-        //else if (GalagaHelper.EnemiesSpawned > 16 && GalagaHelper.EnemiesSpawned < 25)
-        //{
-        //    Debug.Log(GalagaHelper.CurrentRoundPhase.ToString().Colored(Colors.lightblue));
-        //    CreatePathAndMove(GalagaHelper.Formations.Round1Phase3, GalagaHelper.RoundNumber);
-        //}
-        //else if (GalagaHelper.EnemiesSpawned > 24 && GalagaHelper.EnemiesSpawned < 33)
-        //{
-        //    Debug.Log(GalagaHelper.CurrentRoundPhase.ToString().Colored(Colors.lightblue));
-        //    CreatePathAndMove(GalagaHelper.Formations.Round1Phase4, GalagaHelper.RoundNumber);
-        //}
-        //else if (GalagaHelper.EnemiesSpawned > 32 && GalagaHelper.EnemiesSpawned < 41)
-        //{
-        //    Debug.Log(GalagaHelper.CurrentRoundPhase.ToString().Colored(Colors.lightblue));
-        //    CreatePathAndMove(GalagaHelper.Formations.Round1Phase5, GalagaHelper.RoundNumber);
-        //}
-        //else
-        //{
-        //    //Debug.Log("Else fired".Bold());
-        //    //myTween.Add("time", movePathTime);
-        //    //myTween.Add("easetype", "linear");
-        //    //iTween.MoveTo(gameObject, myTween);
-        //}
+    public void EnemyCompletePath()
+    {
+        GalagaHelper.EnemiesSpawned += 1;
+        Debug.Log("Enemy: ".Bold().Colored(Colors.red) + gameObject.name.Bold().Colored(Colors.red) + " has made it!".Bold().Colored(Colors.red));
     }
 
     /// <summary>
@@ -163,27 +150,11 @@ public class EnemyController : MonoBehaviour
         }
         myTween.Add("time", movePathTime);
         myTween.Add("delay", GalagaHelper.Wave1Delay);
-        //Debug.Log("Wave1delay: " + GalagaHelper.Wave1Delay);
         myTween.Add("easetype", "linear");
+        myTween.Add("onComplete", "EnemyCompletePath");
+        myTween.Add("onCompleteTarget", gameObject);
         iTween.MoveTo(gameObject, myTween);
-        //if (myTween.Contains("path"))
-        //{
-        //    Debug.Log(myTween["path"])
-        //}
-        if (GalagaHelper.EnemiesSpawned == 16)
-        {
-            // Last enemy done for 2nd wave
-            main.secondWaveFinished = true;
-        }
-        else if (GalagaHelper.EnemiesSpawned == 24)
-        {
-            main.thirdWaveFinished = true;
-            //Debug.Log("third wave finished.");
-        }
-        else if (GalagaHelper.EnemiesSpawned == 32)
-        {
-            main.fourthWaveFinished = true;
-        }
+        Debug.Log(gameObject.name.Italics().Bold().Colored(Colors.red) + " has added Itween path.".Colored(Colors.red));
     }
 
     public void OnDrawGizmos()
@@ -204,9 +175,10 @@ public class EnemyController : MonoBehaviour
         if (isEnemyFiring)
         {
             float probability = Time.deltaTime * shotsPerSecond;
-            if (Random.value < probability)
+            float x = Random.value;
+            //Debug.Log(gameObject.name + " (if x < probability )- Random: "+ x.ToString() + " Probability: " + probability.ToString());
+            if (x < probability)
             {
-                Debug.Log("Enemy firing.");
                 Fire();
             }  
         }
@@ -214,28 +186,29 @@ public class EnemyController : MonoBehaviour
 
     private void Fire()
     {
-        if (gameObject)
+        // If enemy is north of player then fire
+        if (!hero)
         {
-            // If enemy is north of player then fire
-            if (!hero)
-            {
-                hero = GameObject.FindGameObjectWithTag("Player");
-            }
-            if (gameObject.transform.position.x > hero.transform.position.x)
-            {
-                Vector3 startPos = transform.position + new Vector3(0, 0, -4);
-                //GameObject enemyBullet = Instantiate(enemyLaser, startPos, Quaternion.identity) as GameObject;
-                GameObject enemyBullet = SimplePool.Spawn(enemyLaser, startPos, Quaternion.identity, true) as GameObject;
-                enemyBullet.transform.position = startPos;
+            hero = GameObject.FindGameObjectWithTag("Player");
+        }
+        if (gameObject.transform.position.z > 10f)
+        {
+            Vector3 startPos = transform.position + new Vector3(0, 0, -4);
+            //GameObject enemyBullet = Instantiate(enemyLaser, startPos, Quaternion.identity) as GameObject;
+            GameObject enemyBullet = SimplePool.Spawn(enemyLaser, startPos, Quaternion.identity, true) as GameObject;
+            enemyBullet.transform.position = startPos;
 
-                // get player target
-                Vector3 targetPosition = hero.transform.position;
-                Vector3 currentPosition = enemyBullet.transform.position;
+            // get player target
+            Vector3 targetPosition = hero.transform.position;
+            Vector3 currentPosition = enemyBullet.transform.position;
 
-                Vector3 directionOfTravel = targetPosition - currentPosition;
-                Debug.Log("enemy firing ".Colored(Colors.red));
-                enemyBullet.GetComponent<Rigidbody>().velocity = directionOfTravel.normalized * projectileSpeed;
-            }
+            Vector3 directionOfTravel = targetPosition - currentPosition;
+            //Debug.Log("enemy firing ".Colored(Colors.red));
+            enemyBullet.GetComponent<Rigidbody>().velocity = directionOfTravel.normalized * projectileSpeed;
+        }
+        else
+        {
+            //Debug.Log("Out of firing range.".Bold().Colored(Colors.red) + " Z position of Enemy: " + gameObject.transform.position.z);
         }
     }
 

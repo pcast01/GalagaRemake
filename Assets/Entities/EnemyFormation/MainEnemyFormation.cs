@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using UnityEngine.UI;
 
 public class MainEnemyFormation : MonoBehaviour {
 
@@ -85,6 +86,32 @@ public class MainEnemyFormation : MonoBehaviour {
         //roundTextPos = playerText.transform.position;
 	}
 
+    public void EndGame()
+    {
+        Debug.Log("End Game Called".Colored(Colors.red).Bold());
+        Application.LoadLevel("Lose Screen");
+    }
+
+    public void RestartRound()
+    {
+        enemy1Picked = false;
+        enemy2Picked = false;
+        enemy3Picked = false;
+        isEnemy1Done = false;
+        isEnemy2Done = false;
+        isEnemy3Done = false;
+        enemyAttacks = 0;
+        secondWaveFinished = false;
+        thirdWaveFinished = false;
+        fourthWaveFinished = false;
+        //playerText.SetActive(true);
+        roundText.GetComponent<Text>().text = "Stage " + GalagaHelper.RoundNumber.ToString();
+        roundText.SetActive(false);
+        playerTextHigh.SetActive(false);
+        readyText.SetActive(false);
+        //Invoke("StartRound", 3.0f);
+    }
+
     #region RandomEnemyAttacks
     void PickRandomEnemyOne()
     {
@@ -96,7 +123,7 @@ public class MainEnemyFormation : MonoBehaviour {
             Enemy1Controller enemyOne = enemy1[GalagaHelper.RandomNumber(0, enemy1.Length)].GetComponent<Enemy1Controller>();
             if (enemyOne)
             {
-                if (randScorpion == 5 || randScorpion == 3)
+                if (randScorpion == 3 && GalagaHelper.isTractorBeamOn == false)
                 {
                     enemyOne.startScorpionAttack = true;
                 }
@@ -104,12 +131,11 @@ public class MainEnemyFormation : MonoBehaviour {
                 {
                     //Debug.Log("Found EnemyOne");
                     enemyOne.CreatePath();
-                    enemyOne.isEnemyFiring = true;
+                    //enemyOne.isEnemyFiring = true;
                 }
                 enemyOne.isRandomPicked = true;
                 enemy1Picked = false;
             }
-            
         }
     }
 
@@ -140,14 +166,17 @@ public class MainEnemyFormation : MonoBehaviour {
             if (enemyThree)
             {
                 Debug.Log("Found Enemy Three");
-                int randomTractorBeam = GalagaHelper.RandomNumber(0, 3);
-                if (randomTractorBeam == 3)
+                int randomTractorBeam = GalagaHelper.RandomNumber(0, 10); //6
+                if (randomTractorBeam == 3 && GalagaHelper.isTractorBeamOn == false && GalagaHelper.isPlayerCaptured == false)
                 {
                     enemyThree.isTractorBeamAttack = true;
                 }
                 else
                 {
-                    enemyThree.isAttackPlayer = true;
+                    if (!GalagaHelper.isTractorBeamOn)
+                    {
+                        enemyThree.isAttackPlayer = true;
+                    }
                 }
                 enemyThree.isRandomPicked = true;
                 enemy3Picked = false;
@@ -168,7 +197,15 @@ public class MainEnemyFormation : MonoBehaviour {
 
         #region SetBeginningText
         // Set the player text to show like Galaga
-        GalagaHelper.TimeToSpawn = Time.time;
+        
+        if (GalagaHelper.RoundNumber == 1)
+        {
+            GalagaHelper.TimeToSpawn = Time.time;
+        }
+        else
+        {
+            GalagaHelper.TimeToSpawn = Time.time - GalagaHelper.StartTime;
+        }
         //Debug.Log(GalagaHelper.TimeToSpawn.ToString().Bold());
         if (GalagaHelper.TimeToSpawn > 0f && GalagaHelper.TimeToSpawn < 2.0f)
         {
@@ -203,20 +240,50 @@ public class MainEnemyFormation : MonoBehaviour {
 
         }
         #endregion
+
+        if (GalagaHelper.JustSpawned == 8)
+        {
+            form1.GetComponent<EnemySpawner>().isFull = true;
+            Debug.Log("Form 1 Full".Colored(Colors.green).Bold());
+        }
+        else if (GalagaHelper.JustSpawned == 16)
+        {
+            form2.GetComponent<EnemySpawner>().isFull = true;
+            this.secondWaveFinished = true;
+            Debug.Log("Form 2 Full".Colored(Colors.green).Bold());
+        }
+        else if (GalagaHelper.JustSpawned == 24)
+        {
+            form3.GetComponent<EnemySpawner>().isFull = true;
+            this.thirdWaveFinished = true;
+            Debug.Log("Form 3 Full".Colored(Colors.green).Bold());
+        }
+        else if (GalagaHelper.JustSpawned == 32)
+        {
+            form4.GetComponent<EnemySpawner>().isFull = true;
+            this.fourthWaveFinished = true;
+            Debug.Log("Form 4 Full".Colored(Colors.green).Bold());
+        }
+        else if (GalagaHelper.JustSpawned == 40)
+        {
+            form5.GetComponent<EnemySpawner>().isFull = true;
+            Debug.Log("Form 5 Full".Colored(Colors.green).Bold());
+        }
         //Debug.Log(GalagaHelper.TimeToSpawn.ToString().Italics());
         //Debug.Log(GalagaHelper.CurrentRoundPhase.ToString().Bold());
         //Debug.Log("Player lives: ".Bold() + GalagaHelper.numOfPlayers.ToString().Bold());
-        if (GalagaHelper.CurrentRoundPhase == GalagaHelper.Formations.Round1Phase2 && GalagaHelper.TimeToSpawn > 11.0f) // && GalagaHelper.TimeToSpawn > 8.0f
+        if (GalagaHelper.CurrentRoundPhase == GalagaHelper.Formations.Round1Phase2 && GalagaHelper.TimeToSpawn > 8.0f) // && GalagaHelper.TimeToSpawn > 11.0f
         {
             //GameObject pt2 = GameObject.FindGameObjectWithTag("phase2").gameObject;
             Debug.Log("Round2 enabled".Colored(Colors.purple));
             form2.GetComponent<EnemySpawner>().enabled = true;
             if (form2.GetComponent<EnemySpawner>().isFormationUp)
             {
+                Debug.Log("form2 isFormationUp == True; Enemies Just: ".Bold() + GalagaHelper.JustSpawned + " Enemies Spawned: ".Bold() + GalagaHelper.EnemiesSpawned);
                 GalagaHelper.CurrentRoundPhase += 1;
             }
         }
-        else if (GalagaHelper.CurrentRoundPhase == GalagaHelper.Formations.Round1Phase3 && secondWaveFinished && GalagaHelper.TimeToSpawn > 15.1f) //&& GalagaHelper.TimeToSpawn > 11.8
+        else if (GalagaHelper.CurrentRoundPhase == GalagaHelper.Formations.Round1Phase3 && secondWaveFinished && GalagaHelper.TimeToSpawn > 15f) //&& GalagaHelper.TimeToSpawn > 15
         {
             //Debug.Log("Round3 enabled".Colored(Colors.purple));
             form3.GetComponent<EnemySpawner>().enabled = true;
@@ -227,7 +294,7 @@ public class MainEnemyFormation : MonoBehaviour {
                 //secondWaveFinished = false;
             }
         }
-        else if (GalagaHelper.CurrentRoundPhase == GalagaHelper.Formations.Round1Phase4 && thirdWaveFinished && GalagaHelper.TimeToSpawn > 20.0f) //&& GalagaHelper.TimeToSpawn > 15.1
+        else if (GalagaHelper.CurrentRoundPhase == GalagaHelper.Formations.Round1Phase4 && thirdWaveFinished && GalagaHelper.TimeToSpawn > 19f) //&& GalagaHelper.TimeToSpawn > 20
         {
             Debug.Log("Round4 enabled".Colored(Colors.purple));
             form4.GetComponent<EnemySpawner>().enabled = true;
@@ -237,7 +304,7 @@ public class MainEnemyFormation : MonoBehaviour {
                 //thirdWaveFinished = false;
             }
         }
-        else if (GalagaHelper.CurrentRoundPhase == GalagaHelper.Formations.Round1Phase5 && fourthWaveFinished && GalagaHelper.TimeToSpawn > 25.0f) //&& GalagaHelper.TimeToSpawn > 17.4
+        else if (GalagaHelper.CurrentRoundPhase == GalagaHelper.Formations.Round1Phase5 && fourthWaveFinished && GalagaHelper.TimeToSpawn > 24.0f) //&& GalagaHelper.TimeToSpawn > 18
         {
             Debug.Log("Round5 enabled".Colored(Colors.purple));
             form5.GetComponent<EnemySpawner>().enabled = true;
@@ -312,7 +379,7 @@ public class MainEnemyFormation : MonoBehaviour {
             isEnemy3Done = false;
         }
 
-        Debug.Log("player captured " + GalagaHelper.isPlayerCaptured + " Starfield paused: " + starfield.isPaused);
+        //Debug.Log("player captured " + GalagaHelper.isPlayerCaptured + " Starfield paused: " + starfield.isPaused);
 
         // If found a player captured then set ready text.
         if (GalagaHelper.isPlayerCaptured == true)
@@ -325,16 +392,19 @@ public class MainEnemyFormation : MonoBehaviour {
                 {
                     readyText.SetActive(true);
                     starfield.Pause();
-                    Debug.Log("Paused starfield");
+                    //Debug.Log("Paused starfield");
                 }
                 else if (isPlayerReady) // player is ready now get rid of readyText
                 {
                     readyText.SetActive(false);
-                    Debug.Log("Starfield Unpaused".Colored(Colors.green));
+                    //Debug.Log("Starfield Unpaused".Colored(Colors.green));
                     starfield.Play();
                     isPlayerReady = false;
                     isReadyDone = true;
                     GalagaHelper.isPlayerCaptured = false;
+                    //GameObject player = GameObject.FindGameObjectWithTag("Player").gameObject;
+                    //player.GetComponent<Renderer>().enabled = true;
+                    //player.GetComponent<MeshCollider>().enabled = true;
                     isEnemy1Done = true;
                     isEnemy2Done = true;
                     isEnemy3Done = true;
@@ -342,11 +412,6 @@ public class MainEnemyFormation : MonoBehaviour {
             }
         }
 	}
-
-    void LateUpdate()
-    {
-        
-    }
 
     public void StartEnemyAttack()
     {

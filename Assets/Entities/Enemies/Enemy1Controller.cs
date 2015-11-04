@@ -33,6 +33,14 @@ public class Enemy1Controller : EnemyController
     private void Start()
     {
         base.Start();
+        if (meshcol.enabled == false)
+        {
+            meshcol.enabled = true;
+        }
+        if (rend.enabled == false)
+        {
+            rend.enabled = true;
+        }
         form1 = GameObject.FindGameObjectWithTag("phase1").gameObject;
         //Debug.Log("Original Pos in START: " + transform.position.ToString());
         _isOnPath = true;
@@ -45,6 +53,7 @@ public class Enemy1Controller : EnemyController
 
         if (startScorpionAttack)
         {
+            GalagaHelper.isScorpionAttackOn = true;
             form1.GetComponent<EnemySpawner>().CreateEnemy4Trio(this.transform, this.transform.parent.transform);
             GetComponent<Renderer>().enabled = false;
             gameObject.transform.parent = null;
@@ -57,7 +66,7 @@ public class Enemy1Controller : EnemyController
         // of screen.
         if (_finishedPath)
         {
-            this.isEnemyFiring = false;
+            //this.isEnemyFiring = false;
             CreateIncomingPath();
 
             if (_isOnPath)
@@ -147,6 +156,7 @@ public class Enemy1Controller : EnemyController
 	        }
             else
             {
+                this.isEnemyFiring = true;
                 _waypoints.Add(GameObject.FindGameObjectWithTag("Point2").GetComponent<Transform>().position);
                 //for (int i = 0; i < 9; i++)
                 for (int i = 0; i < 5; i++)
@@ -180,7 +190,6 @@ public class Enemy1Controller : EnemyController
     {
         Vector3 lastPoint = _waypoints[_waypoints.Count - 1];
         _waypoints.Clear();
-
         Vector3 topSide = Camera.main.ViewportToWorldPoint(new Vector3(0, 1, 0));
         _waypoints.Add(new Vector3(lastPoint.x, 0, topSide.z));
         _waypoints.Add(_originalPosition);
@@ -195,6 +204,7 @@ public class Enemy1Controller : EnemyController
 
     public void CircleComplete()
     {
+        this.isEnemyFiring = false;
         _finishedPath = true;
         transform.rotation = _originalRotation;
         //Debug.Log("Enemy completed circle".Bold().Italics());
@@ -208,7 +218,7 @@ public class Enemy1Controller : EnemyController
         {
             health -= playerBullet.GetDamage();
             playerBullet.Hit();
-            Debug.Log("Enemy hit!".Bold().Colored(Colors.red));
+            Debug.Log(gameObject.name.Colored(Colors.red).Bold() + " Enemy hit!".Bold().Colored(Colors.red));
             // BEE: if formation = 50 points, diving == 100
             if (isNotInFormation)
             {
@@ -221,7 +231,8 @@ public class Enemy1Controller : EnemyController
 
             if (health <= 0)
             {
-                top = base.addShotSounds(explosionTop[Random.Range(0, explosionTop.Length)], Random.Range(0.8f, 1.2f));
+                 
+                top = base.addShotSounds(explosionTop[GalagaHelper.RandomNumber(0, explosionTop.Length)], Random.Range(0.8f, 1.2f));
                 bottom = base.addShotSounds(explosionBottom, Random.Range(0.8f, 1.2f));
                 top.PlayScheduled(0.3);
                 bottom.Play();
@@ -229,17 +240,31 @@ public class Enemy1Controller : EnemyController
                 meshcol.enabled = false;
                 GameObject explosionPrefab = Instantiate(explosion, gameObject.transform.position, gameObject.transform.rotation) as GameObject;
                 Destroy(explosionPrefab, 3.0f);
-                Debug.Log("Enemy1 killed: " + gameObject.name.Colored(Colors.blue) + " SpawnDisableTime: " + spawnDisableTime);
-                GalagaHelper.DisabledEnemies += 1;
-                SimplePool.Despawn(gameObject);
-                //DisableEnemy();
-                Invoke("DisableEnemy", spawnDisableTime);
+                //Debug.Log("Enemy1 killed: " + gameObject.name.Colored(Colors.blue) + " Parent: " + gameObject.transform.parent.parent.name.Colored(Colors.blue) + " Position: " + gameObject.transform.parent.name.Colored(Colors.blue));
+                this.isEnemyFiring = false;
+                DisableEnemy();
+                //Invoke("DisableEnemy", spawnDisableTime);
                 GalagaHelper.EnemiesKilled += 1;
                 if (base.isRandomPicked == true)
                 {
                     isRandomPicked = false;
                     main.isEnemy1Done = true;
                 }
+                iTween onTween = gameObject.GetComponent<iTween>();
+                if (onTween)
+                {
+                    if (onTween.isRunning)
+                    {
+                        Debug.Log("Enemy1 Killed during Itween".Colored(Colors.red).Bold());
+                        //onTween.isRunning = false;
+                        GalagaHelper.EnemiesSpawned += 1;
+                    }
+                }
+                if (startScorpionAttack)
+                {
+                    startScorpionAttack = false;
+                }
+                SimplePool.Despawn(gameObject);
             }
         }
     }
@@ -260,7 +285,8 @@ public class Enemy1Controller : EnemyController
 
     void OnDisable()
     {
-        Debug.Log("Disabled Enemy: " + gameObject.name.Colored(Colors.red));
+        Debug.Log("Disabled Enemy1: " + gameObject.name.Colored(Colors.red));
+        GalagaHelper.DisabledEnemies += 1;
         //if (gameObject.transform.parent != null)
         //{
         //    gameObject.transform.parent = null;

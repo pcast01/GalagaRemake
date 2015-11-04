@@ -96,8 +96,8 @@ MonoBehaviour:
   isRandomPicked: 0
   enemyLaser: {fileID: 159908, guid: 6635a52a223ff2f48a4728ecf0781244, type: 2}
   isEnemyFiring: 0
-  shotsPerSecond: .5
-  projectileSpeed: 46
+  shotsPerSecond: .800000012
+  projectileSpeed: 40
   scoreKeeper: {fileID: 0}
   explosionTop:
   - {fileID: 8300000, guid: f203d269d2a20104fbf0eaee349cef4e, type: 3}
@@ -191,7 +191,11 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 0}
       propertyPath: projectileSpeed
-      value: 46
+      value: 40
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: shotsPerSecond
+      value: .800000012
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}

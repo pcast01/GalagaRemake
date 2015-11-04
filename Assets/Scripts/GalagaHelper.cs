@@ -45,8 +45,11 @@ public static class GalagaHelper
     public static List<Hashtable> EnemyPathParams = new List<Hashtable>();
     public static List<Hashtable> ScorpionPathParams = new List<Hashtable>();
     public static Quaternion enemyFourOrigRotation;
+    public static bool isScorpionAttackOn = false;
+    public static bool isTractorBeamOn = false;
     public static int numOfPlayers=3;
     public static bool isPlayerCaptured;
+    public static int numOfPlayersCaptured;
     public static bool isWaveOneStarted;
     public static float Wave1Delay = 0.0f;
     public static int RoundNumber;
@@ -65,6 +68,7 @@ public static class GalagaHelper
     public static int EnemiesSpawned;
     public static int EnemiesKilled;
     public static int DisabledEnemies;
+    public static int JustSpawned;
     /// <summary>
     /// Gets the current wave of enemy.
     /// </summary>
@@ -72,6 +76,7 @@ public static class GalagaHelper
 
     // Timer testing
     public static float TimeToSpawn; //Time started
+    public static float StartTime;
     public static float TimeDone;
     // Player Icons
     public static GameObject[] PlayerIcons;
@@ -146,22 +151,42 @@ public static class GalagaHelper
     {
         EnemySpawner form = GetFormationScript(GalagaHelper.Formations.Round1Phase1);
         form.DisownChildren();
+        form.isFormationUp = false;
+        form.isFull = false;
 
         form = GetFormationScript(GalagaHelper.Formations.Round1Phase2);
         form.DisownChildren();
         form.enabled = false;
+        form.isFormationUp = false;
+        form.isFull = false;
 
         form = GetFormationScript(GalagaHelper.Formations.Round1Phase3);
         form.DisownChildren();
         form.enabled = false;
+        form.isFormationUp = false;
+        form.isFull = false;
 
         form = GetFormationScript(GalagaHelper.Formations.Round1Phase4);
         form.DisownChildren();
         form.enabled = false;
+        form.isFormationUp = false;
+        form.isFull = false;
 
         form = GetFormationScript(GalagaHelper.Formations.Round1Phase5);
         form.DisownChildren();
         form.enabled = false;
+        form.isFormationUp = false;
+        form.isFull = false;
+        GalagaHelper.TimeToSpawn = 0;
+
+        // Reset all Occupied bools in Positions
+        foreach (GameObject obj in Object.FindObjectsOfType(typeof(GameObject)))
+        {
+            if (obj.GetComponent<Position>())
+            {
+                obj.GetComponent<Position>().isOccupied = false;
+            }
+        }
     }
 
     /// <summary>
@@ -203,9 +228,6 @@ public static class GalagaHelper
     public static Transform[] EntrancePatterns(EntranceFlightPatterns pattern)
     {
         EnemySpawner spawner = GameObject.Find("Round1Phase1EnemyFormation").GetComponent<EnemySpawner>();
-        //GameObject form2 = GameObject.FindGameObjectWithTag("phase2").gameObject;
-        //GameObject form31 = GameObject.FindGameObjectWithTag("phase31").gameObject;
-        //GameObject spawnPt = GameObject.FindGameObjectWithTag("Respawn");
         GameObject middlePt = GameObject.FindGameObjectWithTag("Point2");
         GameObject rightEntrancePt = GameObject.FindGameObjectWithTag("begin_Right");
         GameObject leftEntrancePt = GameObject.FindGameObjectWithTag("begin_Left");
@@ -509,7 +531,7 @@ public static class GalagaHelper
     /// </summary>
     public static void StartRound1()
     {
-        if (EnemiesSpawned > 7 && enemyObjects.Count == 8 && isWaveOneStarted == false)
+        if (enemyObjects.Count == 8 && isWaveOneStarted == false)
         {
             try
             {
@@ -564,7 +586,7 @@ public static class GalagaHelper
         MainEnemyFormation mainEnemyForm = GameObject.FindGameObjectWithTag("MainFormation").GetComponent<MainEnemyFormation>();
         if (mainEnemyForm && GalagaHelper.EnemiesKilled < 41)
 	    {
-            int x = GalagaHelper.RandomNumber(0, 6);
+            int x = GalagaHelper.RandomNumber(0, 7);
             if (x == 1)
 	        {
                 mainEnemyForm.enemy1Picked = true;
@@ -614,16 +636,8 @@ public static class GalagaHelper
             case 1:
                 for (int i = 0; i < PlayerIcons.Length; i++)
                 {
-                    if (PlayerIcons[i].name.Equals("PlayerIcon"))
-                    {
-                        Renderer rend = PlayerIcons[i].GetComponent<Renderer>();
-                        rend.enabled = true;
-                    }
-                    else
-                    {
-                        Renderer rend = PlayerIcons[i].GetComponent<Renderer>();
-                        rend.enabled = false;
-                    }
+                    Renderer rend = PlayerIcons[i].GetComponent<Renderer>();
+                    rend.enabled = false;
                 }
                 break;
             case 2:
@@ -725,12 +739,21 @@ public static class GalagaHelper
             {
                 Object.Destroy(obj.gameObject);
             }
-            if (obj.name.StartsWith("Enemy") && obj.gameObject.activeSelf == true && obj.gameObject.transform.parent == null)
+
+            if (obj.activeSelf == false && obj.transform.parent != null)
             {
-                Object.Destroy(obj.gameObject);
+                obj.transform.parent = null;
+            }
+
+            if (obj.name.StartsWith("Enemy") && obj.gameObject.name.Contains("projectile") == false && obj.gameObject.name.Contains("Wall") == false && obj.gameObject.activeSelf == true && obj.gameObject.transform.parent == null)
+            {
+                //Object.Destroy(obj.gameObject);
+                x += 1;
+                //GalagaHelper.EnemiesKilled += 1;
+                //Debug.Log(obj.name.Bold() + " is destoyed.");
             }
         }
-        //Debug.Log("<bold>Count of objects:</bold> " + x);
+        Debug.Log("*** Count of enemies found: ".Bold().Colored(Colors.red) + x.ToString().Bold().Colored(Colors.red));
     }
     #endregion
 }

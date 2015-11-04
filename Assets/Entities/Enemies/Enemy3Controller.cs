@@ -111,6 +111,7 @@ public class Enemy3Controller : EnemyController
     /// </summary>
     public void TractorBeamAttack()
     {
+        GalagaHelper.isTractorBeamOn = true;
         isNotInFormation = true;
         Transform enemyProjWall = GameObject.Find("EnemyProjectileWall").GetComponent<Transform>();
         if (enemyProjWall)
@@ -166,7 +167,6 @@ public class Enemy3Controller : EnemyController
             }
             isTractorBeamAttack = false;
         }
-
     }
 
     /// <summary>
@@ -224,6 +224,7 @@ public class Enemy3Controller : EnemyController
         {
             sweepTractorBeam = false;
             tractorFoundPlayer = false;
+            playerController.isPlayerLive = false;
             playerController.playerCaptured = true;
             player.gameObject.tag = "CapturedPlayer";
 
@@ -284,6 +285,7 @@ public class Enemy3Controller : EnemyController
             gotOriginalPosition = false; // first position of enemy3
             isTractorBeamAttack = false; // Tractor beam attack setup
             isNotInFormation = false; // set for getting scorevalues and for ??
+            GalagaHelper.isTractorBeamOn = false;
         }
     }
 
@@ -319,11 +321,11 @@ public class Enemy3Controller : EnemyController
 
     public void OnTriggerEnter(Collider other)
     {
-        Debug.Log("Bullet hit enemy3.");
         Projectile playerBullet = other.gameObject.GetComponent<Projectile>();
         if (playerBullet)
         {
             health -= playerBullet.GetDamage();
+            Debug.Log(gameObject.name.Colored(Colors.red).Bold() + " Bullet hit enemy3.");
             playerBullet.Hit();
             Renderer rend = GetComponent<Renderer>();
             rend.material.SetColor("_Color", Color.red);
@@ -352,14 +354,29 @@ public class Enemy3Controller : EnemyController
                 meshcol.enabled = false;
                 GameObject explosionPrefab = Instantiate(explosion, gameObject.transform.position, gameObject.transform.rotation) as GameObject;
                 Destroy(explosionPrefab, 3.0f);
-                Debug.Log("Enemy3 killed: " + gameObject.name.Colored(Colors.blue) + " SpawnDisableTime: " + spawnDisableTime);
-                GalagaHelper.DisabledEnemies += 1;
+                Debug.Log("Enemy3 killed: " + gameObject.name.Colored(Colors.blue) + " Parent: " + gameObject.transform.parent.parent.name.Colored(Colors.blue)+ " Position: " + gameObject.transform.parent.name.Colored(Colors.blue));
+                //GalagaHelper.DisabledEnemies += 1;
+                iTween onTween = gameObject.GetComponent<iTween>();
+                if (onTween)
+                {
+                    if (onTween.isRunning)
+                    {
+                        Debug.Log("Enemy3 Killed during Itween".Colored(Colors.red).Bold());
+                        GalagaHelper.EnemiesSpawned += 1;
+                    }
+                }
                 SimplePool.Despawn(gameObject);
-                Invoke("DisableEnemy", spawnDisableTime);
+                DisableEnemy();
+                //Invoke("DisableEnemy", spawnDisableTime);
                 GalagaHelper.EnemiesKilled += 1;
                 // Check if there is a captured player.
                 if (HaveChild())
                 {
+                    if (this.GetComponent<ParticleSystem>().isPlaying == true)
+                    {
+                        this.GetComponent<ParticleSystem>().enableEmission = false;
+                        //this.GetComponent<ParticleSystem>().Play(false);
+                    }
                     // Set in motion extra player
                     // Rotate in place then move to center along with currentplayer and then combine both.
                     Transform child = this.transform.GetChild(0);
@@ -431,7 +448,7 @@ public class Enemy3Controller : EnemyController
         transform.LookAt(player);
         Vector3 targetPosition = player.transform.position;
         Vector3 currentPosition = this.transform.position;
-        //this.isEnemyFiring = true;
+        this.isEnemyFiring = true;
         //first, check to see if we're close enough to the target
         if (Vector3.Distance(currentPosition, targetPosition) > 24.0f && outOfPlayerRange == false)
         {
@@ -445,7 +462,7 @@ public class Enemy3Controller : EnemyController
                 //input sound
                 audio = base.addShotSounds(swooshSound, 1.0f);
                 audio.Play();
-                Debug.Log("Sound swoop played".Colored(Colors.red));
+                //Debug.Log("Sound swoop played".Colored(Colors.red));
             }
             this.transform.Translate(
                 (directionOfTravel.x * swoopSpeed * Time.deltaTime),
@@ -501,8 +518,8 @@ public class Enemy3Controller : EnemyController
     }
     void OnDisable()
     {
-        Debug.Log("Disabled Enemy3 called".Colored(Colors.navy) + " SpawnDisableTime: " + spawnDisableTime);
-        Debug.Log("Disabled Enemy: " + gameObject.name.Colored(Colors.red));
+        Debug.Log(gameObject.name.Colored(Colors.red) +"Disabled Enemy3 called".Colored(Colors.navy) + " SpawnDisableTime: " + spawnDisableTime);
+        GalagaHelper.DisabledEnemies += 1;
     }
 
     public void OnDrawGizmos()

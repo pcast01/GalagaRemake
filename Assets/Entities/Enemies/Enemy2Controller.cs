@@ -29,6 +29,14 @@ public class Enemy2Controller : EnemyController
     {
         base.Start();
         //mainForm = GameObject.FindGameObjectWithTag("MainFormation").GetComponent<MainEnemyFormation>();
+        if (meshcol.enabled == false)
+        {
+            meshcol.enabled = true;
+        }
+        if (rend.enabled == false)
+        {
+            rend.enabled = true;
+        }
         leftSwoop = GameObject.FindGameObjectWithTag("enemy2Left");
         rightSwoop = GameObject.FindGameObjectWithTag("enemy2Right");
         player = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>();
@@ -76,14 +84,22 @@ public class Enemy2Controller : EnemyController
 
         if (!player)
         {
-            player = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>(); ;
+            try
+            {
+                player = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>(); ;
+
+            }
+            catch (System.Exception)
+            {
+                Debug.Log("Player not present");
+            }
         }
         transform.LookAt(player);
         Vector3 targetPosition = player.transform.position;
         Vector3 currentPosition = this.transform.position;
         this.isEnemyFiring = true;
         //first, check to see if we're close enough to the target
-        if (Vector3.Distance(currentPosition, targetPosition) > 24.0f && outOfPlayerRange == false)
+        if (Vector3.Distance(currentPosition, targetPosition) > 15.0f && outOfPlayerRange == false)
         {
             Vector3 directionOfTravel = targetPosition - currentPosition;
             //now normalize the direction, since we only want the direction information
@@ -161,7 +177,7 @@ public class Enemy2Controller : EnemyController
         {
             health -= playerBullet.GetDamage();
             playerBullet.Hit();
-            Debug.Log("Enemy hit!".Bold().Colored(Colors.red));
+            Debug.Log(gameObject.name.Colored(Colors.red).Bold() + " Enemy hit!".Bold().Colored(Colors.red));
 
             // Butterfly: if formation = 80 points, diving == 160
             if (isNotInFormation)
@@ -183,21 +199,32 @@ public class Enemy2Controller : EnemyController
                 meshcol.enabled = false;
                 GameObject explosionPrefab = Instantiate(explosion, gameObject.transform.position, gameObject.transform.rotation) as GameObject;
                 Destroy(explosionPrefab, 3.0f);
-                Debug.Log("Enemy2 killed: " + gameObject.name.Colored(Colors.blue) + " SpawnDisableTime: " + spawnDisableTime);
-                GalagaHelper.DisabledEnemies += 1;
-                Invoke("DisableEnemy", spawnDisableTime);
-                SimplePool.Despawn(gameObject);
+                //Debug.Log("Enemy2 killed: " + gameObject.name.Colored(Colors.blue) + " Parent: " + gameObject.transform.parent.parent.name.Colored(Colors.blue)+ " Position: " + gameObject.transform.parent.name.Colored(Colors.blue));
+                //GalagaHelper.DisabledEnemies += 1;
+                this.isEnemyFiring = false;
+                RunawayFromParent();
                 GalagaHelper.EnemiesKilled += 1;
                 if (base.isRandomPicked == true)
                 {
                     isRandomPicked = false;
                     main.isEnemy2Done = true;
                 }
+                iTween onTween = gameObject.GetComponent<iTween>();
+                if (onTween)
+                {
+                    if (onTween.isRunning)
+                    {
+                        Debug.Log("Enemy2 Killed during Itween".Colored(Colors.red).Bold());
+                        //onTween.isRunning = false;
+                        GalagaHelper.EnemiesSpawned += 1;
+                    }
+                }
+                SimplePool.Despawn(gameObject);
             }
         }
     }
 
-    void DisableEnemy()
+    void RunawayFromParent()
     {
         Debug.Log("Runaway from parent Enemy2 called".Colored(Colors.navy) + " SpawnDisableTime: " + spawnDisableTime);
         gameObject.transform.parent = null;
@@ -206,5 +233,6 @@ public class Enemy2Controller : EnemyController
     void OnDisable()
     {
         Debug.Log("Disabled Enemy2: " + gameObject.name.Colored(Colors.red));
+        GalagaHelper.DisabledEnemies += 1;
     }
 }
