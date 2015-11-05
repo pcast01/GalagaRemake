@@ -36,8 +36,11 @@ public class EnemySpawner : MonoBehaviour {
         //pos = Game
         // Execute Spawn function
         SpawnUntilFull();
-        GalagaHelper.StartTime = Time.time;
-        GalagaHelper.TimeToSpawn = Time.time;
+        if (gameObject.name == "Round1Phase1EnemyFormation")
+        {
+            GalagaHelper.StartTime = Time.time;
+            GalagaHelper.TimeToSpawn = Time.time;
+        }
 	}
 
 	void Update () {
@@ -150,7 +153,7 @@ public class EnemySpawner : MonoBehaviour {
     /// Spawn every enemy in the formation that you are in and then switch to the next wave. Uses Invoke
     /// Command to call it self and when full then it sets the currentroundphase to the next wave.
     /// </summary>
-    void SpawnUntilFull()
+    public void SpawnUntilFull()
     {
         // Get the ntxt Free position that is empty in the formation.
         Transform freePosition = NextFreePosition();
