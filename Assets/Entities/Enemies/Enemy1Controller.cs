@@ -121,11 +121,21 @@ public class Enemy1Controller : EnemyController
             pathToPlayer = player.scorpionCirclePath;
 
             // chose random swoops
-            choosePath = Random.Range(0, 2);
-            Debug.Log("Path = " + choosePath);
+            choosePath = GalagaHelper.RandomNumber(0, 2);
+            switch (choosePath)
+            {
+                case 0:
+                    Debug.Log("Path: Circle Player then swoop back up.".Colored(Colors.purple));
+                    break;
+                case 1:
+                    Debug.Log("Path: Circle Player then re-appear on top.".Colored(Colors.red));
+                    break;
+                default:
+                    Debug.Log("Path: other than 0 or 1 picked.".Colored(Colors.purple));
+                    break;
+            }
             // Path0 = circle then swoop back up
             // Path1 = circle then reappear on top
-            Debug.Log("SwoopDownSpeed: " + swoopDownSpeed);
             if (choosePath==0)
 	        {
                 //_waypoints.Add(GameObject.FindGameObjectWithTag("Point2").GetComponent<Transform>().position);
@@ -140,6 +150,7 @@ public class Enemy1Controller : EnemyController
                 for (int i = 0; i < _waypoints.Count; i++)
                 {
                     newVect30[i] = _waypoints[i];
+                    Debug.Log(gameObject.name.ToString().Bold() + " Path Swoop " + i + ": " + newVect30[i].ToString().Bold());
                 }
 
                 // _waypoints.Add(_originalPosition);
@@ -163,13 +174,14 @@ public class Enemy1Controller : EnemyController
                 {
                     _waypoints.Add(pathToPlayer[i]);
                 }
-                _waypoints.Add(GameObject.FindGameObjectWithTag("Point2").GetComponent<Transform>().position);
+                //_waypoints.Add(GameObject.FindGameObjectWithTag("Point2").GetComponent<Transform>().position);
                 //Debug.Log("Waypoints Count: " + _waypoints.Count);
                 Vector3[] newVect3 = new Vector3[_waypoints.Count];
                 //Debug.Log(_waypoints.Count.ToString().Bold().Italics());
                 for (int i = 0; i < _waypoints.Count; i++)
                 {
                     newVect3[i] = _waypoints[i];
+                    Debug.Log(gameObject.name.ToString().Bold() + " Path reappear on top " + i + ": " + newVect3[i].ToString().Bold());
                 }
                 tweenPath.Add("path", newVect3);
                 tweenPath.Add("time", swoopDownSpeed);

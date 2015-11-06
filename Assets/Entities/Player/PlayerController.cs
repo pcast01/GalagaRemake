@@ -266,6 +266,7 @@ public class PlayerController : MonoBehaviour {
         newPlayer.GetComponent<MeshCollider>().enabled = false;
         newPlayer.GetComponent<PlayerController>().Invoke("ResumeGame", 8.0f);
         newPlayer.GetComponent<PlayerController>().Invoke("ShowPlayer", 4.0f);
+        newPlayer.GetComponentInChildren<CirclePathController>().enabled = true;
     }
 
     public void ResumeGame()
