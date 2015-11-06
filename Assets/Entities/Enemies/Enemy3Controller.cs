@@ -227,8 +227,6 @@ public class Enemy3Controller : EnemyController
             playerController.isPlayerLive = false;
             playerController.playerCaptured = true;
             player.gameObject.tag = "CapturedPlayer";
-
-            
             Debug.Log("Player will now be captured.");
             // Get Player animation of getting captured by tractor beam and play it.
             Animation anim = player.GetComponent<Animation>();
@@ -294,6 +292,7 @@ public class Enemy3Controller : EnemyController
         GameObject play =  Instantiate(playerNew, playerSpawn.transform.position, playerSpawn.transform.rotation) as GameObject;
         player = play.gameObject.transform;
         playerController = play.GetComponent<PlayerController>();
+        play.GetComponentInChildren<CirclePathController>().enabled = true;
         // Stop firing and then resume back on again later??
         Invoke("ResumeGame", 4.0f);
     }
@@ -375,7 +374,7 @@ public class Enemy3Controller : EnemyController
                     if (this.GetComponent<ParticleSystem>().isPlaying == true)
                     {
                         this.GetComponent<ParticleSystem>().enableEmission = false;
-                        //this.GetComponent<ParticleSystem>().Play(false);
+                        this.GetComponent<ParticleSystem>().Stop();
                     }
                     // Set in motion extra player
                     // Rotate in place then move to center along with currentplayer and then combine both.
