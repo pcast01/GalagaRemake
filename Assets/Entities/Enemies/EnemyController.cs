@@ -13,7 +13,7 @@ public class EnemyController : MonoBehaviour
     public MainEnemyFormation main;
     public float spawnDisableTime = 5.1f;
     public bool isRandomPicked;
-    public string posName;
+
     [Header("Weapon Settings")]
     public GameObject enemyLaser;
     public bool isEnemyFiring;

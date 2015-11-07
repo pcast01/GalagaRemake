@@ -22,6 +22,10 @@ public class MainEnemyFormation : MonoBehaviour {
     public bool isEnemy2Done = false;
     public bool isEnemy3Done = false;
     public bool isPlayerReady = false;
+    private bool form2Spawn = false;
+    private bool form3Spawn = false;
+    private bool form4Spawn = false;
+    private bool form5Spawn = false;
     public GameObject player;
     public GameObject[] enemy1;
     public GameObject[] enemy2;
@@ -43,6 +47,7 @@ public class MainEnemyFormation : MonoBehaviour {
     private PlayerController playerController;
     private ParticleSystem starfield;
     public bool isReadyDone;
+    
 
     void Awake()
     {
@@ -280,42 +285,46 @@ public class MainEnemyFormation : MonoBehaviour {
             //GameObject pt2 = GameObject.FindGameObjectWithTag("phase2").gameObject;
             Debug.Log("Round2 enabled".Colored(Colors.purple));
             form2.GetComponent<EnemySpawner>().enabled = true;
+            if (GalagaHelper.RoundNumber == 2 && form2Spawn == false)
+            {
+                form2.GetComponent<EnemySpawner>().SpawnUntilFull();
+                form2Spawn = true;
+            }
             if (form2.GetComponent<EnemySpawner>().isFormationUp)
             {
                 Debug.Log("form2 isFormationUp == True; Enemies Just: ".Bold() + GalagaHelper.JustSpawned + " Enemies Spawned: ".Bold() + GalagaHelper.EnemiesSpawned);
                 GalagaHelper.CurrentRoundPhase += 1;
-                if (GalagaHelper.RoundNumber == 2)
-                {
-                    form2.GetComponent<EnemySpawner>().SpawnUntilFull();
-                }
+                
             }
         }
         else if (GalagaHelper.CurrentRoundPhase == GalagaHelper.Formations.Round1Phase3 && secondWaveFinished && GalagaHelper.TimeToSpawn > 15f) //&& GalagaHelper.TimeToSpawn > 15
         {
             //Debug.Log("Round3 enabled".Colored(Colors.purple));
             form3.GetComponent<EnemySpawner>().enabled = true;
+            if (GalagaHelper.RoundNumber == 2 && form3Spawn == false)
+            {
+                form3.GetComponent<EnemySpawner>().SpawnUntilFull();
+                form3Spawn = true;
+            }
             Debug.Log("Round3 enabled. form3 isFormationUp: " + form3.GetComponent<EnemySpawner>().isFormationUp);
             if (form3.GetComponent<EnemySpawner>().isFormationUp)
             {
                 GalagaHelper.CurrentRoundPhase += 1;
-                if (GalagaHelper.RoundNumber == 2)
-                {
-                    form3.GetComponent<EnemySpawner>().SpawnUntilFull();
-                }
+                
             }
         }
         else if (GalagaHelper.CurrentRoundPhase == GalagaHelper.Formations.Round1Phase4 && thirdWaveFinished && GalagaHelper.TimeToSpawn > 19f) //&& GalagaHelper.TimeToSpawn > 20
         {
             Debug.Log("Round4 enabled".Colored(Colors.purple));
             form4.GetComponent<EnemySpawner>().enabled = true;
+            if (GalagaHelper.RoundNumber == 2 && form4Spawn == false)
+            {
+                form4.GetComponent<EnemySpawner>().SpawnUntilFull();
+                form4Spawn = true;
+            }
             if (form4.GetComponent<EnemySpawner>().isFormationUp)
             {
                 GalagaHelper.CurrentRoundPhase += 1;
-                if (GalagaHelper.RoundNumber == 2)
-                {
-                    form4.GetComponent<EnemySpawner>().SpawnUntilFull();
-                }
-                //thirdWaveFinished = false;
             }
         }
         else if (GalagaHelper.CurrentRoundPhase == GalagaHelper.Formations.Round1Phase5 && fourthWaveFinished && GalagaHelper.TimeToSpawn > 24.0f) //&& GalagaHelper.TimeToSpawn > 18
@@ -327,9 +336,10 @@ public class MainEnemyFormation : MonoBehaviour {
             Invoke("StartEnemyAttack", 5.0f);
             //moveFormation = true;
             fourthWaveFinished = false;
-            if (GalagaHelper.RoundNumber == 2)
+            if (GalagaHelper.RoundNumber == 2 && form5Spawn == false)
             {
                 form5.GetComponent<EnemySpawner>().SpawnUntilFull();
+                form5Spawn = true;
             }
         }
 
