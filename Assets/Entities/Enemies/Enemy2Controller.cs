@@ -10,7 +10,6 @@ public class Enemy2Controller : EnemyController
     public GameObject rightSwoop;
     public bool AttackPlayer = false;
     private Hashtable tweenPath = new Hashtable();
-    //private bool moveRight = true;
     private Vector3 pos;
     private Vector3 axis;
     private Transform enemyProjWall;
@@ -18,6 +17,7 @@ public class Enemy2Controller : EnemyController
     private bool outOfPlayerRange = false;
     [Header("Path from Top of Screen Settings")]
     public Vector3 _originalPosition;
+    private Quaternion _originalRotation;
     private bool gotOriginalPosition = false;
     private List<Vector3> _waypoints;
     private AudioSource audio;
@@ -25,10 +25,17 @@ public class Enemy2Controller : EnemyController
     private bool _isOnPath = false;
     private float _pathPercentage = 0f;
 
+    private void Awake()
+    {
+        // Save the first transform so we can use that to create our path.
+        _originalRotation = transform.rotation;
+        _waypoints = new List<Vector3>();
+        //Debug.Log("Original Pos: " + transform.position.ToString());
+    }
+
     private void Start() 
     {
         base.Start();
-        //mainForm = GameObject.FindGameObjectWithTag("MainFormation").GetComponent<MainEnemyFormation>();
         if (meshcol.enabled == false)
         {
             meshcol.enabled = true;
@@ -41,12 +48,9 @@ public class Enemy2Controller : EnemyController
         rightSwoop = GameObject.FindGameObjectWithTag("enemy2Right");
         player = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>();
         enemyProjWall = GameObject.Find("EnemyProjectileWall").GetComponent<Transform>();
-        //scoreKeeper = GameObject.Find("Score").GetComponent<ScoreKeeper>();
         _waypoints = new List<Vector3>();
         pos = transform.position;
         axis = transform.right;
-        //AttackPlayer = true;
-        //SetPath();
 	}
 
     private void Update()
@@ -65,7 +69,6 @@ public class Enemy2Controller : EnemyController
 
     private void CreateIncomingPath()
     {
-        //Vector3 lastPoint = _waypoints[_waypoints.Count - 1];
         _waypoints.Clear();
 
         Vector3 topSide = Camera.main.ViewportToWorldPoint(new Vector3(0, 1, 0));
@@ -141,12 +144,12 @@ public class Enemy2Controller : EnemyController
                 transform.LookAt(GalagaHelper.Enemy2LookAtTransform);
                 
             }
+
             //Debug.Log(gameObject.transform.position.z.ToString().Bold());
             if (gameObject.transform.position.z < -70f)
             {
                 //Debug.Log("Enemy made it to wall".Bold());
                 CreateIncomingPath();
-                //main.isEnemy2Done = true;
             }
         }
 
@@ -165,6 +168,7 @@ public class Enemy2Controller : EnemyController
                 AttackPlayer = false;
                 isNotInFormation = false;
                 main.isEnemy2Done = true;
+                transform.rotation = _originalRotation;
             }
         }
     }
@@ -200,7 +204,6 @@ public class Enemy2Controller : EnemyController
                 GameObject explosionPrefab = Instantiate(explosion, gameObject.transform.position, gameObject.transform.rotation) as GameObject;
                 Destroy(explosionPrefab, 3.0f);
                 //Debug.Log("Enemy2 killed: " + gameObject.name.Colored(Colors.blue) + " Parent: " + gameObject.transform.parent.parent.name.Colored(Colors.blue)+ " Position: " + gameObject.transform.parent.name.Colored(Colors.blue));
-                //GalagaHelper.DisabledEnemies += 1;
                 this.isEnemyFiring = false;
                 RunawayFromParent();
                 GalagaHelper.EnemiesKilled += 1;
@@ -215,7 +218,6 @@ public class Enemy2Controller : EnemyController
                     if (onTween.isRunning)
                     {
                         Debug.Log("Enemy2 Killed during Itween".Colored(Colors.red).Bold());
-                        //onTween.isRunning = false;
                         GalagaHelper.EnemiesSpawned += 1;
                     }
                 }

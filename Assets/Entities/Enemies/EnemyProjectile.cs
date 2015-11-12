@@ -13,6 +13,5 @@ public class EnemyProjectile : MonoBehaviour {
     public void Hit()
     {
         SimplePool.Despawn(gameObject);
-        //Destroy(gameObject);
     }
 }

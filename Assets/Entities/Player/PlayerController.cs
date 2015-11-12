@@ -50,7 +50,6 @@ public class PlayerController : MonoBehaviour {
         xMax = rightMost.x - padding;
         Mesh mesh = GetComponent<MeshFilter>().mesh;
         rend = GetComponent<Renderer>();
-        //rend.enabled = true;
         playerWidth = mesh.bounds.size.x;
         //Debug.Log("PlayerWidth: " + playerWidth);
 	}
@@ -214,39 +213,6 @@ public class PlayerController : MonoBehaviour {
                 }
             }
         }
-
-        //if (enemyProjectile)
-        //{
-        //    if (isPlayerLive)
-        //    {
-        //        GameObject explosionPrefab = Instantiate(explosion, gameObject.transform.position, gameObject.transform.rotation) as GameObject;
-        //        Destroy(explosionPrefab, 3.0f);
-        //        Debug.Log("Enemy proj hit Player.");
-        //        top = addShotSounds(explosionTop, Random.Range(0.8f, 1.2f));
-        //        bottom = addShotSounds(explosionBottom, Random.Range(0.8f, 1.2f));
-        //        top.Play();
-        //        bottom.Play();
-        //        enemyProjectile.Hit();
-        //        rend.enabled = false;
-        //        isPlayerLive = false;
-        //        //SimplePool.Despawn(gameObject);
-        //        GalagaHelper.numOfPlayers -= 1;
-        //        GalagaHelper.PlacePlayerIcons();
-        //        GalagaHelper.isPlayerCaptured = true;
-        //        GameObject.FindGameObjectWithTag("MainFormation").GetComponent<MainEnemyFormation>().isReadyDone = false;
-        //        Destroy(gameObject);
-        //        if (!CanPlayerStillPlay())
-        //        {
-        //            MainEnemyFormation main = GameObject.FindGameObjectWithTag("MainFormation").GetComponent<MainEnemyFormation>();
-        //            main.Invoke("EndGame", 3.0f);
-        //            //Invoke("EndGame", 3.0f);
-        //        }
-        //        else
-        //        {
-        //            CreatePlayer();
-        //        }
-        //    }
-        //}
 
         Debug.Log("Something hit the player.".Colored(Colors.darkblue));
     }

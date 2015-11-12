@@ -6,6 +6,5 @@ public class PlasmaWall : MonoBehaviour {
 	void OnTriggerEnter(Collider other)
     {
         SimplePool.Despawn(other.gameObject);
-        //Destroy(other.gameObject);
     }
 }

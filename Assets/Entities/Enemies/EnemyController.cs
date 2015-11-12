@@ -135,18 +135,10 @@ public class EnemyController : MonoBehaviour
         if ((int)form == 2 || (int)form == 3)
         {
             myTween.Add("path", GalagaHelper.SecondWavePath);
-            if (gameObject.name == "EnemyTwo (16)" || gameObject.name == "EnemyOne (12)")
-            {
-                Debug.Log(GalagaHelper.SecondWavePath[10].ToString().Bold().Colored(Colors.darkblue));
-            }
         }
         else
         {
             myTween.Add("path", GalagaHelper.FourthWavePath);
-            if (gameObject.name == "EnemyTwo (16)" || gameObject.name == "EnemyOne (12)")
-            {
-                Debug.Log(GalagaHelper.FourthWavePath[7].ToString().Bold().Colored(Colors.darkblue));
-            }
         }
         myTween.Add("time", movePathTime);
         myTween.Add("delay", GalagaHelper.Wave1Delay);
@@ -154,7 +146,7 @@ public class EnemyController : MonoBehaviour
         myTween.Add("onComplete", "EnemyCompletePath");
         myTween.Add("onCompleteTarget", gameObject);
         iTween.MoveTo(gameObject, myTween);
-        Debug.Log(gameObject.name.Italics().Bold().Colored(Colors.red) + " has added Itween path.".Colored(Colors.red));
+        //Debug.Log(gameObject.name.Italics().Bold().Colored(Colors.red) + " has added Itween path.".Colored(Colors.red));
     }
 
     public void OnDrawGizmos()

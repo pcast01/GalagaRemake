@@ -4,32 +4,34 @@ using UnityEngine.UI;
 
 public class MainEnemyFormation : MonoBehaviour {
 
+    [Header("Movement Settings (not used)")]
     public bool isMovingRight;
-    //public bool isStartFormation;
     public bool moveFormation;
-    private bool isTextDone = false;
+    [Header("Gizmo Settings")]
     public float padding = 1f;
     public float speed = 5.0f;
     public float width = 10f;
     public float height = 5f;
     private float xMin;
     private float xMax;
+    [Header("Random Enemy Attack Settings")]
     private int enemyAttacks = 0;
+    public GameObject[] enemy1;
+    public GameObject[] enemy2;
+    public GameObject[] enemy3;
     public bool enemy1Picked = false;
     public bool enemy2Picked = false;
     public bool enemy3Picked = false;
     public bool isEnemy1Done = false;
     public bool isEnemy2Done = false;
     public bool isEnemy3Done = false;
+    [Header("Spawn Settings")]
     public bool isPlayerReady = false;
     private bool form2Spawn = false;
     private bool form3Spawn = false;
     private bool form4Spawn = false;
     private bool form5Spawn = false;
     public GameObject player;
-    public GameObject[] enemy1;
-    public GameObject[] enemy2;
-    public GameObject[] enemy3;
     public GameObject form1;
     private GameObject form2;
     private GameObject form3;
@@ -47,15 +49,7 @@ public class MainEnemyFormation : MonoBehaviour {
     private PlayerController playerController;
     private ParticleSystem starfield;
     public bool isReadyDone;
-    
-
-    void Awake()
-    {
-        //GameObject playerSpawn = GameObject.Find("PlayerSpawn");
-        //GameObject newPlayer = SimplePool.Spawn(player, playerSpawn.transform.position, playerSpawn.transform.rotation, true) as GameObject;
-        //newPlayer.GetComponent<PlayerController>().enabled = true;
-        //newPlayer.transform.position = playerSpawn.transform.position;
-    }
+    private bool isTextDone;
 
 	void Start () {
 
@@ -82,13 +76,11 @@ public class MainEnemyFormation : MonoBehaviour {
         roundText = GameObject.Find("RoundTitle");
         playerTextHigh = GameObject.Find("PlayerTextHigh");
         readyText = GameObject.Find("ReadyText");
-        //playerController = GameObject.FindGameObjectWithTag("CapturedPlayer").GetComponent<PlayerController>();
         starfield = GameObject.FindGameObjectWithTag("Starfield").GetComponent<ParticleSystem>();
         playerText.SetActive(true);
         roundText.SetActive(false);
         playerTextHigh.SetActive(false);
         readyText.SetActive(false);
-        //roundTextPos = playerText.transform.position;
 	}
 
     public void EndGame()
@@ -97,6 +89,10 @@ public class MainEnemyFormation : MonoBehaviour {
         Application.LoadLevel("Lose Screen");
     }
 
+    /// <summary>
+    /// Reset Random enemy attack variables, and wave indicators.
+    /// Also reset text values.
+    /// </summary>
     public void RestartRound()
     {
         enemy1Picked = false;
@@ -109,7 +105,6 @@ public class MainEnemyFormation : MonoBehaviour {
         secondWaveFinished = false;
         thirdWaveFinished = false;
         fourthWaveFinished = false;
-        //playerText.SetActive(true);
         roundText.GetComponent<Text>().text = "Stage " + GalagaHelper.RoundNumber.ToString();
         roundText.SetActive(false);
         playerTextHigh.SetActive(false);
@@ -129,7 +124,7 @@ public class MainEnemyFormation : MonoBehaviour {
             Enemy1Controller enemyOne = enemy1[GalagaHelper.RandomNumber(0, enemy1.Length)].GetComponent<Enemy1Controller>();
             if (enemyOne)
             {
-                if (randScorpion == 3 && GalagaHelper.isTractorBeamOn == false)
+                if (randScorpion == 3 && GalagaHelper.isTractorBeamOn == false && enemyOne.isNotInFormation == false)
                 {
                     enemyOne.startScorpionAttack = true;
                 }
@@ -194,7 +189,6 @@ public class MainEnemyFormation : MonoBehaviour {
 
     void StartRound()
     {
-        //form1 = GameObject.FindGameObjectWithTag("phase1").gameObject;
         form1.GetComponent<EnemySpawner>().enabled = true;
         Debug.Log("Starting Round 1".Colored(Colors.purple).Bold());
     }
@@ -219,24 +213,33 @@ public class MainEnemyFormation : MonoBehaviour {
         {
             //Debug.Log("See player text?".Bold());
             // show player1 first
-            playerText.SetActive(true);
-            playerTextHigh.SetActive(false);
+            if (GalagaHelper.RoundNumber == 1)
+            {
+                playerText.SetActive(true);
+                playerTextHigh.SetActive(false);
+            }
         }
         else if (GalagaHelper.TimeToSpawn > 2.0f && GalagaHelper.TimeToSpawn < 3.5f)
         {
             // show round title same place
            // Debug.Log("See player text?".Bold());
-            playerText.SetActive(false);
-            roundText.transform.position = playerText.transform.position;
-            roundText.SetActive(true);
+            if (GalagaHelper.RoundNumber == 1)
+            {
+                playerText.SetActive(false);
+                roundText.transform.position = playerText.transform.position;
+                roundText.SetActive(true);
+            }
         }
         else if (GalagaHelper.TimeToSpawn > 3.5f && GalagaHelper.TimeToSpawn < 5.3f)
         {
             //Debug.Log("See player text?".Bold());
             // Show both
-            playerText.transform.position = playerTextHigh.transform.position;
-            playerText.SetActive(true);
-            roundText.SetActive(true);
+            if (GalagaHelper.RoundNumber == 1)
+            {
+                playerText.transform.position = playerTextHigh.transform.position;
+                playerText.SetActive(true);
+                roundText.SetActive(true);
+            }
         }
         else
         {
@@ -245,10 +248,11 @@ public class MainEnemyFormation : MonoBehaviour {
             isTextDone = true;
             //Debug.Log("isTextDone eq true");
             //timeBetweenSpawn = 0;
-
         }
         #endregion
 
+        // Once each wave is generated then set that part of
+        // formation set to Full.
         if (GalagaHelper.JustSpawned == 8)
         {
             form1.GetComponent<EnemySpawner>().isFull = true;
@@ -277,12 +281,13 @@ public class MainEnemyFormation : MonoBehaviour {
             form5.GetComponent<EnemySpawner>().isFull = true;
             Debug.Log("Form 5 Full".Colored(Colors.green).Bold());
         }
+
         //Debug.Log("Time to Spawn: " + GalagaHelper.TimeToSpawn.ToString().Italics());
         //Debug.Log(GalagaHelper.CurrentRoundPhase.ToString().Bold());
         //Debug.Log("Player lives: ".Bold() + GalagaHelper.numOfPlayers.ToString().Bold());
+        // According to formation and time enable the next Formation
         if (GalagaHelper.CurrentRoundPhase == GalagaHelper.Formations.Round1Phase2 && GalagaHelper.TimeToSpawn > 8.0f) // && GalagaHelper.TimeToSpawn > 11.0f
         {
-            //GameObject pt2 = GameObject.FindGameObjectWithTag("phase2").gameObject;
             Debug.Log("Round2 enabled".Colored(Colors.purple));
             form2.GetComponent<EnemySpawner>().enabled = true;
             if (GalagaHelper.RoundNumber == 2 && form2Spawn == false)
@@ -334,7 +339,6 @@ public class MainEnemyFormation : MonoBehaviour {
             GalagaHelper.PrintAllGhostObjects();
             Debug.Log("Deleting all ghosts.".Colored(Colors.green));
             Invoke("StartEnemyAttack", 5.0f);
-            //moveFormation = true;
             fourthWaveFinished = false;
             if (GalagaHelper.RoundNumber == 2 && form5Spawn == false)
             {
@@ -429,9 +433,6 @@ public class MainEnemyFormation : MonoBehaviour {
                     isPlayerReady = false;
                     isReadyDone = true;
                     GalagaHelper.isPlayerCaptured = false;
-                    //GameObject player = GameObject.FindGameObjectWithTag("Player").gameObject;
-                    //player.GetComponent<Renderer>().enabled = true;
-                    //player.GetComponent<MeshCollider>().enabled = true;
                     isEnemy1Done = true;
                     isEnemy2Done = true;
                     isEnemy3Done = true;

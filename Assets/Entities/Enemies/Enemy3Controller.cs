@@ -93,6 +93,7 @@ public class Enemy3Controller : EnemyController
                     gotOriginalPosition = false;
                     isAttackPlayer = false;
                     isNotInFormation = false;
+                    transform.rotation = origRotation;
                 }
             }
         }

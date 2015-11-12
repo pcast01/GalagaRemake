@@ -20,20 +20,12 @@ public class EnemySpawner : MonoBehaviour {
     public float spawnDelay = 0.5f;
     public bool spawnEntranceRight = false;
     [Header("Formation")]
-    //private EnemySpawner round1Phase2spawner;
     public bool isFormationUp = false;
     public bool isFull = false;
     private Position pos;
     private List<Vector3> _waypoints;
-    //private int enemiesInPlace = 0;
-
-    void Awake()
-    {
-        //SimplePool.Preload(enemy1Prefab, 8);
-    }
 
 	void Start () {
-        //pos = Game
         // Execute Spawn function
         SpawnUntilFull();
         if (gameObject.name == "Round1Phase1EnemyFormation")
@@ -45,10 +37,6 @@ public class EnemySpawner : MonoBehaviour {
 
 	void Update () {
         
-        // Get the number of enemies in place on the current Formation
-        //enemiesInPlace = isEnemyInPlace();
-        //+ " - enemies in place: " + enemiesInPlace.ToString().Colored(Colors.red
-
         if (gameObject.name == "Round1Phase1EnemyFormation")
         {
             Debug.Log(gameObject.name.Bold() + " Just Spawned: " + GalagaHelper.JustSpawned + " Enemies Spawned: " + GalagaHelper.EnemiesSpawned + " Enemies Killed: " + GalagaHelper.EnemiesKilled + " Enemies Disabled: "+ GalagaHelper.DisabledEnemies + " PlayerLifes: " + GalagaHelper.numOfPlayers);
@@ -129,7 +117,6 @@ public class EnemySpawner : MonoBehaviour {
                 int childZ = (int)Math.Round(transform.GetChild(i).GetChild(0).position.z, 0);
                 int parentZ = (int)Math.Round(transform.GetChild(i).position.z, 0);
                 Transform childEnemy = transform.GetChild(i).GetChild(0);
-                //EnemyController childEnemyScript = childEnemy.GetComponent<EnemyController>();
                 
                 // if the child is in position or is dead from bullets
                 if (childZ == parentZ || childEnemy.gameObject.activeSelf == false)
@@ -177,7 +164,7 @@ public class EnemySpawner : MonoBehaviour {
 
         if (NextFreePosition() && this.isFull == false)
         {
-            Debug.Log(gameObject.name.Bold() + " Free position");
+            Debug.Log(gameObject.name.Bold() + " Free position, SpawnUntilFull Called.".Bold().Colored(Colors.red));
             Invoke("SpawnUntilFull", spawnDelay);
         }
         else
@@ -228,11 +215,11 @@ public class EnemySpawner : MonoBehaviour {
                     //}
                     break;
                 case GalagaHelper.Formations.Round1Phase3:
-                    Debug.Log("Free pos == " + freePos.gameObject.name);
+                    //Debug.Log("Free pos == " + freePos.gameObject.name);
                     defaultEnemyPrefab = enemy2Prefab;
                     break;
                 case GalagaHelper.Formations.Round1Phase4:
-                    Debug.Log("Free pos == " + freePos.gameObject.name);
+                    //Debug.Log("Free pos == " + freePos.gameObject.name);
                     defaultEnemyPrefab = enemy1Prefab;
                     break;
                 case GalagaHelper.Formations.Round1Phase5:
@@ -323,7 +310,7 @@ public class EnemySpawner : MonoBehaviour {
                 ec3.Start();
             }
         }
-        Debug.Log("Enemy Name: " + enemy.name + " Parent: " + enemy.transform.parent.parent.name.Colored(Colors.blue) + " Position: " + enemy.transform.parent.name.Colored(Colors.blue));
+        //Debug.Log("Enemy Name: " + enemy.name + " Parent: " + enemy.transform.parent.parent.name.Colored(Colors.blue) + " Position: " + enemy.transform.parent.name.Colored(Colors.blue));
         //GalagaHelper.EnemiesSpawned += 1;
         GalagaHelper.JustSpawned += 1;
     }

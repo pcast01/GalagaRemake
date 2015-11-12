@@ -178,6 +178,7 @@ public static class GalagaHelper
         form.isFormationUp = false;
         form.isFull = false;
         GalagaHelper.TimeToSpawn = 0;
+        GalagaHelper.Wave1Delay = 0;
 
         // Reset all Occupied bools in Positions
         foreach (GameObject obj in Object.FindObjectsOfType(typeof(GameObject)))
@@ -461,12 +462,12 @@ public static class GalagaHelper
         if (path.Length == 8)
         {
             FourthWavePath[7] = formSpawn.currentSpawnPos.position;
-            Debug.Log(formSpawn.currentSpawnPos.position.ToString().Bold());
+            //Debug.Log(formSpawn.currentSpawnPos.position.ToString().Bold());
         }
         else
 	    {
             SecondWavePath[10] = formSpawn.currentSpawnPos.position;
-            Debug.Log(formSpawn.currentSpawnPos.position.ToString().Bold());
+            //Debug.Log(formSpawn.currentSpawnPos.position.ToString().Bold());
 	    }
     }
     #endregion
